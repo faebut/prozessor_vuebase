@@ -1,0 +1,72 @@
+<template>
+  <span>
+    <v-toolbar app flat max-width="1200" class="background">
+      <v-toolbar-side-icon
+        @click="drawer = !drawer"
+        class="grey--text"
+      ></v-toolbar-side-icon>
+      <v-toolbar-title class="text-uppercase grey--text">
+        <span class="font-weight-light">Database</span>
+        <span>Prozessor</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn flat color="grey">
+        <span>Sign Out</span>
+        <v-icon right>exit_to_app</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-navigation-drawer app v-model="drawer" class="white darkgrey--text">
+      <v-layout column align-center>
+        <v-flex class="mt-5">
+          <img height="200px" src="../assets/2_black.png" alt="" />
+        </v-flex>
+      </v-layout>
+      <v-list class="mt-3">
+        <template v-for="(item, index) in items">
+          <v-list-tile
+            v-if="item.show"
+            :key="index"
+            router
+            :to="item.link"
+            active-class="grey lighten-2"
+          >
+            <v-list-tile-action>
+              <v-icon class="darkgrey--text">{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              {{ item.title }}
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+  </span>
+</template>
+
+<script>
+export default {
+  name: 'AppNavigation',
+  data() {
+    return {
+      appTitle: 'Prozessor UserDatabase',
+      drawer: false,
+      items: [
+        { icon: 'dashboard', title: 'Home', link: '/', show: true },
+        { icon: 'folder', title: 'Eingang', link: '/entry', show: true },
+        { icon: 'person', title: 'Besuchende', link: 'users', show: true },
+        { icon: 'group', title: 'Partner', link: '/partners', show: true },
+        {
+          icon: 'insert_chart',
+          title: 'Statistik',
+          link: '/statistics',
+          show: true
+        },
+        { icon: 'call_received', title: 'Log in', link: '/login', show: true }
+      ]
+    };
+  }
+};
+</script>
+
+<style scoped></style>

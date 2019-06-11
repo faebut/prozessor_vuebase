@@ -1,0 +1,30 @@
+<template>
+  <div>
+    <h1 class="grey--text">Partner*innen</h1>
+    <v-container class="my-5">
+      <partner-create />
+      <partner-list />
+    </v-container>
+  </div>
+</template>
+
+<script>
+import PartnerCreate from '@/components/PartnerCreate';
+import PartnerList from '@/components/PartnerList';
+
+export default {
+  name: 'Partners',
+  components: {
+    PartnerCreate,
+    PartnerList
+  }
+};
+</script>
+
+<style scoped>
+h1 {
+  font-weight: 300;
+  color: #fff;
+  text-transform: uppercase;
+}
+</style>
