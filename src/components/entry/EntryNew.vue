@@ -1,20 +1,18 @@
-<template>
-  <v-dialog max-width="800px" v-model="dialog">
+.<template>
+  <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-btn fab small color="info" @click="openInfo" slot="activator">
-      <v-icon>info</v-icon>
-    </v-btn>
+    <v-icon class="success--text" @click="openNew" slot="activator">exit_to_app</v-icon>
 
     <!-- form -->
     <v-card>
       <v-card-title v-if="!fetching" class="px-4">
-        <h1>Informationen zu {{ user.firstname }} {{ user.name }}</h1>
+        <h1>{{ user.firstname }} {{ user.name }} einchecken</h1>
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
           <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
 
-          <h2 class="primary--text mt-4">Lade Benutzer*in...</h2>
+          <h2 class="primary--text mt-4">Lade Besucher*in...</h2>
         </v-flex>
 
         <v-form ref="form" v-if="!fetching">
@@ -84,18 +82,67 @@ import format from 'date-fns/format';
 import locales from 'date-fns/locale/de';
 
 export default {
-  name: 'UserInfo',
+  name: 'EntryNew',
   props: ['id'],
-  data: () => ({
-    dialog: false,
-    fetching: true,
-    user: {}
-  }),
-  methods: {
-    ...mapActions(['fetchPartners', 'fetchSingleUser']),
+  data: () => {
+    return {
+      loading: false,
+      dialog: false,
+      valid: false,
+      fetching: true,
+      // rules
+      rules: {
+        required: value => !!value || 'Bitte eingeben.',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || 'E-Mail ungültig.';
+        }
+      },
+      // date Stuff
+      datePickerBirthday: false,
+      datePickerBuydate: false,
 
-    // fetch user after pressing Info button
-    openInfo(e) {
+      // form fields initally empty --> check if needed
+      user: {}
+    };
+  },
+  methods: {
+    ...mapActions(['fetchPartners', 'fetchSingleUser', 'editUser', 'setSnack']),
+
+    // on clicking the send button in the form
+    onSubmit(e) {
+      e.preventDefault();
+
+      // check if the input is valid
+      if (this.$refs.form.validate()) {
+        // set the button to spin
+        this.loading = true;
+        // call action to add new user
+        this.editUser(this.user)
+          .then(() => {
+            // remove spinner
+            this.loading = false;
+            // show snackbar for success
+            this.setSnack({
+              message: `Besucher*in ${this.user.firstname} ${
+                this.user.name
+              } erfolgreich eingecheckt`,
+              type: 'success'
+            });
+            // close dialog
+            this.dialog = false;
+          })
+          .catch(err => {
+            // show snackbar for error
+            this.setSnack({
+              message: `Error: ${err}`,
+              type: 'error'
+            });
+          });
+      }
+    },
+
+    opeNew(e) {
       e.preventDefault();
 
       // make sure the loading spinner ist showing and dialog fires up
@@ -109,8 +156,6 @@ export default {
 
           // remove the loader and show form
           this.fetching = false;
-
-          // feedback for successfull loading
         })
         .catch(err => {
           // show snackbar for error
@@ -124,9 +169,6 @@ export default {
     // on clicking the cancel button in the form
     onCancel(e) {
       e.preventDefault();
-
-      // // reset the userToEdit in storage --> Check if needed
-      // this.clearUserToEdit();
 
       // close dialog
       this.dialog = false;
@@ -142,29 +184,11 @@ export default {
         : '';
     },
 
-    // Format the end date
-    computedDateEnddate() {
-      const datestring = new Date(this.user.buydate);
-
-      const enddate = new Date(
-        datestring.setFullYear(datestring.getFullYear() + 1)
-      );
-
-      return enddate
-        ? format(enddate, 'DD. MMMM YYYY', { locale: locales })
+    // Format the Buydate
+    computedDateBuydate() {
+      return this.user.buydate
+        ? format(this.user.buydate, 'DD. MMMM YYYY', { locale: locales })
         : '';
-    },
-    computedPartners() {
-      const partnerNames = [];
-
-      this.user.partners.forEach(partnerID => {
-        const partnerName = this.partners.find(p => p._id === partnerID)
-          .partner;
-
-        partnerNames.push(partnerName);
-      });
-
-      return partnerNames;
     }
   },
   created() {
@@ -174,4 +198,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>
