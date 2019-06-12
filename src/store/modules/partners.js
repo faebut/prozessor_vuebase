@@ -24,6 +24,7 @@ const actions = {
 
     const newpartner = partner;
     newpartner._id = response.data.name;
+    console.log(newpartner)
 
     commit('newPartner', newpartner);
   },
@@ -40,7 +41,9 @@ const actions = {
 
 const mutations = {
   // push new partner to state of partners
-  newPartner: (state, partner) => state.partners.push(partner),
+  newPartner: (state, partner) => {
+    state.partners.push(partner)
+  },
 
   // filter state of partners for ID and remove it from storage
   removePartner: (state, _id) =>
