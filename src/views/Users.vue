@@ -21,9 +21,4 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-weight: 300;
-  color: #fff;
-  text-transform: uppercase;
-}
 </style>

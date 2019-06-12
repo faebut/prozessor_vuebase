@@ -2,8 +2,8 @@
   <div>
     <h1 class="grey--text">Partner*innen</h1>
     <v-container class="my-5">
-      <partner-create />
-      <partner-list />
+      <partner-create/>
+      <partner-list/>
     </v-container>
   </div>
 </template>
@@ -22,9 +22,4 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-weight: 300;
-  color: #fff;
-  text-transform: uppercase;
-}
 </style>

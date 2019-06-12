@@ -1,13 +1,10 @@
 <template>
-  <v-container>
-    <v-layout>
-      <h1>Willkommen bei der Benutzerdatenbank des Prozessors. Bitte logge dich ein</h1>
-      <br>
-      <p class="text-xs-center">
-        <v-btn flat large class="success">Login</v-btn>
-      </p>
-    </v-layout>
-  </v-container>
+  <div>
+    <h1 class="grey--text">Willkommen bei der Benutzerdatenbank des Prozessors. Bitte logge dich ein</h1>
+    <v-container class="my-5 text-xs-center">
+      <v-btn large class="success">Login</v-btn>
+    </v-container>
+  </div>
 </template>
 
 <script>
