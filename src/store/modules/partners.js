@@ -13,25 +13,25 @@ const getters = {
 const actions = {
   // fetch partners from database and set value for mutation
   async fetchPartners({ commit }) {
-    const response = await axios.get('http://192.168.1.20:3000/api/partners');
+    const response = await axios.get('/partners.json');
 
     commit('setPartners', response.data);
   },
 
   // add a partner to the database and set value for mutation
   async addPartner({ commit }, partner) {
-    const response = await axios.post(
-      'http://192.168.1.20:3000/api/partners',
-      partner
-    );
+    const response = await axios.post('/partners.json', partner);
 
-    commit('newPartner', response.data);
+    const newpartner = partner;
+    newpartner._id = response.data.name;
+
+    commit('newPartner', newpartner);
   },
 
   // remove a partner from the database and set value for mutation
   async deletePartner({ commit }, _id) {
     if (confirm('Besucher*in wirklich löschen?')) {
-      await axios.delete(`http://192.168.1.20:3000/api/partners/${_id}`);
+      await axios.delete(`/partners/${_id}.json`);
 
       commit('removePartner', _id);
     }
@@ -47,7 +47,15 @@ const mutations = {
     (state.partners = state.partners.filter(partner => partner._id !== _id)),
 
   // set state of partners to new value
-  setPartners: (state, partners) => (state.partners = partners)
+  setPartners: (state, partners) => {
+    const partnerarray = [];
+    for (let key in partners) {
+      const newpartner = partners[key];
+      newpartner._id = key;
+      partnerarray.push(newpartner);
+    }
+    state.partners = partnerarray;
+  }
 };
 
 export default {
