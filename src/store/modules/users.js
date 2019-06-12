@@ -17,7 +17,7 @@ const getters = {
 const actions = {
   // fetch users from database and set value for mutation
   async fetchUsers({ commit }) {
-    const response = await axios.get('http://192.168.1.20:3000/api/users');
+    const response = await axios.get('/users.json');
 
     commit('setUsers', response.data);
   },
@@ -37,10 +37,7 @@ const actions = {
 
   // add a user to the database and set value for mutation
   async addUser({ commit }, user) {
-    const response = await axios.post(
-      'http://192.168.1.20:3000/api/users',
-      user
-    );
+    const response = await axios.post('/users.json', user);
 
     commit('newUser', response.data);
   },

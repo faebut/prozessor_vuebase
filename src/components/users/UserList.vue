@@ -14,7 +14,12 @@
       </template>
     </v-text-field>
 
-    <v-card flat class="pa-3 mb-1" v-for="user in filteredUsers.pagedUsers" :key="user._id">
+    <v-card
+      flat
+      class="pa-3 mb-1"
+      v-for="user in filteredUsers.pagedUsers"
+      :key="user._id"
+    >
       <v-layout row wrap>
         <v-flex xs6 sm6 md3>
           <div class="caption grey--text">Name</div>
@@ -30,9 +35,9 @@
         </v-flex>
         <v-flex xs12 sm6 md3>
           <center>
-            <user-info :id="user._id"/>
+            <user-info :id="user._id" />
 
-            <user-edit :id="user._id"/>
+            <user-edit :id="user._id" />
 
             <v-btn fab small color="error" @click="deleteUser(user._id)">
               <v-icon>delete</v-icon>
@@ -43,7 +48,11 @@
     </v-card>
 
     <div v-if="filteredUsers.pages > 1" class="text-xs-center">
-      <v-pagination v-model="pagination.currentPage" :length="filteredUsers.pages" color="primary"></v-pagination>
+      <v-pagination
+        v-model="pagination.currentPage"
+        :length="filteredUsers.pages"
+        color="primary"
+      ></v-pagination>
     </div>
   </div>
 </template>

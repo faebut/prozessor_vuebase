@@ -2,8 +2,8 @@
   <div>
     <h1 class="grey--text">Besucher*innen</h1>
     <v-container class="my-5">
-      <user-create/>
-      <user-list/>
+      <user-create />
+      <user-list />
     </v-container>
   </div>
 </template>
@@ -20,5 +20,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

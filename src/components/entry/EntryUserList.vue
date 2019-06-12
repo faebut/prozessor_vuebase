@@ -15,7 +15,12 @@
       </template>
     </v-text-field>
 
-    <v-card flat class="pa-3 mb-1" v-for="user in filteredUsers.pagedUsers" :key="user._id">
+    <v-card
+      flat
+      class="pa-3 mb-1"
+      v-for="user in filteredUsers.pagedUsers"
+      :key="user._id"
+    >
       <v-layout row wrap>
         <v-flex xs2>
           <v-icon class="info--text">person</v-icon>
@@ -26,13 +31,17 @@
         </v-flex>
 
         <v-flex xs1>
-          <entry-new :id="user._id"/>
+          <entry-new :id="user._id" />
         </v-flex>
       </v-layout>
     </v-card>
 
     <div v-if="filteredUsers.pages > 1" class="text-xs-center">
-      <v-pagination v-model="pagination.currentPage" :length="filteredUsers.pages" color="primary"></v-pagination>
+      <v-pagination
+        v-model="pagination.currentPage"
+        :length="filteredUsers.pages"
+        color="primary"
+      ></v-pagination>
     </div>
   </div>
 </template>
