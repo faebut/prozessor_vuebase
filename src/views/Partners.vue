@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import PartnerCreate from '@/components/PartnerCreate';
-import PartnerList from '@/components/PartnerList';
+import PartnerCreate from '@/components/partners/PartnerCreate';
+import PartnerList from '@/components/partners/PartnerList';
 
 export default {
   name: 'Partners',
