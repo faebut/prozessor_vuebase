@@ -12,11 +12,7 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular
-            :size="50"
-            color="primary"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Partner*in...</h2>
         </v-flex>
@@ -24,48 +20,27 @@
         <v-form ref="form" v-if="!fetching">
           <v-layout wrap>
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.partner"
-                :rules="[rules.required]"
-                label="Partner*in"
-              ></v-text-field>
+              <v-text-field v-model="partner.partner" :rules="[rules.required]" label="Partner*in"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.city"
-                :rules="[rules.required]"
-                label="Ort*"
-              ></v-text-field>
+              <v-text-field v-model="partner.city" :rules="[rules.required]" label="Ort*"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.postcode"
-                :rules="[rules.required]"
-                label="PLZ*"
-              ></v-text-field>
+              <v-text-field v-model="partner.postcode" :rules="[rules.required]" label="PLZ*"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.address"
-                label="Adresse"
-              ></v-text-field>
+              <v-text-field v-model="partner.address" label="Adresse"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.contactfirstname"
-                label="Kontaktperson Vorname"
-              ></v-text-field>
+              <v-text-field v-model="partner.contactfirstname" label="Kontaktperson Vorname"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field
-                v-model="partner.contactname"
-                label="Kontaktperson Name"
-              ></v-text-field>
+              <v-text-field v-model="partner.contactname" label="Kontaktperson Name"></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
@@ -77,26 +52,14 @@
             </v-flex>
 
             <v-flex sm12 class="px-2">
-              <v-textarea
-                v-model="partner.description"
-                label="Beschreibung / Infos"
-              ></v-textarea>
+              <v-textarea v-model="partner.description" label="Beschreibung / Infos"></v-textarea>
             </v-flex>
 
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn
-                block
-                :loading="loading"
-                color="warning"
-                dark
-                @click="onSubmit"
-                >Ändern</v-btn
-              >
+              <v-btn block :loading="loading" color="warning" dark @click="onSubmit">Ändern</v-btn>
             </v-flex>
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn block color="error" dark @click="onCancel"
-                >Abbrechen</v-btn
-              >
+              <v-btn block color="error" dark @click="onCancel">Abbrechen</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -154,9 +117,7 @@ export default {
               }  erfolgreich geändert`,
               type: 'success'
             });
-            // // reset the input fields
-            // this.$refs.form.reset();
-            // // close dialog
+            // close dialog
             this.dialog = false;
           })
           .catch(err => {
@@ -186,8 +147,6 @@ export default {
 
           // remove the loader and show form
           this.fetching = false;
-
-          // feedback for successfull loading
         })
         .catch(err => {
           // show snackbar for error

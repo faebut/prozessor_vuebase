@@ -24,9 +24,7 @@ const actions = {
 
   // fetch single user from database and set value for mutation
   async fetchSingleUser({ commit }, _id) {
-    const response = await axios.get(
-      `http://192.168.1.20:3000/api/users/${_id}`
-    );
+    const response = await axios.get(`/users/${_id}.json`);
 
     commit('setUserToEdit', response.data);
 
@@ -38,14 +36,22 @@ const actions = {
   // add a user to the database and set value for mutation
   async addUser({ commit }, user) {
     const response = await axios.post('/users.json', user);
+    // get the data in the database with the generated key from the post request
+    const newdata = await axios.get(`/users/${response.data.name}.json`);
 
-    commit('newUser', response.data);
+    // assign the data from the get request to a new variable
+    const newuser = newdata.data;
+
+    // add the generated ID to the Object so the state can be mutated
+    newuser._id = response.data.name;
+
+    commit('newUser', newuser);
   },
 
   // remove a user from the database and set value for mutation
   async deleteUser({ commit }, _id) {
     if (confirm('Besucher*in wirklich löschen?')) {
-      await axios.delete(`http://192.168.1.20:3000/api/users/${_id}`);
+      await axios.delete(`/users/${_id}.json`);
 
       commit('removeUser', _id);
     }
@@ -53,10 +59,7 @@ const actions = {
 
   // edit a user in the database and reset userToEdit state
   async editUser({ commit }, user) {
-    const response = await axios.put(
-      `http://192.168.1.20:3000/api/users/${user._id}`,
-      user
-    );
+    const response = await axios.put(`/users/${user._id}.json`, user);
 
     commit('updateUser', response.data);
   }
@@ -71,7 +74,15 @@ const mutations = {
     (state.users = state.users.filter(user => user._id !== _id)),
 
   // set state of users to new value
-  setUsers: (state, users) => (state.users = users),
+  setUsers: (state, users) => {
+    const userarray = [];
+    for (let key in users) {
+      const newuser = users[key];
+      newuser._id = key;
+      userarray.push(newuser);
+    }
+    state.users = userarray;
+  },
 
   // set state of user to edit to new value
   setUserToEdit: (state, userToEdit) => (state.userToEdit = userToEdit),

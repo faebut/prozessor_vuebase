@@ -12,11 +12,7 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular
-            :size="50"
-            color="primary"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Benutzer*in...</h2>
         </v-flex>
@@ -27,7 +23,7 @@
               <div class="caption grey--text">Adresse</div>
               <div>{{ user.firstname }} {{ user.name }}</div>
               <div>
-                <br />
+                <br>
               </div>
               <div v-if="user.address !== ''">{{ user.address }}</div>
               <div>{{ user.postcode }} {{ user.city }}</div>
@@ -37,7 +33,7 @@
               <div class="caption grey--text">Geburtstag</div>
               <div>{{ computedDateBirthdate }}</div>
               <div>
-                <br />
+                <br>
               </div>
               <div class="caption grey--text">Kontakt</div>
               <div>{{ user.email }}</div>
@@ -45,27 +41,27 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="user.buydate === null">Kein Abonnement</div>
-              <div v-else>gültig bis: {{ computedDateEnddate }}</div>
+              <div v-if="user.buydate">gültig bis: {{ computedDateEnddate }}</div>
+              <div v-else>Kein Abonnement</div>
               <div>
-                <br />
+                <br>
               </div>
               <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">
-                  Mitglied Prozessor
-                </div>
+                <div class="caption grey--text" v-if="user.member">Mitglied Prozessor</div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
-              <div v-if="user.partners === []">Keine Partnerschaft</div>
-              <div v-else>
-                <v-chip v-for="partner in computedPartners" :key="partner">{{
+              <div v-if="user.partners">
+                <v-chip v-for="partner in computedPartners" :key="partner">
+                  {{
                   partner
-                }}</v-chip>
+                  }}
+                </v-chip>
               </div>
+              <div v-else>Keine Partnerschaften</div>
             </v-flex>
 
             <v-flex xs12 class="px-2 mt-4">
@@ -73,13 +69,15 @@
             </v-flex>
 
             <v-flex xs6 sm6 md4 class="px-2">
-              <div>Anzahl Besuche: {{ user.visits.length }}</div>
+              <div>
+                Anzahl Besuche:
+                <span v-if="user.visits">{{ user.visits.length }}</span>
+                <span v-else>noch keine Besuche</span>
+              </div>
             </v-flex>
 
             <v-flex xs12 class="mt-4 px-2">
-              <v-btn block color="error" dark @click="onCancel"
-                >Schliessen</v-btn
-              >
+              <v-btn block color="error" dark @click="onCancel">Schliessen</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -119,8 +117,6 @@ export default {
 
           // remove the loader and show form
           this.fetching = false;
-
-          // feedback for successfull loading
         })
         .catch(err => {
           // show snackbar for error
