@@ -52,6 +52,9 @@ import EntryNew from '@/components/entry/EntryNew';
 
 export default {
   name: 'UserList',
+  components: {
+    EntryNew
+  },
   data() {
     return {
       search: '',

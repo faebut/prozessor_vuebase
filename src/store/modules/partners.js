@@ -2,12 +2,16 @@ import axios from 'axios';
 
 const state = {
   // initial state for partners
-  partners: []
+  partners: [],
+  partnerToEdit: {}
 };
 
 const getters = {
   // get partners from central storage
-  partners: state => state.partners
+  partners: state => state.partners,
+
+  // get single partner from central storage
+  partnerToEdit: state => state.partnerToEdit
 };
 
 const actions = {
@@ -16,6 +20,17 @@ const actions = {
     const response = await axios.get('/partners.json');
 
     commit('setPartners', response.data);
+  },
+
+  // fetch single partner from database and set value for mutation
+  async fetchSinglePartner({ commit }, _id) {
+    const response = await axios.get(`/partners/${_id}.json`);
+
+    commit('setPartnerToEdit', response.data);
+
+    return {
+      response
+    };
   },
 
   // add a partner to the database and set value for mutation
@@ -40,6 +55,13 @@ const actions = {
 
       commit('removePartner', _id);
     }
+  },
+
+  // edit a partner in the database and reset partnerToEdit state
+  async editPartner({ commit }, partner) {
+    const response = await axios.put(`/partners/${partner._id}.json`, partner);
+
+    commit('updatePartner', response.data);
   }
 };
 
@@ -62,6 +84,23 @@ const mutations = {
       partnerarray.push(newpartner);
     }
     state.partners = partnerarray;
+  },
+  // set state of partner to edit to new value
+  setPartnerToEdit: (state, partnerToEdit) =>
+    (state.partnerToEdit = partnerToEdit),
+
+  // reset userToEdit state
+  clearPartnerToEdit: state => (state.partnerToEdit = {}),
+
+  // find user in array and replace it with new one
+  updatePartner: (state, partner) => {
+    const index = state.partners
+      .map(e => {
+        return e._id;
+      })
+      .indexOf(partner._id);
+
+    state.partners.splice(index, 1, partner);
   }
 };
 

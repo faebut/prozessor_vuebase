@@ -47,9 +47,7 @@
         </v-flex>
         <v-flex xs12 sm3>
           <center>
-            <v-btn fab small color="info">
-              <v-icon>edit</v-icon>
-            </v-btn>
+            <partner-edit :id="partner._id" />
             <v-btn fab small color="error" @click="deletePartner(partner._id)">
               <v-icon>delete</v-icon>
             </v-btn>
@@ -70,9 +68,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import PartnerEdit from '@/components/partners/PartnerEdit';
 
 export default {
   name: 'PartnerList',
+  components: {
+    PartnerEdit
+  },
   data() {
     return {
       search: '',
