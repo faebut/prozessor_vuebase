@@ -21,10 +21,14 @@ const actions = {
   // add a partner to the database and set value for mutation
   async addPartner({ commit }, partner) {
     const response = await axios.post('/partners.json', partner);
+    // get the data in the database with the generated key from the post request
+    const newdata = await axios.get(`/partners/${response.data.name}.json`);
 
-    const newpartner = partner;
+    // assign the data from the get request to a new variable
+    const newpartner = newdata.data;
+
+    // add the generated ID to the Object so the state can be mutated
     newpartner._id = response.data.name;
-    console.log(newpartner)
 
     commit('newPartner', newpartner);
   },
@@ -42,7 +46,7 @@ const actions = {
 const mutations = {
   // push new partner to state of partners
   newPartner: (state, partner) => {
-    state.partners.push(partner)
+    state.partners.push(partner);
   },
 
   // filter state of partners for ID and remove it from storage
