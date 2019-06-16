@@ -1,9 +1,7 @@
 .<template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-icon class="success--text" @click="openNew" slot="activator"
-      >exit_to_app</v-icon
-    >
+    <v-icon class="success--text" @click="openNew" slot="activator">exit_to_app</v-icon>
 
     <!-- form -->
     <v-card>
@@ -12,11 +10,7 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular
-            :size="50"
-            color="primary"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Besucher*in...</h2>
         </v-flex>
@@ -27,7 +21,7 @@
               <div class="caption grey--text">Adresse</div>
               <div>{{ user.firstname }} {{ user.name }}</div>
               <div>
-                <br />
+                <br>
               </div>
               <div v-if="user.address !== ''">{{ user.address }}</div>
               <div>{{ user.postcode }} {{ user.city }}</div>
@@ -37,7 +31,7 @@
               <div class="caption grey--text">Geburtstag</div>
               <div>{{ computedDateBirthdate }}</div>
               <div>
-                <br />
+                <br>
               </div>
               <div class="caption grey--text">Kontakt</div>
               <div>{{ user.email }}</div>
@@ -45,41 +39,48 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="user.buydate === null">Kein Abonnement</div>
-              <div v-else>gültig bis: {{ computedDateEnddate }}</div>
+              <div v-if="user.buydate">gültig bis: {{ computedDateEnddate }}</div>
+              <div v-else>Kein Abonnement</div>
               <div>
-                <br />
+                <br>
               </div>
               <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">
-                  Mitglied Prozessor
-                </div>
+                <div class="caption grey--text" v-if="user.member">Mitglied Prozessor</div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
-              <div v-if="user.partners === []">Keine Partnerschaft</div>
-              <div v-else>
-                <v-chip v-for="partner in computedPartners" :key="partner">{{
+              <div v-if="user.partners">
+                <v-chip v-for="partner in computedPartners" :key="partner">
+                  {{
                   partner
-                }}</v-chip>
+                  }}
+                </v-chip>
+              </div>
+              <div v-else>Keine Partnerschaften</div>
+              <div class="text-xs-right pr-2 pt-3">
+                <user-edit :id="user._id"/>
               </div>
             </v-flex>
 
-            <v-flex xs12 class="px-2 mt-4">
-              <h2>Statistik</h2>
+            <v-flex xs12 class="px-2 mt-4 mb-3">
+              <h2>Einchecken</h2>
             </v-flex>
 
-            <v-flex xs6 sm6 md4 class="px-2">
-              <div>Anzahl Besuche: {{ user.visits.length }}</div>
+            <v-flex xs6 class="px-2">
+              <div class="caption grey--text">Altersklasse</div>
+              <div>
+                <span v-if="userage < 12">Kinder unter 12 Jahren</span>
+                <span v-if="userage < 18">Jugendliche unter 18 Jahren</span>
+                <span v-else>Erwachsene</span>
+              </div>
             </v-flex>
 
-            <v-flex xs12 class="mt-4 px-2">
-              <v-btn block color="error" dark @click="onCancel"
-                >Schliessen</v-btn
-              >
+            <v-flex xs6 class="mt-4px-2">
+              <v-btn color="success" dark @click="onSubmit">Einchecken</v-btn>
+              <v-btn color="error" dark @click="onCancel">Abbrechen</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -90,11 +91,15 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import UserEdit from '../users/UserEdit';
 import format from 'date-fns/format';
 import locales from 'date-fns/locale/de';
 
 export default {
   name: 'EntryNew',
+  components: {
+    UserEdit
+  },
   props: ['id'],
   data: () => {
     return {
@@ -111,46 +116,55 @@ export default {
       datePickerBuydate: false,
 
       // form fields initally empty --> check if needed
-      user: {}
+      user: {},
+
+      // age of user
+      userage: 0
     };
   },
   methods: {
-    ...mapActions(['fetchPartners', 'fetchSingleUser', 'editUser', 'setSnack']),
+    ...mapActions(['fetchPartners', 'fetchSingleUser', 'addEntry', 'setSnack']),
 
     // on clicking the send button in the form
     onSubmit(e) {
       e.preventDefault();
 
-      // check if the input is valid
-      if (this.$refs.form.validate()) {
-        // set the button to spin
-        this.loading = true;
-        // call action to add new user
-        this.editUser(this.user)
-          .then(() => {
-            // remove spinner
-            this.loading = false;
-            // show snackbar for success
-            this.setSnack({
-              message: `Besucher*in ${this.user.firstname} ${
-                this.user.name
-              } erfolgreich eingecheckt`,
-              type: 'success'
-            });
-            // close dialog
-            this.dialog = false;
-          })
-          .catch(err => {
-            // show snackbar for error
-            this.setSnack({
-              message: `Error: ${err}`,
-              type: 'error'
-            });
-          });
+      // check if there are already visits. And create empty array if not.
+
+      if (this.user.visits == undefined) {
+        this.user.visits = [];
       }
+
+      // push new date to visit array.
+      this.user.visits.push(new Date());
+
+      // set the button to spin
+      this.loading = true;
+      // call action to add new user
+      this.addEntry(this.user)
+        .then(() => {
+          // remove spinner
+          this.loading = false;
+          // show snackbar for success
+          this.setSnack({
+            message: `Besucher*in ${this.user.firstname} ${
+              this.user.name
+            } erfolgreich eingecheckt`,
+            type: 'success'
+          });
+          // close dialog
+          this.dialog = false;
+        })
+        .catch(err => {
+          // show snackbar for error
+          this.setSnack({
+            message: `Error: ${err}`,
+            type: 'error'
+          });
+        });
     },
 
-    opeNew(e) {
+    openNew(e) {
       e.preventDefault();
 
       // make sure the loading spinner ist showing and dialog fires up
@@ -164,6 +178,11 @@ export default {
 
           // remove the loader and show form
           this.fetching = false;
+
+          // calculate user age
+          const diff_ms = this.now - new Date(this.user.birthdate).getTime();
+          const age_dt = new Date(diff_ms);
+          this.userage = Math.abs(age_dt.getUTCFullYear() - 1970);
         })
         .catch(err => {
           // show snackbar for error
@@ -192,11 +211,29 @@ export default {
         : '';
     },
 
-    // Format the Buydate
-    computedDateBuydate() {
-      return this.user.buydate
-        ? format(this.user.buydate, 'DD. MMMM YYYY', { locale: locales })
+    // Format the end date
+    computedDateEnddate() {
+      const datestring = new Date(this.user.buydate);
+
+      const enddate = new Date(
+        datestring.setFullYear(datestring.getFullYear() + 1)
+      );
+
+      return enddate
+        ? format(enddate, 'DD. MMMM YYYY', { locale: locales })
         : '';
+    },
+    computedPartners() {
+      const partnerNames = [];
+
+      this.user.partners.forEach(partnerID => {
+        const partnerName = this.partners.find(p => p._id === partnerID)
+          .partner;
+
+        partnerNames.push(partnerName);
+      });
+
+      return partnerNames;
     }
   },
   created() {

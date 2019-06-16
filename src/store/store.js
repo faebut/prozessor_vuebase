@@ -5,6 +5,7 @@ import Vuex from 'vuex';
 import users from './modules/users';
 import partners from './modules/partners';
 import snackbar from './modules/snackbar';
+import entry from './modules/entry';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   modules: {
     users,
     partners,
-    snackbar
+    snackbar,
+    entry
   }
 });

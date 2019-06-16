@@ -12,7 +12,11 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Benutzer*in...</h2>
         </v-flex>
@@ -20,11 +24,19 @@
         <v-form ref="form" v-if="!fetching">
           <v-layout wrap>
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.firstname" :rules="[rules.required]" label="Vorname*"></v-text-field>
+              <v-text-field
+                v-model="user.firstname"
+                :rules="[rules.required]"
+                label="Vorname*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.name" :rules="[rules.required]" label="Name*"></v-text-field>
+              <v-text-field
+                v-model="user.name"
+                :rules="[rules.required]"
+                label="Name*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
@@ -62,19 +74,33 @@
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.address" label="Addresse"></v-text-field>
+              <v-text-field
+                v-model="user.address"
+                label="Addresse"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.postcode" :rules="[rules.required]" label="Postleitzahl*"></v-text-field>
+              <v-text-field
+                v-model="user.postcode"
+                :rules="[rules.required]"
+                label="Postleitzahl*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.city" :rules="[rules.required]" label="Ort*"></v-text-field>
+              <v-text-field
+                v-model="user.city"
+                :rules="[rules.required]"
+                label="Ort*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.phone" label="Tel. Nummer"></v-text-field>
+              <v-text-field
+                v-model="user.phone"
+                label="Tel. Nummer"
+              ></v-text-field>
             </v-flex>
 
             <v-flex xs12 class="px-2">
@@ -106,11 +132,17 @@
             </v-flex>
 
             <v-flex md6 sm12 class="pt-3">
-              <v-btn color="error" small dark @click="user.buydate = null">Abonnement löschen</v-btn>
+              <v-btn color="error" small dark @click="user.buydate = null"
+                >Abonnement löschen</v-btn
+              >
             </v-flex>
 
             <v-flex xs12 class="px-2">
-              <v-switch v-model="user.member" color="primary" :label="'Mitglied Verein Prozessor'"></v-switch>
+              <v-switch
+                v-model="user.member"
+                color="primary"
+                :label="'Mitglied Verein Prozessor'"
+              ></v-switch>
             </v-flex>
 
             <v-flex xs12 class="px-2">
@@ -130,10 +162,19 @@
             </v-flex>
 
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn block :loading="loading" color="warning" dark @click="onSubmit">Ändern</v-btn>
+              <v-btn
+                block
+                :loading="loading"
+                color="warning"
+                dark
+                @click="onSubmit"
+                >Ändern</v-btn
+              >
             </v-flex>
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn block color="error" dark @click="onCancel">Abbrechen</v-btn>
+              <v-btn block color="error" dark @click="onCancel"
+                >Abbrechen</v-btn
+              >
             </v-flex>
           </v-layout>
         </v-form>
@@ -174,7 +215,6 @@ export default {
   },
   methods: {
     ...mapActions(['fetchPartners', 'fetchSingleUser', 'editUser', 'setSnack']),
-    // ...mapMutations(['clearUserToEdit']), --> check if needed
 
     // on clicking the send button in the form
     onSubmit(e) {
@@ -185,7 +225,6 @@ export default {
         // set the button to spin
         this.loading = true;
         // call action to add new user
-        console.log(this.user.buydate);
         this.editUser(this.user)
           .then(() => {
             // remove spinner
@@ -197,9 +236,7 @@ export default {
               } erfolgreich geändert`,
               type: 'success'
             });
-            // // reset the input fields
-            // this.$refs.form.reset();
-            // // close dialog
+            // close dialog
             this.dialog = false;
           })
           .catch(err => {
@@ -244,9 +281,6 @@ export default {
     // on clicking the cancel button in the form
     onCancel(e) {
       e.preventDefault();
-
-      // // reset the userToEdit in storage --> Check if needed
-      // this.clearUserToEdit();
 
       // close dialog
       this.dialog = false;

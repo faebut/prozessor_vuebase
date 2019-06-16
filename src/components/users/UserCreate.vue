@@ -9,11 +9,19 @@
         <v-form ref="form">
           <v-layout wrap>
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.firstname" :rules="[rules.required]" label="Vorname*"></v-text-field>
+              <v-text-field
+                v-model="user.firstname"
+                :rules="[rules.required]"
+                label="Vorname*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.name" :rules="[rules.required]" label="Name*"></v-text-field>
+              <v-text-field
+                v-model="user.name"
+                :rules="[rules.required]"
+                label="Name*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
@@ -51,19 +59,33 @@
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.address" label="Addresse"></v-text-field>
+              <v-text-field
+                v-model="user.address"
+                label="Addresse"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.postcode" :rules="[rules.required]" label="Postleitzahl*"></v-text-field>
+              <v-text-field
+                v-model="user.postcode"
+                :rules="[rules.required]"
+                label="Postleitzahl*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.city" :rules="[rules.required]" label="Ort*"></v-text-field>
+              <v-text-field
+                v-model="user.city"
+                :rules="[rules.required]"
+                label="Ort*"
+              ></v-text-field>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
-              <v-text-field v-model="user.phone" label="Tel. Nummer"></v-text-field>
+              <v-text-field
+                v-model="user.phone"
+                label="Tel. Nummer"
+              ></v-text-field>
             </v-flex>
 
             <v-flex xs12 class="px-2">
@@ -96,11 +118,16 @@
             </v-flex>
 
             <v-flex md6 sm12 class="pt-3">
-              <v-btn color="error" small dark @click="user.buydate = null">Abonnement löschen</v-btn>
+              <v-btn color="error" small dark @click="user.buydate = null"
+                >Abonnement löschen</v-btn
+              >
             </v-flex>
 
             <v-flex xs12 class="px-2">
-              <v-switch v-model="user.member" :label="'Mitglied Verein Prozessor'"></v-switch>
+              <v-switch
+                v-model="user.member"
+                :label="'Mitglied Verein Prozessor'"
+              ></v-switch>
             </v-flex>
 
             <v-flex xs12 class="px-2">
@@ -119,7 +146,14 @@
             </v-flex>
 
             <v-flex xs12 class="mt-4">
-              <v-btn block :loading="loading" color="primary" dark @click="onSubmit">Absenden</v-btn>
+              <v-btn
+                block
+                :loading="loading"
+                color="primary"
+                dark
+                @click="onSubmit"
+                >Absenden</v-btn
+              >
             </v-flex>
           </v-layout>
         </v-form>

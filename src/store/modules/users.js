@@ -87,9 +87,6 @@ const mutations = {
   // set state of user to edit to new value
   setUserToEdit: (state, userToEdit) => (state.userToEdit = userToEdit),
 
-  // reset userToEdit state
-  clearUserToEdit: state => (state.userToEdit = {}),
-
   // find user in array and replace it with new one
   updateUser: (state, user) => {
     const index = state.users
