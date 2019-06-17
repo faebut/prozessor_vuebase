@@ -69,6 +69,42 @@
               <h2>Einchecken</h2>
             </v-flex>
 
+            <v-flex v-if="user.member" xs6 class="px-2">
+              <div class="caption grey--text">Mitglied</div>
+              <div>
+                <v-switch v-model="asmember" label="als Mitglied einchecken"></v-switch>
+              </div>
+            </v-flex>
+
+            <v-flex v-if="user.partners" xs6 class="px-2">
+              <div class="caption grey--text">als Partner_in Einchecken</div>
+
+              <div>
+                <v-select
+                  :items="computedPartnersSelect"
+                  item-value="id"
+                  item-text="name"
+                  v-model="aspartner"
+                ></v-select>
+              </div>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <div class="caption grey--text">Werkstätten</div>
+              <div>
+                <v-select
+                  v-model="asatelier"
+                  :items="ateliers"
+                  hide-selected
+                  deletable-chips
+                  attach
+                  chips
+                  label="Ateliers/Werkstätten auswählen"
+                  multiple
+                ></v-select>
+              </div>
+            </v-flex>
+
             <v-flex xs6 class="px-2">
               <div class="caption grey--text">Altersklasse</div>
               <div>
@@ -78,7 +114,12 @@
               </div>
             </v-flex>
 
-            <v-flex xs6 class="mt-4px-2">
+            <v-flex xs6 class="px-2">
+              <div class="caption grey--text">Eintrittspreis</div>
+              <div>CHF {{ computedPrice }}.-</div>
+            </v-flex>
+
+            <v-flex xs6 class="mt-4 px-2">
               <v-btn color="success" dark @click="onSubmit">Einchecken</v-btn>
               <v-btn color="error" dark @click="onCancel">Abbrechen</v-btn>
             </v-flex>
@@ -119,11 +160,32 @@ export default {
       user: {},
 
       // age of user
-      userage: 0
+      userage: 0,
+
+      // checked in as member
+      asmember: false,
+
+      // checked in as partner
+      aspartner: 'no_id',
+
+      // ateliers
+      ateliers: [
+        'Holzwerkstatt',
+        'Metallwerkstatt',
+        'Fotolabor',
+        'Druckatelier',
+        'Foodatelier',
+        'Textilatelier',
+        'Studio',
+        'Fablab'
+      ],
+
+      // checked in ateliers
+      asatelier: []
     };
   },
   methods: {
-    ...mapActions(['fetchPartners', 'fetchSingleUser', 'addEntry', 'setSnack']),
+    ...mapActions(['fetchSingleUser', 'addEntry', 'setSnack']),
 
     // on clicking the send button in the form
     onSubmit(e) {
@@ -135,8 +197,22 @@ export default {
         this.user.visits = [];
       }
 
-      // push new date to visit array.
-      this.user.visits.push(new Date());
+      // create new visit object
+      const visit = {};
+
+      // add new Date to object
+      visit.date = new Date();
+      // add price to object
+      visit.price = this.computedPrice;
+      // add membership to object
+      visit.member = this.asmember;
+      // add partnership to object
+      visit.partner = this.aspartner;
+      // add visited ateliers to object
+      visit.ateliers = this.asatelier;
+
+      // push new visit to visits array.
+      this.user.visits.push(visit);
 
       // set the button to spin
       this.loading = true;
@@ -169,6 +245,11 @@ export default {
 
       // make sure the loading spinner ist showing and dialog fires up
       this.fetching = true;
+
+      // make sure that asmember, asatelier and aspartner are reset
+      this.asmember = false;
+      this.aspartner = 'no_id';
+      this.asatelier = [];
 
       // fetch single User
       this.fetchSingleUser(this.id)
@@ -234,11 +315,54 @@ export default {
       });
 
       return partnerNames;
+    },
+    // compute selects for Partnerbox
+    computedPartnersSelect() {
+      const partnerNames = [];
+
+      // add default option for no partner
+      partnerNames.push({
+        name: 'kein Partner',
+        id: 'no_id'
+      });
+
+      // add partners of user to array
+      this.user.partners.forEach(partnerID => {
+        const name = this.partners.find(p => p._id === partnerID).partner;
+
+        // add Values to object
+        const partnerObject = {
+          name: name,
+          id: partnerID
+        };
+
+        // push object to array
+        partnerNames.push(partnerObject);
+      });
+
+      return partnerNames;
+    },
+    computedPrice() {
+      let price = 30;
+
+      // price for age
+      if (this.userage < 18) {
+        price = 10;
+      }
+      if (this.userage < 12) {
+        price = 0;
+      }
+
+      // check if as member or partner
+      if (this.asmember === true) {
+        price = 0;
+      }
+      if (this.aspartner !== 'no_id') {
+        price = 0;
+      }
+
+      return price;
     }
-  },
-  created() {
-    // reload state of partners
-    this.fetchPartners();
   }
 };
 </script>
