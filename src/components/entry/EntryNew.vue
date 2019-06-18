@@ -1,7 +1,9 @@
 .<template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-icon class="success--text" @click="openNew" slot="activator">exit_to_app</v-icon>
+    <v-icon class="success--text" @click="openNew" slot="activator"
+      >exit_to_app</v-icon
+    >
 
     <!-- form -->
     <v-card>
@@ -10,7 +12,11 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Besucher*in...</h2>
         </v-flex>
@@ -21,7 +27,7 @@
               <div class="caption grey--text">Adresse</div>
               <div>{{ user.firstname }} {{ user.name }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="user.address !== ''">{{ user.address }}</div>
               <div>{{ user.postcode }} {{ user.city }}</div>
@@ -31,7 +37,7 @@
               <div class="caption grey--text">Geburtstag</div>
               <div>{{ computedDateBirthdate }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div class="caption grey--text">Kontakt</div>
               <div>{{ user.email }}</div>
@@ -39,13 +45,17 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="user.buydate">gültig bis: {{ computedDateEnddate }}</div>
+              <div v-if="user.buydate">
+                gültig bis: {{ computedDateEnddate }}
+              </div>
               <div v-else>Kein Abonnement</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">Mitglied Prozessor</div>
+                <div class="caption grey--text" v-if="user.member">
+                  Mitglied Prozessor
+                </div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
@@ -53,15 +63,13 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{
+                <v-chip v-for="partner in computedPartners" :key="partner">{{
                   partner
-                  }}
-                </v-chip>
+                }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
-                <user-edit :id="user._id"/>
+                <user-edit :id="user._id" />
               </div>
             </v-flex>
 
@@ -72,7 +80,10 @@
             <v-flex v-if="user.member" xs6 class="px-2">
               <div class="caption grey--text">Mitglied</div>
               <div>
-                <v-switch v-model="asmember" label="als Mitglied einchecken"></v-switch>
+                <v-switch
+                  v-model="asmember"
+                  label="als Mitglied einchecken"
+                ></v-switch>
               </div>
             </v-flex>
 
@@ -94,7 +105,9 @@
               <div>
                 <v-select
                   v-model="asatelier"
-                  :items="ateliers"
+                  :items="computedAteliersSelect"
+                  item-value="id"
+                  item-text="name"
                   hide-selected
                   deletable-chips
                   attach
@@ -131,7 +144,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import UserEdit from '../users/UserEdit';
 import format from 'date-fns/format';
 import locales from 'date-fns/locale/de';
@@ -141,7 +154,7 @@ export default {
   components: {
     UserEdit
   },
-  props: ['id'],
+  props: ['id', 'partners', 'ateliers'],
   data: () => {
     return {
       loading: false,
@@ -167,18 +180,6 @@ export default {
 
       // checked in as partner
       aspartner: 'no_id',
-
-      // ateliers
-      ateliers: [
-        'Holzwerkstatt',
-        'Metallwerkstatt',
-        'Fotolabor',
-        'Druckatelier',
-        'Foodatelier',
-        'Textilatelier',
-        'Studio',
-        'Fablab'
-      ],
 
       // checked in ateliers
       asatelier: []
@@ -283,8 +284,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['partners']),
-
     // Format the Birthdate
     computedDateBirthdate() {
       return this.user.birthdate
@@ -341,6 +340,24 @@ export default {
       });
 
       return partnerNames;
+    },
+    // compute selects for Atelierbox
+    computedAteliersSelect() {
+      const atelierNames = [];
+
+      // add ateliers to array
+      this.ateliers.forEach(atelierID => {
+        // add Values to object
+        const atelierObject = {
+          name: atelierID.name,
+          id: atelierID._id
+        };
+
+        // push object to array
+        atelierNames.push(atelierObject);
+      });
+
+      return atelierNames;
     },
     computedPrice() {
       let price = 30;

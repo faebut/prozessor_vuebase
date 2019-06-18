@@ -19,7 +19,7 @@
     <v-navigation-drawer app v-model="drawer" class="white darkgrey--text">
       <v-layout column align-center>
         <v-flex class="mt-5">
-          <img height="200px" src="../assets/2_black.png" alt="" />
+          <img height="200px" src="../assets/2_black.png" alt />
         </v-flex>
       </v-layout>
       <v-list class="mt-3">
@@ -34,9 +34,7 @@
             <v-list-tile-action>
               <v-icon class="darkgrey--text">{{ item.icon }}</v-icon>
             </v-list-tile-action>
-            <v-list-tile-content>
-              {{ item.title }}
-            </v-list-tile-content>
+            <v-list-tile-content>{{ item.title }}</v-list-tile-content>
           </v-list-tile>
         </template>
       </v-list>
@@ -62,6 +60,7 @@ export default {
           link: '/statistics',
           show: true
         },
+        { icon: 'assignment', title: 'Stammdaten', link: '/stamm', show: true },
         { icon: 'call_received', title: 'Log in', link: '/login', show: true }
       ]
     };

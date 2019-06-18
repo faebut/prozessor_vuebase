@@ -34,6 +34,11 @@ export default new Router({
       component: () => import('./views/Statistics.vue')
     },
     {
+      path: '/stamm',
+      name: 'stamm',
+      component: () => import('./views/Stamm.vue')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue')
