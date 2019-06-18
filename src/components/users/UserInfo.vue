@@ -45,10 +45,13 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="user.buydate">
+              <div v-if="validAbo === 'ja'">
                 gültig bis: {{ computedDateEnddate }}
               </div>
-              <div v-else>Kein Abonnement</div>
+              <div v-if="validAbo === 'nein'" class="error--text">
+                abgelaufen am: {{ computedDateEnddate }}
+              </div>
+              <div v-if="validAbo === 'kein'">Kein Abonnement</div>
               <div>
                 <br />
               </div>
@@ -63,9 +66,9 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{ partner }}
-                </v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">{{
+                  partner
+                }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
             </v-flex>
@@ -167,6 +170,26 @@ export default {
       return enddate
         ? format(enddate, 'DD. MMMM YYYY', { locale: locales })
         : '';
+    },
+    validAbo() {
+      // format the end date
+      const datestring = new Date(this.user.buydate);
+
+      const enddate = new Date(
+        datestring.setFullYear(datestring.getFullYear() + 1)
+      );
+
+      // check if still valid or not or not existent
+      let valid = 'kein';
+      if (Math.sign(new Date() - new Date(enddate)) === 1) {
+        valid = 'nein';
+      } else if (Math.sign(new Date() - new Date(enddate)) === -1) {
+        valid = 'ja';
+      } else {
+        valid = 'kein';
+      }
+
+      return valid;
     },
     computedPartners() {
       const partnerNames = [];
