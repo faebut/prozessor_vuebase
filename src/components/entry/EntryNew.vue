@@ -1,7 +1,9 @@
 .<template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-icon class="success--text" @click="openNew" slot="activator">exit_to_app</v-icon>
+    <v-icon class="success--text" @click="openNew" slot="activator"
+      >exit_to_app</v-icon
+    >
 
     <!-- form -->
     <v-card>
@@ -10,7 +12,11 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Besucher*in...</h2>
         </v-flex>
@@ -21,7 +27,7 @@
               <div class="caption grey--text">Adresse</div>
               <div>{{ user.firstname }} {{ user.name }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="user.address !== ''">{{ user.address }}</div>
               <div>{{ user.postcode }} {{ user.city }}</div>
@@ -31,7 +37,7 @@
               <div class="caption grey--text">Geburtstag</div>
               <div>{{ computedDateBirthdate }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div class="caption grey--text">Kontakt</div>
               <div>{{ user.email }}</div>
@@ -39,17 +45,20 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="validAbo === 'ja'">gültig bis: {{ computedDateEnddate }}</div>
-              <div
-                v-if="validAbo === 'nein'"
-                class="error--text"
-              >abgelaufen am: {{ computedDateEnddate }}</div>
+              <div v-if="validAbo === 'ja'">
+                gültig bis: {{ computedDateEnddate }}
+              </div>
+              <div v-if="validAbo === 'nein'" class="error--text">
+                abgelaufen am: {{ computedDateEnddate }}
+              </div>
               <div v-if="validAbo === 'kein'">Kein Abonnement</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">Mitglied Prozessor</div>
+                <div class="caption grey--text" v-if="user.member">
+                  Mitglied Prozessor
+                </div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
@@ -58,14 +67,12 @@
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
                 <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{
-                  partner
-                  }}
+                  {{ partner }}
                 </v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
-                <user-edit :id="user._id"/>
+                <user-edit :id="user._id" />
               </div>
             </v-flex>
 
@@ -76,7 +83,10 @@
             <v-flex v-if="user.member" xs6 class="px-2">
               <div class="caption grey--text">Mitglied</div>
               <div>
-                <v-switch v-model="asmember" label="als Mitglied einchecken"></v-switch>
+                <v-switch
+                  v-model="asmember"
+                  label="als Mitglied einchecken"
+                ></v-switch>
               </div>
             </v-flex>
 
@@ -216,7 +226,6 @@ export default {
 
       // set id to User id
       this.user._id = this.id;
-      console.log(this.user);
 
       // set the button to spin
       this.loading = true;
