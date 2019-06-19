@@ -4,11 +4,12 @@
 
     <v-container class="my-5">
       <v-layout row wrap>
-        <v-flex xs12 md3>
-          <entry-user-list />
+        <v-flex xs12 md4>
+          <entry-user-list/>
         </v-flex>
-        <v-flex xs12 md3 class="ml-5">
-          <entry-overview />
+        <v-flex xs12 md1></v-flex>
+        <v-flex xs12 md7>
+          <entry-overview/>
         </v-flex>
       </v-layout>
     </v-container>

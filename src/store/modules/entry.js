@@ -22,6 +22,13 @@ const actions = {
     const response = await axios.get('/users.json');
 
     commit('setLoggedIn', response.data);
+  },
+  async deleteVisit({ commit }, user) {
+    if (confirm(`Besuch von ${user.firstname} ${user.name} wirklich löschen?`)) {
+      await axios.delete(`/users/${user._id}/visits/${user.visits.length - 1}.json`);
+
+      commit('removeVisit', user._id);
+    }
   }
 };
 
@@ -57,7 +64,8 @@ const mutations = {
 
     state.loggedIn = loggedIn;
   },
-  addLoggedIn: (state, newuser) => state.loggedIn.push(newuser)
+  addLoggedIn: (state, newuser) => state.loggedIn.push(newuser),
+  removeVisit: (state, _id) => (state.loggedIn = state.loggedIn.filter(user => user._id !== _id)),
 };
 
 export default {

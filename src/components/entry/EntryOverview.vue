@@ -1,6 +1,14 @@
 <template>
   <div>
-    <h2>Eingecheckt</h2>
+    <h2 class="mb-2">Eingecheckt</h2>
+    <div class="mb-1 caption grey--text">Legende</div>
+    <div class="mb-3">
+      <v-icon>person</v-icon>kein Mitglied,
+      <v-icon class="success--text">person</v-icon>Mitglied,
+      <v-icon class="success--text">group</v-icon>Partner*in,
+      <v-icon class="success--text">verified_user</v-icon>Abonnement
+    </div>
+    <div v-if="loggedIn.length < 1" class="error--text">heute noch keine Besuche erfasst!</div>
     <entry-logged-in-user
       v-for="user in sortedUsers"
       :key="user._id"

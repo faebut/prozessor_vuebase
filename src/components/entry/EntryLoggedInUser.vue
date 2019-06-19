@@ -2,24 +2,74 @@
   <v-card flat class="pa-3 mb-1">
     <v-layout row wrap>
       <v-flex xs2>
-        <v-icon class="info--text">person</v-icon>
+        <v-icon v-if="visit.member === true" class="success--text">person</v-icon>
+        <v-icon v-if="visit.partner === 'no_id' && visit.member === false">person</v-icon>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon v-if="visit.partner !== 'no_id'" class="success--text" v-on="on">group</v-icon>
+          </template>
+          <span>{{ computedPartner }}</span>
+        </v-tooltip>
+        <v-icon v-if="validAbo === 'ja'" class="success--text">verified_user</v-icon>
       </v-flex>
 
-      <v-flex xs9>
-        <div>{{ user.firstname }} {{ user.name }}</div>
+      <v-flex xs2>
+        <v-icon v-for="atelier in visit.ateliers" :key="atelier">theaters</v-icon>
+      </v-flex>
+
+      <v-flex xs7>
+        <div>{{ user.firstname }} {{ user.name }}, {{ user.city }}</div>
       </v-flex>
 
       <v-flex xs1>
-        <!-- Button für löschen -->
+        <v-icon class="error--text" @click="deleteVisit(user)">delete</v-icon>
       </v-flex>
     </v-layout>
   </v-card>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'EntryLoggedInUser',
-  props: ['user', 'visit']
+  props: ['user', 'visit'],
+  methods: {
+    ...mapActions(['deleteVisit'])
+  },
+  computed: {
+    ...mapGetters(['partners']),
+    validAbo() {
+      // format the end date
+      const datestring = new Date(this.user.buydate);
+
+      const enddate = new Date(
+        datestring.setFullYear(datestring.getFullYear() + 1)
+      );
+
+      // check if still valid or not or not existent
+      let valid = 'kein';
+      if (Math.sign(new Date() - new Date(enddate)) === 1) {
+        valid = 'nein';
+      } else if (Math.sign(new Date() - new Date(enddate)) === -1) {
+        valid = 'ja';
+      } else {
+        valid = 'kein';
+      }
+
+      return valid;
+    },
+    computedPartner() {
+      if (this.visit.partner !== 'no_id') {
+        const partner = this.partners.find(x => x._id === this.visit.partner)
+          .partner;
+
+        return partner;
+      } else {
+        return 'nopartner';
+      }
+    }
+  }
 };
 </script>
 

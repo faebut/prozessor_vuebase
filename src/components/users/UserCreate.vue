@@ -142,6 +142,7 @@
                 chips
                 label="Partnervereine/institutionen auswählen"
                 multiple
+                menu-props="closeOnContentClick"
               ></v-select>
             </v-flex>
 
