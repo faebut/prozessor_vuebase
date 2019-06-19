@@ -3,10 +3,10 @@
     <h2 class="mb-2">Eingecheckt</h2>
     <div class="mb-1 caption grey--text">Legende</div>
     <div class="mb-3">
-      <v-icon>person</v-icon>kein Mitglied,
-      <v-icon class="success--text">person</v-icon>Mitglied,
-      <v-icon class="success--text">group</v-icon>Partner*in,
-      <v-icon class="success--text">verified_user</v-icon>Abonnement
+      <v-icon>person</v-icon>&nbsp;kein Mitglied,&nbsp;
+      <v-icon class="success--text">person</v-icon>&nbsp;Mitglied,&nbsp;
+      <v-icon class="success--text">group</v-icon>&nbsp;Partner*in,&nbsp;
+      <v-icon class="success--text">verified_user</v-icon>&nbsp;Abonnement
     </div>
     <div v-if="loggedIn.length < 1" class="error--text">heute noch keine Besuche erfasst!</div>
     <entry-logged-in-user
