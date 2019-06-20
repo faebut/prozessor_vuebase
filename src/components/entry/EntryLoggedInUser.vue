@@ -14,7 +14,7 @@
       </v-flex>
 
       <v-flex xs2>
-        <v-icon v-for="atelier in visit.ateliers" :key="atelier">theaters</v-icon>
+        <v-icon v-for="atelier in computedAteliers" :key="atelier.name">{{ atelier.icon }}</v-icon>
       </v-flex>
 
       <v-flex xs7>
@@ -33,7 +33,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'EntryLoggedInUser',
-  props: ['user', 'visit'],
+  props: ['user', 'visit', 'ateliers'],
   methods: {
     ...mapActions(['deleteVisit'])
   },
@@ -68,6 +68,17 @@ export default {
       } else {
         return 'nopartner';
       }
+    },
+    computedAteliers() {
+      const ateliersarray = [];
+
+      // get for each logged in atelier the object from ateliers and add it to the array
+      this.visit.ateliers.forEach(atelier => {
+        const object = this.ateliers.find(x => x._id === atelier);
+        ateliersarray.push(object);
+      });
+
+      return ateliersarray;
     }
   }
 };
