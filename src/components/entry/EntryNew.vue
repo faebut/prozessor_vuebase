@@ -6,7 +6,7 @@
     <!-- form -->
     <v-card>
       <v-card-title v-if="!fetching" class="px-4">
-        <h1>{{ user.firstname }} {{ user.name }} einchecken</h1>
+        <h1>{{ userToEdit.firstname }} {{ userToEdit.name }} einchecken</h1>
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
@@ -19,12 +19,12 @@
           <v-layout row wrap>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Adresse</div>
-              <div>{{ user.firstname }} {{ user.name }}</div>
+              <div>{{ userToEdit.firstname }} {{ userToEdit.name }}</div>
               <div>
                 <br>
               </div>
-              <div v-if="user.address !== ''">{{ user.address }}</div>
-              <div>{{ user.postcode }} {{ user.city }}</div>
+              <div v-if="userToEdit.address !== ''">{{ userToEdit.address }}</div>
+              <div>{{ userToEdit.postcode }} {{ userToEdit.city }}</div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">
@@ -34,8 +34,8 @@
                 <br>
               </div>
               <div class="caption grey--text">Kontakt</div>
-              <div>{{ user.email }}</div>
-              <div>{{ user.phone }}</div>
+              <div>{{ userToEdit.email }}</div>
+              <div>{{ userToEdit.phone }}</div>
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
@@ -48,20 +48,20 @@
               <div>
                 <br>
               </div>
-              <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">Mitglied Prozessor</div>
+              <div v-if="userToEdit.member">
+                <div class="caption grey--text" v-if="userToEdit.member">Mitglied Prozessor</div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
-              <div v-if="user.partners">
+              <div v-if="userToEdit.partners">
                 <v-chip v-for="partner in computedPartners" :key="partner">{{ partner }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
-                <user-edit :id="user._id"/>
+                <user-edit :id="id"/>
               </div>
             </v-flex>
 
@@ -69,14 +69,14 @@
               <h2>Einchecken</h2>
             </v-flex>
 
-            <v-flex v-if="user.member && aspartner === 'no_id'" xs6 class="px-2">
+            <v-flex v-if="userToEdit.member && aspartner === 'no_id'" xs6 class="px-2">
               <div class="caption grey--text">Mitglied</div>
               <div>
                 <v-switch v-model="asmember" label="als Mitglied einchecken"></v-switch>
               </div>
             </v-flex>
 
-            <v-flex v-if="user.partners && !asmember" xs6 class="px-2">
+            <v-flex v-if="userToEdit.partners && !asmember" xs6 class="px-2">
               <div class="caption grey--text">als Partner_in Einchecken</div>
 
               <div>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import UserEdit from '../users/UserEdit';
 import format from 'date-fns/format';
 import locales from 'date-fns/locale/de';
@@ -159,12 +159,6 @@ export default {
       datePickerBirthday: false,
       datePickerBuydate: false,
 
-      // form fields initally empty --> check if needed
-      user: {},
-
-      // age of user
-      userage: 0,
-
       // checked in as member
       asmember: false,
 
@@ -184,8 +178,8 @@ export default {
 
       // check if there are already visits. And create empty array if not.
 
-      if (this.user.visits == undefined) {
-        this.user.visits = [];
+      if (this.userToEdit.visits == undefined) {
+        this.userToEdit.visits = [];
       }
 
       // create new visit object
@@ -209,10 +203,10 @@ export default {
       }
 
       // push new visit to visits array.
-      this.user.visits.push(visit);
+      this.userToEdit.visits.push(visit);
 
       // set id to User id
-      this.user._id = this.id;
+      this.userToEdit._id = this.id;
 
       // set the button to spin
       this.loading = true;
@@ -254,16 +248,8 @@ export default {
       // fetch single User
       this.fetchSingleUser(this.id)
         .then(res => {
-          // get the data and set it to the user
-          this.user = res.response.data;
-
           // remove the loader and show form
           this.fetching = false;
-
-          // calculate user age
-          const diff_ms = this.now - new Date(this.user.birthdate).getTime();
-          const age_dt = new Date(diff_ms);
-          this.userage = Math.abs(age_dt.getUTCFullYear() - 1970);
         })
         .catch(err => {
           // show snackbar for error
@@ -283,16 +269,19 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['userToEdit']),
     // Format the Birthdate
     computedDateBirthdate() {
-      return this.user.birthdate
-        ? format(this.user.birthdate, 'DD. MMMM YYYY', { locale: locales })
+      return this.userToEdit.birthdate
+        ? format(this.userToEdit.birthdate, 'DD. MMMM YYYY', {
+            locale: locales
+          })
         : '';
     },
 
     // Format the end date
     computedDateEnddate() {
-      const datestring = new Date(this.user.buydate);
+      const datestring = new Date(this.userToEdit.buydate);
 
       const enddate = new Date(
         datestring.setFullYear(datestring.getFullYear() + 1)
@@ -305,7 +294,7 @@ export default {
     computedPartners() {
       const partnerNames = [];
 
-      this.user.partners.forEach(partnerID => {
+      this.userToEdit.partners.forEach(partnerID => {
         const partnerName = this.partners.find(p => p._id === partnerID)
           .partner;
 
@@ -325,7 +314,7 @@ export default {
       });
 
       // add partners of user to array
-      this.user.partners.forEach(partnerID => {
+      this.userToEdit.partners.forEach(partnerID => {
         const name = this.partners.find(p => p._id === partnerID).partner;
 
         // add Values to object
@@ -360,7 +349,7 @@ export default {
     },
     validAbo() {
       // format the end date
-      const datestring = new Date(this.user.buydate);
+      const datestring = new Date(this.userToEdit.buydate);
 
       const enddate = new Date(
         datestring.setFullYear(datestring.getFullYear() + 1)
@@ -377,6 +366,16 @@ export default {
       }
 
       return valid;
+    },
+    userage() {
+      // calculate user age
+      const diff_ms =
+        new Date() - new Date(this.userToEdit.birthdate).getTime();
+
+      const age_dt = new Date(diff_ms);
+      const userage = Math.abs(age_dt.getUTCFullYear() - 1970);
+
+      return userage;
     },
     computedPrice() {
       let price = 30;
