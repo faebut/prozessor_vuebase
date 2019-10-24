@@ -5,11 +5,11 @@
     <v-container class="my-5">
       <v-layout row wrap>
         <v-flex xs12 md4>
-          <entry-user-list/>
+          <entry-user-list />
         </v-flex>
         <v-flex xs12 md1></v-flex>
         <v-flex xs12 md7>
-          <entry-overview :date="computedDate"/>
+          <entry-overview :date="computedDate" />
         </v-flex>
       </v-layout>
     </v-container>

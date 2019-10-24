@@ -21,7 +21,7 @@
               <div class="caption grey--text">Adresse</div>
               <div>{{ userToEdit.firstname }} {{ userToEdit.name }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="userToEdit.address !== ''">{{ userToEdit.address }}</div>
               <div>{{ userToEdit.postcode }} {{ userToEdit.city }}</div>
@@ -31,7 +31,7 @@
               <div class="caption grey--text">Geburtstag</div>
               <div>{{ computedDateBirthdate }}</div>
               <div>
-                <br>
+                <br />
               </div>
               <div class="caption grey--text">Kontakt</div>
               <div>{{ userToEdit.email }}</div>
@@ -46,7 +46,7 @@
               >abgelaufen am: {{ computedDateEnddate }}</div>
               <div v-if="validAbo === 'kein'">Kein Abonnement</div>
               <div>
-                <br>
+                <br />
               </div>
               <div v-if="userToEdit.member">
                 <div class="caption grey--text" v-if="userToEdit.member">Mitglied Prozessor</div>
@@ -61,7 +61,7 @@
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
-                <user-edit :id="id"/>
+                <user-edit :id="id" />
               </div>
             </v-flex>
 
@@ -95,6 +95,7 @@
                 <v-select
                   v-model="asatelier"
                   :items="computedAteliersSelect"
+                  :rules="[rules.required]"
                   item-value="id"
                   item-text="name"
                   hide-selected
@@ -211,15 +212,13 @@ export default {
       // set the button to spin
       this.loading = true;
       // call action to add new user
-      this.addEntry(this.user)
+      this.addEntry(this.userToEdit)
         .then(() => {
           // remove spinner
           this.loading = false;
           // show snackbar for success
           this.setSnack({
-            message: `Besucher*in ${this.user.firstname} ${
-              this.user.name
-            } erfolgreich eingecheckt`,
+            message: `Besucher*in ${this.userToEdit.firstname} ${this.userToEdit.name} erfolgreich eingecheckt`,
             type: 'success'
           });
           // close dialog
@@ -247,7 +246,7 @@ export default {
 
       // fetch single User
       this.fetchSingleUser(this.id)
-        .then(res => {
+        .then(() => {
           // remove the loader and show form
           this.fetching = false;
         })

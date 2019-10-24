@@ -1,7 +1,9 @@
 <template>
   <div>
     <h2 class="mb-2">Eingecheckt am {{ date }}</h2>
-    <div v-if="loggedIn.length < 1" class="error--text">heute noch keine Besuche erfasst!</div>
+    <div v-if="loggedIn.length < 1" class="error--text">
+      heute noch keine Besuche erfasst!
+    </div>
     <entry-logged-in-user
       v-for="user in sortedUsers"
       :key="user._id"
@@ -19,11 +21,11 @@
         <v-flex xs4>
           <div class="mb-1 caption grey--text">Tarif</div>
           <v-icon>person</v-icon>&nbsp;kein Mitglied
-          <br>
+          <br />
           <v-icon class="success--text">person</v-icon>&nbsp;Mitglied
-          <br>
+          <br />
           <v-icon class="success--text">group</v-icon>&nbsp;Partner*in
-          <br>
+          <br />
           <v-icon class="success--text">verified_user</v-icon>&nbsp;Abonnement
         </v-flex>
 

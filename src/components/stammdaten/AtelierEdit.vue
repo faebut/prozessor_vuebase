@@ -12,7 +12,11 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Werkstatt/Atelier...</h2>
         </v-flex>
@@ -36,7 +40,11 @@
             </v-flex>
 
             <v-flex sm4 class="px-2">
-              <v-text-field v-model="atelier.icon" :rules="[rules.required]" label="Icon"></v-text-field>
+              <v-text-field
+                v-model="atelier.icon"
+                :rules="[rules.required]"
+                label="Icon"
+              ></v-text-field>
             </v-flex>
 
             <v-flex xs8 class="px-2 mt-3">
@@ -44,10 +52,19 @@
             </v-flex>
 
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn block :loading="loading" color="warning" dark @click="onSubmit">Ändern</v-btn>
+              <v-btn
+                block
+                :loading="loading"
+                color="warning"
+                dark
+                @click="onSubmit"
+                >Ändern</v-btn
+              >
             </v-flex>
             <v-flex xs6 class="mt-4 px-2">
-              <v-btn block color="error" dark @click="onCancel">Abbrechen</v-btn>
+              <v-btn block color="error" dark @click="onCancel"
+                >Abbrechen</v-btn
+              >
             </v-flex>
           </v-layout>
         </v-form>

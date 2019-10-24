@@ -1,6 +1,8 @@
 <template>
   <v-dialog max-width="800px" v-model="dialog">
-    <v-btn flat class="success" slot="activator">Atelier/Werkstatt hinzufügen</v-btn>
+    <v-btn flat class="success" slot="activator"
+      >Atelier/Werkstatt hinzufügen</v-btn
+    >
     <v-card>
       <v-card-title class="px-4">
         <h1>Atelier/Werkstatt hinzufügen</h1>
@@ -25,7 +27,11 @@
             </v-flex>
 
             <v-flex sm4 class="px-2">
-              <v-text-field v-model="atelier.icon" :rules="[rules.required]" label="Icon"></v-text-field>
+              <v-text-field
+                v-model="atelier.icon"
+                :rules="[rules.required]"
+                label="Icon"
+              ></v-text-field>
             </v-flex>
 
             <v-flex xs8 class="px-2 mt-3">
@@ -33,7 +39,14 @@
             </v-flex>
 
             <v-flex xs12 class="mt-4">
-              <v-btn block :loading="loading" color="primary" dark @click="onSubmit">Absenden</v-btn>
+              <v-btn
+                block
+                :loading="loading"
+                color="primary"
+                dark
+                @click="onSubmit"
+                >Absenden</v-btn
+              >
             </v-flex>
           </v-layout>
         </v-form>

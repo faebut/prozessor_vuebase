@@ -50,7 +50,7 @@ const actions = {
 
   // remove a partner from the database and set value for mutation
   async deletePartner({ commit }, _id) {
-    if (confirm('Besucher*in wirklich löschen?')) {
+    if (confirm('Partner*in wirklich löschen?')) {
       await axios.delete(`/partners/${_id}.json`);
 
       commit('removePartner', _id);
