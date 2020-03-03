@@ -1,56 +1,61 @@
 <template>
   <div>
-    <h1 class="grey--text">Willkommen bei der Benutzerdatenbank des Prozessors. Bitte logge dich ein</h1>
+    <h1 class="grey--text">
+      Willkommen bei der Benutzerdatenbank des Prozessors. Bitte logge dich ein
+    </h1>
     <v-container class="my-5 text-xs-center">
-      <div id="signin">
-        <div class="signin-form">
-          <form @submit.prevent="onSubmit">
-            <div class="input">
-              <label for="email">Mail</label>
-              <input type="email" id="email" v-model="email" />
-            </div>
-            <div class="input">
-              <label for="password">Password</label>
-              <input type="password" id="password" v-model="password" />
-            </div>
-            <div class="submit">
-              <button type="submit">Submit</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <v-btn large flat class="success">Login</v-btn>
+      <v-form ref="form">
+        <v-layout row wrap>
+          <v-flex md6 sm12 class="px-2">
+            <v-text-field
+              v-model="email"
+              :rules="[rules.required, rules.email]"
+              label="E-Mail"
+            ></v-text-field>
+          </v-flex>
+          <v-flex md6 sm12 class="px-2">
+            <v-text-field
+              v-model="password"
+              :rules="[rules.required]"
+              :type="'password'"
+              label="Passwort"
+              @click:append="show1 = !show1"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs12 class="mt-4 px-2">
+            <v-btn color="success" dark @click="onSubmit">Login</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-form>
     </v-container>
   </div>
 </template>
 
 <script>
-import axios from '../axios-auth';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Home',
   data: () => ({
     email: '',
-    password: ''
+    password: '',
+    // rules
+    rules: {
+      required: value => !!value || 'Bitte eingeben.',
+      email: value => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return pattern.test(value) || 'E-Mail ungültig.';
+      }
+    }
   }),
   methods: {
+    ...mapActions(['login']),
     onSubmit() {
       const formData = {
         email: this.email,
         password: this.password
       };
-      console.log(formData),
-        axios
-          .post(
-            '/accounts:signInWithPassword?key=AIzaSyAwcADep1pDUmKasNzaTu0bWDqH0Bj96mk',
-            {
-              email: formData.email,
-              password: formData.password,
-              returnSecureToken: true
-            }
-          )
-          .then(res => console.log(res))
-          .catch(error => console.log(error));
+      this.login({ email: formData.email, password: formData.password });
     }
   }
 };

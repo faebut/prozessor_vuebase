@@ -1,4 +1,5 @@
 import axios from 'axios';
+import auth from './auth';
 
 const state = {
   loggedIn: []
@@ -13,13 +14,13 @@ const actions = {
   // add a entry to the user to the database and set value for mutation
   // eslint-disable-next-line no-empty-pattern
   async addEntry({ commit }, user) {
-    await axios.put(`/users/${user._id}/visits.json`, user.visits);
+    await axios.put(`/users/${user._id}/visits.json` + '?auth=' + auth.state.idToken, user.visits);
 
     commit('addLoggedIn', user);
   },
   // getting List of logged in Users
   async usersLoggedIn({ commit }) {
-    const response = await axios.get('/users.json');
+    const response = await axios.get('/users.json' + '?auth=' + auth.state.idToken);
 
     commit('setLoggedIn', response.data);
   },
@@ -28,7 +29,7 @@ const actions = {
       confirm(`Besuch von ${user.firstname} ${user.name} wirklich löschen?`)
     ) {
       await axios.delete(
-        `/users/${user._id}/visits/${user.visits.length - 1}.json`
+        `/users/${user._id}/visits/${user.visits.length - 1}.json` + '?auth=' + auth.state.idToken
       );
 
       commit('removeVisit', user._id);

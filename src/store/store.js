@@ -7,6 +7,7 @@ import partners from './modules/partners';
 import snackbar from './modules/snackbar';
 import entry from './modules/entry';
 import ateliers from './modules/ateliers';
+import auth from './modules/auth';
 
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     partners,
     snackbar,
     entry,
-    ateliers
+    ateliers,
+    auth
   }
 });

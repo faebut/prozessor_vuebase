@@ -6,7 +6,7 @@ import store from './store/store';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://prozessor-vuebase.firebaseio.com';
-axios.defaults.headers.get['Accepts'] = 'application/json'
+axios.defaults.headers.get['Accepts'] = 'application/json';
 
 Vue.config.productionTip = false;
 
