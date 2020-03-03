@@ -95,9 +95,9 @@
                 <v-select
                   v-model="asatelier"
                   :items="computedAteliersSelect"
-                  :rules="[rules.required]"
                   item-value="id"
                   item-text="name"
+                  :rules="[rules.required]"
                   hide-selected
                   deletable-chips
                   attach
@@ -154,7 +154,7 @@ export default {
       fetching: true,
       // rules
       rules: {
-        required: value => !!value || 'Bitte eingeben.'
+        required: value => value.length > 0 || 'Bitte eingeben.'
       },
       // date Stuff
       datePickerBirthday: false,
@@ -183,54 +183,57 @@ export default {
         this.userToEdit.visits = [];
       }
 
-      // create new visit object
-      const visit = {};
+      // check if the input is valid
+      if (this.$refs.form.validate()) {
+        // create new visit object
+        const visit = {};
 
-      // add new Date to object
-      visit.date = new Date();
-      // add price to object
-      visit.price = this.computedPrice;
-      // add membership to object
-      visit.member = this.asmember;
-      // add partnership to object
-      visit.partner = this.aspartner;
-      // add visited ateliers to object
-      visit.ateliers = this.asatelier;
-      // add valid abonnement to object
-      if (this.validAbo === 'ja') {
-        visit.abonnement = true;
-      } else {
-        visit.abonnement = false;
+        // add new Date to object
+        visit.date = new Date();
+        // add price to object
+        visit.price = this.computedPrice;
+        // add membership to object
+        visit.member = this.asmember;
+        // add partnership to object
+        visit.partner = this.aspartner;
+        // add visited ateliers to object
+        visit.ateliers = this.asatelier;
+        // add valid abonnement to object
+        if (this.validAbo === 'ja') {
+          visit.abonnement = true;
+        } else {
+          visit.abonnement = false;
+        }
+
+        // push new visit to visits array.
+        this.userToEdit.visits.push(visit);
+
+        // set id to User id
+        this.userToEdit._id = this.id;
+
+        // set the button to spin
+        this.loading = true;
+        // call action to add new user
+        this.addEntry(this.userToEdit)
+          .then(() => {
+            // remove spinner
+            this.loading = false;
+            // show snackbar for success
+            this.setSnack({
+              message: `Besucher*in ${this.userToEdit.firstname} ${this.userToEdit.name} erfolgreich eingecheckt`,
+              type: 'success'
+            });
+            // close dialog
+            this.dialog = false;
+          })
+          .catch(err => {
+            // show snackbar for error
+            this.setSnack({
+              message: `Error: ${err}`,
+              type: 'error'
+            });
+          });
       }
-
-      // push new visit to visits array.
-      this.userToEdit.visits.push(visit);
-
-      // set id to User id
-      this.userToEdit._id = this.id;
-
-      // set the button to spin
-      this.loading = true;
-      // call action to add new user
-      this.addEntry(this.userToEdit)
-        .then(() => {
-          // remove spinner
-          this.loading = false;
-          // show snackbar for success
-          this.setSnack({
-            message: `Besucher*in ${this.userToEdit.firstname} ${this.userToEdit.name} erfolgreich eingecheckt`,
-            type: 'success'
-          });
-          // close dialog
-          this.dialog = false;
-        })
-        .catch(err => {
-          // show snackbar for error
-          this.setSnack({
-            message: `Error: ${err}`,
-            type: 'error'
-          });
-        });
     },
 
     openNew(e) {
