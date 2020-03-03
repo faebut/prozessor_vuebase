@@ -18,14 +18,18 @@ const getters = {
 const actions = {
   // fetch ateliers from database and set value for mutation
   async fetchAteliers({ commit }) {
-    const response = await axios.get('/ateliers.json' + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      '/ateliers.json' + '?auth=' + auth.state.idToken
+    );
 
     commit('setAteliers', response.data);
   },
 
   // fetch single atelier from database and set value for mutation
   async fetchSingleAtelier({ commit }, _id) {
-    const response = await axios.get(`/ateliers/${_id}.json` + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      `/ateliers/${_id}.json` + '?auth=' + auth.state.idToken
+    );
 
     commit('setAtelierToEdit', response.data);
 
@@ -36,9 +40,14 @@ const actions = {
 
   // add a atelier to the database and set value for mutation
   async addAtelier({ commit }, atelier) {
-    const response = await axios.post('/ateliers.json' + '?auth=' + auth.state.idToken, atelier);
+    const response = await axios.post(
+      '/ateliers.json' + '?auth=' + auth.state.idToken,
+      atelier
+    );
     // get the data in the database with the generated key from the post request
-    const newdata = await axios.get(`/ateliers/${response.data.name}.json` + '?auth=' + auth.state.idToken);
+    const newdata = await axios.get(
+      `/ateliers/${response.data.name}.json` + '?auth=' + auth.state.idToken
+    );
 
     // assign the data from the get request to a new variable
     const newatelier = newdata.data;
@@ -52,7 +61,9 @@ const actions = {
   // remove a atelier from the database and set value for mutation
   async deleteAtelier({ commit }, _id) {
     if (confirm('Atlier wirklich löschen?')) {
-      await axios.delete(`/ateliers/${_id}.json` + '?auth=' + auth.state.idToken);
+      await axios.delete(
+        `/ateliers/${_id}.json` + '?auth=' + auth.state.idToken
+      );
 
       commit('removeAteliers', _id);
     }
@@ -60,7 +71,10 @@ const actions = {
 
   // edit a atelier in the database and reset atelierToEdit state
   async editAtelier({ commit }, atelier) {
-    const response = await axios.put(`/ateliers/${atelier._id}.json` + '?auth=' + auth.state.idToken, atelier);
+    const response = await axios.put(
+      `/ateliers/${atelier._id}.json` + '?auth=' + auth.state.idToken,
+      atelier
+    );
 
     commit('updateAtelier', response.data);
   }

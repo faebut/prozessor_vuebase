@@ -9,15 +9,18 @@
 
     <b>{{ snack.message }}</b>
 
-    <v-btn dark flat @click="show = false">schliessen</v-btn>
+    <v-btn dark flat @click="hideSnack">schliessen</v-btn>
   </v-snackbar>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'AlertSnackbar',
+  methods: {
+    ...mapActions(['hideSnack'])
+  },
   computed: {
     ...mapGetters(['snack'])
   }

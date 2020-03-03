@@ -1,10 +1,12 @@
 <template>
   <div>
-    <h1 class="grey--text">
-      Willkommen bei der Benutzerdatenbank des Prozessors. Bitte logge dich ein
+    <h1 v-if="!loggedIn" class="red--text text--darken-1">Bitte einloggen</h1>
+    <h1 v-else class="grey--text">
+      Willkommen bei der Userdatenbank des Prozessors. Bitte wähle aus der
+      Navigation.
     </h1>
     <v-container class="my-5 text-xs-center">
-      <v-form ref="form">
+      <v-form v-if="!loggedIn" ref="form">
         <v-layout row wrap>
           <v-flex md6 sm12 class="px-2">
             <v-text-field
@@ -33,6 +35,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import auth from '../store/modules/auth';
 
 export default {
   name: 'Home',
@@ -49,13 +52,35 @@ export default {
     }
   }),
   methods: {
-    ...mapActions(['login']),
+    ...mapActions(['login', 'setSnack']),
     onSubmit() {
-      const formData = {
-        email: this.email,
-        password: this.password
-      };
-      this.login({ email: formData.email, password: formData.password });
+      if (this.$refs.form.validate()) {
+        const formData = {
+          email: this.email,
+          password: this.password
+        };
+        this.login({ email: formData.email, password: formData.password })
+          .then(() => {
+            // show snackbar for success
+            this.setSnack({
+              message: 'Erfolgreich eingeloggt',
+              type: 'success'
+            });
+          })
+          .catch(() => {
+            // show snackbar for error
+            this.setSnack({
+              message: `Benutzername oder Passwort falsch`,
+              type: 'error'
+            });
+          });
+      }
+    }
+  },
+  computed: {
+    loggedIn() {
+      // return the value of the idToken
+      return auth.state.idToken;
     }
   }
 };

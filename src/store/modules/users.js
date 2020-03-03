@@ -18,14 +18,18 @@ const getters = {
 const actions = {
   // fetch users from database and set value for mutation
   async fetchUsers({ commit }) {
-    const response = await axios.get('/users.json' + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      '/users.json' + '?auth=' + auth.state.idToken
+    );
 
     commit('setUsers', response.data);
   },
 
   // fetch single user from database and set value for mutation
   async fetchSingleUser({ commit }, _id) {
-    const response = await axios.get(`/users/${_id}.json` + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      `/users/${_id}.json` + '?auth=' + auth.state.idToken
+    );
 
     commit('setUserToEdit', response.data);
 
@@ -36,9 +40,14 @@ const actions = {
 
   // add a user to the database and set value for mutation
   async addUser({ commit }, user) {
-    const response = await axios.post('/users.json' + '?auth=' + auth.state.idToken, user);
+    const response = await axios.post(
+      '/users.json' + '?auth=' + auth.state.idToken,
+      user
+    );
     // get the data in the database with the generated key from the post request
-    const newdata = await axios.get(`/users/${response.data.name}.json` + '?auth=' + auth.state.idToken);
+    const newdata = await axios.get(
+      `/users/${response.data.name}.json` + '?auth=' + auth.state.idToken
+    );
 
     // assign the data from the get request to a new variable
     const newuser = newdata.data;
@@ -60,7 +69,10 @@ const actions = {
 
   // edit a user in the database and reset userToEdit state
   async editUser({ commit }, user) {
-    const response = await axios.put(`/users/${user._id}.json` + '?auth=' + auth.state.idToken, user);
+    const response = await axios.put(
+      `/users/${user._id}.json` + '?auth=' + auth.state.idToken,
+      user
+    );
 
     commit('updateUser', response.data);
   }

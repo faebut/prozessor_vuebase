@@ -10,7 +10,8 @@
         <span>Prozessor</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat color="grey">
+
+      <v-btn v-if="loggedIn" @click="onLogout" flat color="grey">
         <span>Sign Out</span>
         <v-icon right>exit_to_app</v-icon>
       </v-btn>
@@ -25,7 +26,7 @@
       <v-list class="mt-3">
         <template v-for="(item, index) in items">
           <v-list-tile
-            v-if="item.show"
+            v-if="item.show || loggedIn"
             :key="index"
             router
             :to="item.link"
@@ -43,6 +44,9 @@
 </template>
 
 <script>
+import auth from '../store/modules/auth';
+import { mapActions } from 'vuex';
+
 export default {
   name: 'AppNavigation',
   data() {
@@ -51,19 +55,35 @@ export default {
       drawer: false,
       items: [
         { icon: 'dashboard', title: 'Home', link: '/', show: true },
-        { icon: 'folder', title: 'Eingang', link: '/entry', show: true },
-        { icon: 'person', title: 'Besuchende', link: 'users', show: true },
-        { icon: 'group', title: 'Partner', link: '/partners', show: true },
+        { icon: 'folder', title: 'Eingang', link: '/entry', show: false },
+        { icon: 'person', title: 'Besuchende', link: 'users', show: false },
+        { icon: 'group', title: 'Partner', link: '/partners', show: false },
+        {
+          icon: 'assignment',
+          title: 'Stammdaten',
+          link: '/stamm',
+          show: false
+        },
         {
           icon: 'insert_chart',
           title: 'Statistik',
           link: '/statistics',
-          show: true
-        },
-        { icon: 'assignment', title: 'Stammdaten', link: '/stamm', show: true },
-        { icon: 'call_received', title: 'Log in', link: '/login', show: true }
+          show: false
+        }
       ]
     };
+  },
+  methods: {
+    ...mapActions(['logout']),
+    onLogout() {
+      this.logout();
+    }
+  },
+  computed: {
+    loggedIn() {
+      // return the value of the idToken
+      return auth.state.idToken;
+    }
   }
 };
 </script>

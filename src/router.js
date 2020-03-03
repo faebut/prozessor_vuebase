@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 
+import auth from './store/modules/auth';
+
 Vue.use(Router);
 
 export default new Router({
@@ -16,32 +18,62 @@ export default new Router({
     {
       path: '/entry',
       name: 'entry',
-      component: () => import('./views/Entry.vue')
+      component: () => import('./views/Entry.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     },
     {
       path: '/users',
       name: 'users',
-      component: () => import('./views/Users.vue')
+      component: () => import('./views/Users.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     },
     {
       path: '/partners',
       name: 'partners',
-      component: () => import('./views/Partners.vue')
+      component: () => import('./views/Partners.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     },
     {
       path: '/statistics',
       name: 'statistics',
-      component: () => import('./views/Statistics.vue')
+      component: () => import('./views/Statistics.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     },
     {
       path: '/stamm',
       name: 'stamm',
-      component: () => import('./views/Stamm.vue')
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('./views/Login.vue')
+      component: () => import('./views/Stamm.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     }
   ]
 });

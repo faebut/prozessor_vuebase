@@ -29,12 +29,17 @@ const actions = {
 
     // send modified object to mutations
     commit('setSnack', snack);
+  },
+  hideSnack({ commit }) {
+    commit('notShowSnack');
   }
 };
 
 const mutations = {
   // set state of snack to new value
-  setSnack: (state, snack) => (state.snack = snack)
+  setSnack: (state, snack) => (state.snack = snack),
+  // hide the snackbar again
+  notShowSnack: state => (state.snack.show = false)
 };
 
 export default {

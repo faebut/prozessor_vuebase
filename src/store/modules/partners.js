@@ -18,14 +18,18 @@ const getters = {
 const actions = {
   // fetch partners from database and set value for mutation
   async fetchPartners({ commit }) {
-    const response = await axios.get('/partners.json' + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      '/partners.json' + '?auth=' + auth.state.idToken
+    );
 
     commit('setPartners', response.data);
   },
 
   // fetch single partner from database and set value for mutation
   async fetchSinglePartner({ commit }, _id) {
-    const response = await axios.get(`/partners/${_id}.json` + '?auth=' + auth.state.idToken);
+    const response = await axios.get(
+      `/partners/${_id}.json` + '?auth=' + auth.state.idToken
+    );
 
     commit('setPartnerToEdit', response.data);
 
@@ -36,9 +40,14 @@ const actions = {
 
   // add a partner to the database and set value for mutation
   async addPartner({ commit }, partner) {
-    const response = await axios.post('/partners.json' + '?auth=' + auth.state.idToken, partner);
+    const response = await axios.post(
+      '/partners.json' + '?auth=' + auth.state.idToken,
+      partner
+    );
     // get the data in the database with the generated key from the post request
-    const newdata = await axios.get(`/partners/${response.data.name}.json` + '?auth=' + auth.state.idToken);
+    const newdata = await axios.get(
+      `/partners/${response.data.name}.json` + '?auth=' + auth.state.idToken
+    );
 
     // assign the data from the get request to a new variable
     const newpartner = newdata.data;
@@ -52,7 +61,9 @@ const actions = {
   // remove a partner from the database and set value for mutation
   async deletePartner({ commit }, _id) {
     if (confirm('Partner*in wirklich löschen?')) {
-      await axios.delete(`/partners/${_id}.json` + '?auth=' + auth.state.idToken);
+      await axios.delete(
+        `/partners/${_id}.json` + '?auth=' + auth.state.idToken
+      );
 
       commit('removePartner', _id);
     }
@@ -60,7 +71,10 @@ const actions = {
 
   // edit a partner in the database and reset partnerToEdit state
   async editPartner({ commit }, partner) {
-    const response = await axios.put(`/partners/${partner._id}.json` + '?auth=' + auth.state.idToken, partner);
+    const response = await axios.put(
+      `/partners/${partner._id}.json` + '?auth=' + auth.state.idToken,
+      partner
+    );
 
     commit('updatePartner', response.data);
   }

@@ -18,6 +18,9 @@ export default {
   components: {
     AppNavigation,
     AlertSnackbar
+  },
+  created() {
+    this.$store.dispatch('tryAutoLogin');
   }
 };
 </script>
