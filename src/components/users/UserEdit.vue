@@ -161,6 +161,27 @@
               ></v-select>
             </v-flex>
 
+            <v-flex xs12 class="px-2">
+              <h1>Nutzungsvereinbarung / Infos</h1>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <v-switch
+                v-model="user.agreement"
+                color="primary"
+                :label="'Nutzungsvereinbarung unterschrieben'"
+              ></v-switch>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <v-textarea
+                v-model="user.infos"
+                filled
+                label="Weitere Infos / Allergien / Spezielles"
+                auto-grow
+              ></v-textarea>
+            </v-flex>
+
             <v-flex xs6 class="mt-4 px-2">
               <v-btn
                 block

@@ -143,8 +143,40 @@
               <div>CHF {{ computedPrice }}.-</div>
             </v-flex>
 
-            <v-flex xs6 class="mt-4 px-2">
-              <v-btn color="success" dark @click="onSubmit">Einchecken</v-btn>
+            <v-flex v-if="!userToEdit.agreement" xs12 class="px-2 mt-3">
+              <v-card color="error" dark>
+                <v-card-actions>
+                  <div class="font-weight-bold">
+                    Nutzungsvereinbarung noch nicht unterschrieben!
+                  </div>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    class="ma-2"
+                    outline
+                    @click="userToEdit.agreement = true"
+                    color="white"
+                    >jetzt unterschreiben!</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+
+            <v-flex v-if="userToEdit.agreement" xs12 class="px-2 mt-3">
+              <v-card color="success" dark>
+                <v-card-text class="font-weight-bold">
+                  Nutzungsvereinbarung unterschrieben
+                  <v-icon>done</v-icon>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-flex xs12 class="mt-3">
+              <v-btn v-if="!userToEdit.agreement" color="success" dark>
+                <v-icon>not_interested</v-icon>
+              </v-btn>
+              <v-btn v-else color="success" dark @click="onSubmit"
+                >Einchecken</v-btn
+              >
               <v-btn color="error" dark @click="onCancel">Abbrechen</v-btn>
             </v-flex>
           </v-layout>
@@ -187,7 +219,10 @@ export default {
       aspartner: 'no_id',
 
       // checked in ateliers
-      asatelier: []
+      asatelier: [],
+
+      // agreement checked
+      agreement: false
     };
   },
   methods: {
@@ -290,6 +325,12 @@ export default {
 
       // close dialog
       this.dialog = false;
+    },
+    onAgreement(e) {
+      e.preventDefault();
+
+      // create an agreement property and set it to true
+      this.userToEdit.agreement = true;
     }
   },
   computed: {

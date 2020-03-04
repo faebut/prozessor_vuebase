@@ -126,6 +126,7 @@
             <v-flex xs12 class="px-2">
               <v-switch
                 v-model="user.member"
+                color="primary"
                 :label="'Mitglied Verein Prozessor'"
               ></v-switch>
             </v-flex>
@@ -144,6 +145,27 @@
                 multiple
                 menu-props="closeOnContentClick"
               ></v-select>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <h1>Nutzungsvereinbarung / Infos</h1>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <v-switch
+                v-model="user.agreement"
+                color="primary"
+                :label="'Nutzungsvereinbarung unterschrieben'"
+              ></v-switch>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
+              <v-textarea
+                v-model="user.infos"
+                filled
+                label="Weitere Infos / Allergien / Spezielles"
+                auto-grow
+              ></v-textarea>
             </v-flex>
 
             <v-flex xs12 class="mt-4">
@@ -197,7 +219,9 @@ export default {
       phone: '',
       buydate: null,
       partners: [],
-      member: false
+      member: false,
+      agreement: false,
+      infos: ''
     }
   }),
   methods: {

@@ -66,18 +66,43 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">{{
-                  partner
-                }}</v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">
+                  {{ partner }}
+                </v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
+            </v-flex>
+
+            <v-flex xs12 class="px-2 mt-4">
+              <h2>Weitere Infos</h2>
+            </v-flex>
+
+            <v-flex xs12 sm6 class="px-2">
+              <div class="caption grey--text">Nutzungsvereinbarung</div>
+              <div>
+                <span class="success--text" v-if="user.agreement === true"
+                  >Nutzungsvereinbarung unterschrieben</span
+                >
+                <span v-else class="error--text"
+                  >Nutzungsvereinbarung nicht unterschrieben</span
+                >
+              </div>
+              <br />
+            </v-flex>
+
+            <v-flex xs12 sm6 class="px-2">
+              <div class="caption grey--text">Infos</div>
+              <div>
+                <span v-if="user.infos">{{ user.infos }}</span>
+                <span v-else>keine speziellen Informationen</span>
+              </div>
             </v-flex>
 
             <v-flex xs12 class="px-2 mt-4">
               <h2>Statistik</h2>
             </v-flex>
 
-            <v-flex xs6 sm6 md4 class="px-2">
+            <v-flex xs12 class="px-2">
               <div>
                 Anzahl Besuche:
                 <span v-if="user.visits">{{ user.visits.length }}</span>
