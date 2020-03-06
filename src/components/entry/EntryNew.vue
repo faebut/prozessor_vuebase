@@ -68,9 +68,9 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="userToEdit.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">{{
-                  partner
-                }}</v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">
+                  {{ partner }}
+                </v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
@@ -226,7 +226,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchSingleUser', 'addEntry', 'setSnack']),
+    ...mapActions(['fetchSingleUser', 'addEntry', 'setSnack', 'editUser']),
 
     // on clicking the send button in the form
     onSubmit(e) {
@@ -271,17 +271,19 @@ export default {
         // call action to add new user
         this.addEntry(this.userToEdit)
           .then(() => {
-            // remove spinner
-            this.loading = false;
-            // show snackbar for success
-            this.setSnack({
-              message: `Besucher*in ${this.userToEdit.firstname} ${
-                this.userToEdit.name
-              } erfolgreich eingecheckt`,
-              type: 'success'
+            this.editUser(this.userToEdit).then(() => {
+              // remove spinner
+              this.loading = false;
+              // show snackbar for success
+              this.setSnack({
+                message: `Besucher*in ${this.userToEdit.firstname} ${
+                  this.userToEdit.name
+                } erfolgreich eingecheckt`,
+                type: 'success'
+              });
+              // close dialog
+              this.dialog = false;
             });
-            // close dialog
-            this.dialog = false;
           })
           .catch(err => {
             // show snackbar for error
