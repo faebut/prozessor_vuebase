@@ -1,9 +1,7 @@
 .<template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-icon class="success--text" @click="openNew" slot="activator"
-      >exit_to_app</v-icon
-    >
+    <v-icon class="success--text" @click="openNew" slot="activator">exit_to_app</v-icon>
 
     <!-- form -->
     <v-card>
@@ -12,11 +10,7 @@
       </v-card-title>
       <v-card-text>
         <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
-          <v-progress-circular
-            :size="50"
-            color="primary"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
 
           <h2 class="primary--text mt-4">Lade Besucher*in...</h2>
         </v-flex>
@@ -29,9 +23,7 @@
               <div>
                 <br />
               </div>
-              <div v-if="userToEdit.address !== ''">
-                {{ userToEdit.address }}
-              </div>
+              <div v-if="userToEdit.address !== ''">{{ userToEdit.address }}</div>
               <div>{{ userToEdit.postcode }} {{ userToEdit.city }}</div>
             </v-flex>
 
@@ -47,20 +39,17 @@
             </v-flex>
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="validAbo === 'ja'">
-                gültig bis: {{ computedDateEnddate }}
-              </div>
-              <div v-if="validAbo === 'nein'" class="error--text">
-                abgelaufen am: {{ computedDateEnddate }}
-              </div>
+              <div v-if="validAbo === 'ja'">gültig bis: {{ computedDateEnddate }}</div>
+              <div
+                v-if="validAbo === 'nein'"
+                class="error--text"
+              >abgelaufen am: {{ computedDateEnddate }}</div>
               <div v-if="validAbo === 'kein'">Kein Abonnement</div>
               <div>
                 <br />
               </div>
               <div v-if="userToEdit.member">
-                <div class="caption grey--text" v-if="userToEdit.member">
-                  Mitglied Prozessor
-                </div>
+                <div class="caption grey--text" v-if="userToEdit.member">Mitglied Prozessor</div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
             </v-flex>
@@ -68,9 +57,7 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="userToEdit.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{ partner }}
-                </v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">{{ partner }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
@@ -82,17 +69,10 @@
               <h2>Einchecken</h2>
             </v-flex>
 
-            <v-flex
-              v-if="userToEdit.member && aspartner === 'no_id'"
-              xs6
-              class="px-2"
-            >
+            <v-flex v-if="userToEdit.member && aspartner === 'no_id'" xs6 class="px-2">
               <div class="caption grey--text">Mitglied</div>
               <div>
-                <v-switch
-                  v-model="asmember"
-                  label="als Mitglied einchecken"
-                ></v-switch>
+                <v-switch v-model="asmember" label="als Mitglied einchecken"></v-switch>
               </div>
             </v-flex>
 
@@ -146,17 +126,14 @@
             <v-flex v-if="!userToEdit.agreement" xs12 class="px-2 mt-3">
               <v-card color="error" dark>
                 <v-card-actions>
-                  <div class="font-weight-bold">
-                    Nutzungsvereinbarung noch nicht unterschrieben!
-                  </div>
+                  <div class="font-weight-bold">Nutzungsvereinbarung noch nicht unterschrieben!</div>
                   <v-spacer></v-spacer>
                   <v-btn
                     class="ma-2"
                     outline
                     @click="userToEdit.agreement = true"
                     color="white"
-                    >jetzt unterschreiben!</v-btn
-                  >
+                  >jetzt unterschreiben!</v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
@@ -174,9 +151,7 @@
               <v-btn v-if="!userToEdit.agreement" color="success" dark>
                 <v-icon>not_interested</v-icon>
               </v-btn>
-              <v-btn v-else color="success" dark @click="onSubmit"
-                >Einchecken</v-btn
-              >
+              <v-btn v-else color="success" dark @click="onSubmit">Einchecken</v-btn>
               <v-btn color="error" dark @click="onCancel">Abbrechen</v-btn>
             </v-flex>
           </v-layout>
@@ -219,14 +194,11 @@ export default {
       aspartner: 'no_id',
 
       // checked in ateliers
-      asatelier: [],
-
-      // agreement checked
-      agreement: false
+      asatelier: []
     };
   },
   methods: {
-    ...mapActions(['fetchSingleUser', 'addEntry', 'setSnack', 'editUser']),
+    ...mapActions(['fetchSingleUser', 'addEntry', 'setSnack']),
 
     // on clicking the send button in the form
     onSubmit(e) {
@@ -271,19 +243,15 @@ export default {
         // call action to add new user
         this.addEntry(this.userToEdit)
           .then(() => {
-            this.editUser(this.userToEdit).then(() => {
-              // remove spinner
-              this.loading = false;
-              // show snackbar for success
-              this.setSnack({
-                message: `Besucher*in ${this.userToEdit.firstname} ${
-                  this.userToEdit.name
-                } erfolgreich eingecheckt`,
-                type: 'success'
-              });
-              // close dialog
-              this.dialog = false;
+            // remove spinner
+            this.loading = false;
+            // show snackbar for success
+            this.setSnack({
+              message: `Besucher*in ${this.userToEdit.firstname} ${this.userToEdit.name} erfolgreich eingecheckt`,
+              type: 'success'
             });
+            // close dialog
+            this.dialog = false;
           })
           .catch(err => {
             // show snackbar for error
