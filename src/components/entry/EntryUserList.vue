@@ -72,7 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['users', 'partners', 'ateliers']),
+    ...mapGetters(['users', 'partners', 'ateliers', 'loggedIn']),
     filteredUsers() {
       const sortedUsers = this.users
         .slice()
@@ -86,8 +86,17 @@ export default {
             : -1
         );
 
+      // filter logged in users from List
+      const notLoggedIn = sortedUsers.filter(user => {
+        return (
+          this.loggedIn.filter(userLoggedIn => {
+            return userLoggedIn._id == user._id;
+          }).length == 0
+        );
+      });
+
       // Filter from searchbox
-      const filterUsers = sortedUsers.filter(user => {
+      const filterUsers = notLoggedIn.filter(user => {
         return (
           user.name.toLowerCase().match(this.search.toLowerCase()) ||
           user.firstname.toLowerCase().match(this.search.toLowerCase()) ||
