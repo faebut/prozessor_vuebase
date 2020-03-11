@@ -249,6 +249,7 @@ export default {
             });
             // reset the input fields
             this.$refs.form.reset();
+            this.user.buydate = null;
             // close dialog
             this.dialog = false;
           })
