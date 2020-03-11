@@ -3,12 +3,16 @@
     <v-layout>
       <h1>Statistik</h1>
       <v-container class="my-5">
-        <ul v-for="user in users" :key="user._id">
-          <li v-if="user.visits">
-            {{ user.firstname }} : {{ user.visits.length }} visits
-          </li>
+        <h2>Rangliste:</h2>
+        <ul v-for="user in sortUserList" :key="user._id">
+          <li>{{ user.firstname }} {{ user.name }} : {{ user.visits.length }} visits</li>
         </ul>
-        <div>Total: {{ allVisits.length }}</div>
+        <div>Total Besuche: {{ allVisits.length }}</div>
+
+        <h2>Sortierte Besuche</h2>
+        <ul v-for="(visit, index) in visitsByDate" :key="index">
+          <li>{{ visit }}</li>
+        </ul>
       </v-container>
     </v-layout>
   </v-container>
@@ -25,26 +29,51 @@ export default {
   computed: {
     ...mapGetters(['users']),
     allVisits() {
-      const visitlist = [];
+      const visitList = [];
       this.users.forEach(user => {
         if (user.visits) {
-          const userid = user._id;
           user.visits.forEach(visit => {
-            visitlist.push({
-              user: userid,
-              abonnement: visit.abonnement,
-              ateliers: visit.ateliers,
-              date: visit.date,
-              member: visit.member,
-              partner: visit.partner,
-              price: visit.price
-            });
+            visit.user = user._id;
+            visit.date = new Date(visit.date);
+            visitList.push(visit);
           });
         }
       });
-      // console.log(visitlist);
-      //passthrough, not really needed.
-      return visitlist;
+
+      return visitList;
+    },
+    sortUserList() {
+      // remove all users without visits from list
+      const userList = [];
+      this.users.forEach(user => {
+        if (user.visits) {
+          userList.push(user);
+        }
+      });
+
+      // sort List by length and return
+      return userList.sort((a, b) => {
+        return b.visits.length - a.visits.length;
+      });
+    },
+    visitsByDate() {
+      const visitsDate = [];
+
+      for (let i = 0; i < 12; i++) {
+        this.allVisits.forEach(visit => {
+          if (visit.date.getMonth() == i) {
+            if (visitsDate.includes(i)) {
+              return;
+            } else {
+              visitsDate.push(i);
+            }
+          }
+        });
+      }
+
+      console.log(visitsDate);
+
+      return visitsDate;
     }
   },
   created() {
