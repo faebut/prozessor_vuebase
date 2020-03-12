@@ -5,14 +5,12 @@
       <v-container class="my-5">
         <h2>Rangliste:</h2>
         <ul v-for="user in sortUserList" :key="user._id">
-          <li>{{ user.firstname }} {{ user.name }} : {{ user.visits.length }} visits</li>
+          <li>
+            {{ user.firstname }} {{ user.name }} :
+            {{ user.visits.length }} visits
+          </li>
         </ul>
         <div>Total Besuche: {{ allVisits.length }}</div>
-
-        <h2>Sortierte Besuche</h2>
-        <ul v-for="(visit, index) in visitsByDate" :key="index">
-          <li>{{ visit }}</li>
-        </ul>
       </v-container>
     </v-layout>
   </v-container>
@@ -57,22 +55,74 @@ export default {
       });
     },
     visitsByDate() {
-      const visitsDate = [];
+      const visitsDate = {};
 
-      for (let i = 0; i < 12; i++) {
+      for (let y = 2019; y < 2030; y++) {
         this.allVisits.forEach(visit => {
-          if (visit.date.getMonth() == i) {
-            if (visitsDate.includes(i)) {
-              return;
+          if (visit.date.getFullYear() == y) {
+            if (visitsDate[y]) {
+              for (let m = 0; m < 12; m++) {
+                if (visit.date.getMonth() == m) {
+                  if (visitsDate[y][m]) {
+                    for (let d = 0; d < 30; d++) {
+                      if (visit.date.getDate() == d) {
+                        if (visitsDate[y][m][d]) {
+                          visitsDate[y][m][d].push(visit);
+                        } else {
+                          visitsDate[y][m][d] = [];
+                          visitsDate[y][m][d].push(visit);
+                        }
+                      }
+                    }
+                  } else {
+                    visitsDate[y][m] = {};
+                    for (let d = 0; d < 30; d++) {
+                      if (visit.date.getDate() == d) {
+                        if (visitsDate[y][m][d]) {
+                          visitsDate[y][m][d].push(visit);
+                        } else {
+                          visitsDate[y][m][d] = [];
+                          visitsDate[y][m][d].push(visit);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             } else {
-              visitsDate.push(i);
+              visitsDate[y] = {};
+              for (let m = 0; m < 12; m++) {
+                if (visit.date.getMonth() == m) {
+                  if (visitsDate[y][m]) {
+                    for (let d = 0; d < 30; d++) {
+                      if (visit.date.getDate() == d) {
+                        if (visitsDate[y][m][d]) {
+                          visitsDate[y][m][d].push(visit);
+                        } else {
+                          visitsDate[y][m][d] = [];
+                          visitsDate[y][m][d].push(visit);
+                        }
+                      }
+                    }
+                  } else {
+                    visitsDate[y][m] = {};
+                    for (let d = 0; d < 30; d++) {
+                      if (visit.date.getDate() == d) {
+                        if (visitsDate[y][m][d]) {
+                          visitsDate[y][m][d].push(visit);
+                        } else {
+                          visitsDate[y][m][d] = [];
+                          visitsDate[y][m][d].push(visit);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         });
       }
-
-      console.log(visitsDate);
-
       return visitsDate;
     }
   },
