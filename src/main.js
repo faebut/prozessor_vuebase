@@ -4,6 +4,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store/store';
 import axios from 'axios';
+import VueApexCharts from 'vue-apexcharts';
+
+Vue.use(VueApexCharts);
 
 axios.defaults.baseURL = 'https://prozessor-vuebase.firebaseio.com';
 axios.defaults.headers.get['Accepts'] = 'application/json';

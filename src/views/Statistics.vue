@@ -15,6 +15,15 @@
         <ul v-for="(date, index) in visitsPerDate" :key="index">
           <li>{{ index }} : {{ date }}</li>
         </ul>
+        <h2>Charts</h2>
+        <div>
+          <apexcharts
+            width="500"
+            type="bar"
+            :options="chartData.chartOptions"
+            :series="chartData.series"
+          ></apexcharts>
+        </div>
       </v-container>
     </v-layout>
   </v-container>
@@ -23,8 +32,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
+import VueApexCharts from 'vue-apexcharts';
+
 export default {
   name: 'Statistics',
+  components: {
+    apexcharts: VueApexCharts
+  },
   methods: {
     ...mapActions(['fetchUsers'])
   },
@@ -166,6 +180,26 @@ export default {
         });
 
       return countDatesOrdered;
+    },
+    chartData() {
+      return {
+        chartOptions: {
+          chart: {
+            id: 'Besuche nach Datum'
+          },
+          xaxis: {
+            categories: Object.keys(this.visitsPerDate)
+          }
+        },
+        series: [
+          {
+            name: 'Besuche',
+            data: Object.keys(this.visitsPerDate).map(key => {
+              return this.visitsPerDate[key];
+            })
+          }
+        ]
+      };
     }
   },
   created() {
