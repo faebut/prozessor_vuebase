@@ -76,7 +76,7 @@ export default {
                     }
                   } else {
                     visitsDate[y][m] = {};
-                    for (let d = 0; d < 30; d++) {
+                    for (let d = 0; d < 32; d++) {
                       if (visit.date.getDate() == d) {
                         if (visitsDate[y][m][d]) {
                           visitsDate[y][m][d].push(visit);
