@@ -72,79 +72,6 @@ export default {
         return b.visits.length - a.visits.length;
       });
     },
-    // visitsByDate() {
-
-    //   // complicated way to rearrange visitDates in a complex Object
-    //   const visitsDate = {};
-
-    //   for (let y = 2019; y < 2030; y++) {
-    //     this.allVisits.forEach(visit => {
-    //       if (visit.date.getFullYear() == y) {
-    //         if (visitsDate[y]) {
-    //           for (let m = 0; m < 12; m++) {
-    //             if (visit.date.getMonth() == m) {
-    //               if (visitsDate[y][m]) {
-    //                 for (let d = 0; d < 30; d++) {
-    //                   if (visit.date.getDate() == d) {
-    //                     if (visitsDate[y][m][d]) {
-    //                       visitsDate[y][m][d].push(visit);
-    //                     } else {
-    //                       visitsDate[y][m][d] = [];
-    //                       visitsDate[y][m][d].push(visit);
-    //                     }
-    //                   }
-    //                 }
-    //               } else {
-    //                 visitsDate[y][m] = {};
-    //                 for (let d = 0; d < 32; d++) {
-    //                   if (visit.date.getDate() == d) {
-    //                     if (visitsDate[y][m][d]) {
-    //                       visitsDate[y][m][d].push(visit);
-    //                     } else {
-    //                       visitsDate[y][m][d] = [];
-    //                       visitsDate[y][m][d].push(visit);
-    //                     }
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         } else {
-    //           visitsDate[y] = {};
-    //           for (let m = 0; m < 12; m++) {
-    //             if (visit.date.getMonth() == m) {
-    //               if (visitsDate[y][m]) {
-    //                 for (let d = 0; d < 30; d++) {
-    //                   if (visit.date.getDate() == d) {
-    //                     if (visitsDate[y][m][d]) {
-    //                       visitsDate[y][m][d].push(visit);
-    //                     } else {
-    //                       visitsDate[y][m][d] = [];
-    //                       visitsDate[y][m][d].push(visit);
-    //                     }
-    //                   }
-    //                 }
-    //               } else {
-    //                 visitsDate[y][m] = {};
-    //                 for (let d = 0; d < 30; d++) {
-    //                   if (visit.date.getDate() == d) {
-    //                     if (visitsDate[y][m][d]) {
-    //                       visitsDate[y][m][d].push(visit);
-    //                     } else {
-    //                       visitsDate[y][m][d] = [];
-    //                       visitsDate[y][m][d].push(visit);
-    //                     }
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    //   return visitsDate;
-    // },
     visitsPerDate() {
       let allDates = [];
 
@@ -185,18 +112,38 @@ export default {
       return {
         chartOptions: {
           chart: {
-            id: 'Besuche nach Datum'
+            id: 'Besuche nach Datum',
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+              show: true
+            }
           },
           xaxis: {
-            categories: Object.keys(this.visitsPerDate)
+            type: 'datetime',
+            categories: [
+              '01/01/2011 GMT',
+              '01/02/2011 GMT',
+              '01/03/2011 GMT',
+              '01/04/2011 GMT',
+              '01/05/2011 GMT',
+              '01/06/2011 GMT'
+            ]
           }
         },
         series: [
           {
-            name: 'Besuche',
-            data: Object.keys(this.visitsPerDate).map(key => {
-              return this.visitsPerDate[key];
-            })
+            name: 'Mitglieder',
+            data: [44, 55, 41, 67, 0, 43]
+          },
+          {
+            name: 'Tagesnutzung',
+            data: [13, 23, 0, 8, 13, 27]
+          },
+          {
+            name: 'Jahresabo',
+            data: [11, 17, 15, 15, 21, 14]
           }
         ]
       };
