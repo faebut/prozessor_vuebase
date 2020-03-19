@@ -76,20 +76,17 @@ export default {
             '#F9CE1D',
             '#FF9800'
           ],
-          labels: Object.keys(this.visitsPerAtelier)
-          // responsive: [
-          //   {
-          //     breakpoint: 480,
-          //     options: {
-          //       chart: {
-          //         width: 200
-          //       },
-          //       legend: {
-          //         position: 'bottom'
-          //       }
-          //     }
-          //   }
-          // ]
+          labels: Object.keys(this.visitsPerAtelier),
+          responsive: [
+            {
+              breakpoint: 650,
+              options: {
+                legend: {
+                  position: 'bottom'
+                }
+              }
+            }
+          ]
         }
       };
     }
