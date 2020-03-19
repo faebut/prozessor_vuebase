@@ -40,7 +40,26 @@ export default {
           xaxis: {
             type: 'datetime',
             categories: Object.keys(this.visitsPerDate.dates)
-          }
+          },
+          legend: {
+            position: 'top',
+            horizontalAlign: 'left'
+          },
+          responsive: [
+            {
+              breakpoint: 600,
+              options: {
+                legend: {
+                  position: 'bottom',
+                  horizontalAlign: 'center',
+                  containerMargin: {
+                    top: 65,
+                    bottom: 35
+                  }
+                }
+              }
+            }
+          ]
         },
         series: [
           {
