@@ -1,43 +1,21 @@
 <template>
-  <v-container>
-    <v-layout>
-      <h1>Statistik</h1>
-      <v-container class="my-5">
-        <h2>Rangliste:</h2>
-        <ul v-for="user in sortUserList" :key="user._id">
-          <li>
-            {{ user.firstname }} {{ user.name }} :
-            {{ user.visits.length }} visits
-          </li>
-        </ul>
-        <div>Total Besuche: {{ allVisits.length }}</div>
-        <h2>Besuche nach Daten:</h2>
-        <ul v-for="(date, index) in visitsPerDate" :key="index">
-          <li>{{ index }} : {{ date }}</li>
-        </ul>
-        <h2>Charts</h2>
-        <div>
-          <apexcharts
-            width="500"
-            type="bar"
-            :options="chartData.chartOptions"
-            :series="chartData.series"
-          ></apexcharts>
-        </div>
-      </v-container>
-    </v-layout>
-  </v-container>
+  <div>
+    <h1 class="grey--text">Statistik</h1>
+    <v-container class="my-5">
+      <visitor-chart :visitsPerDate="visitsPerDate" />
+    </v-container>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import VueApexCharts from 'vue-apexcharts';
+import VisitorChart from '@/components/statistics/VisitorChart';
 
 export default {
   name: 'Statistics',
   components: {
-    apexcharts: VueApexCharts
+    VisitorChart
   },
   methods: {
     ...mapActions(['fetchUsers'])
@@ -73,16 +51,28 @@ export default {
       });
     },
     visitsPerDate() {
-      let allDates = [];
+      // seperate visits for type and count every Date
+      const allDatesSeperate = {
+        member: [],
+        abo: [],
+        daily: []
+      };
 
       this.allVisits.forEach(visit => {
-        allDates.push(visit.date);
+        if (visit.member == true) {
+          allDatesSeperate.member.push(visit.date);
+        } else if (visit.abonnement == true) {
+          allDatesSeperate.abo.push(visit.date);
+        } else {
+          allDatesSeperate.daily.push(visit.date);
+        }
       });
 
       function pad(n) {
         return n.toString().length == 1 ? '0' + n : n;
       }
 
+      // count for every date
       function getCount(arr) {
         var obj = {};
         for (var i = 0, l = arr.length; i < l; i++) {
@@ -97,55 +87,63 @@ export default {
         return obj;
       }
 
+      // Push all dates in one array
+      const allDates = [];
+
+      this.allVisits.forEach(visit => {
+        allDates.push(visit.date);
+      });
+
       const countDates = getCount(allDates);
 
-      const countDatesOrdered = {};
-      Object.keys(countDates)
-        .sort()
-        .forEach(function(key) {
-          countDatesOrdered[key] = countDates[key];
-        });
+      // Get those keys as an array
+      let keys = Object.keys(countDates);
 
-      return countDatesOrdered;
-    },
-    chartData() {
+      // Create an object with all keys set to the default value (0)
+      let def = keys.reduce((result, key) => {
+        result[key] = 0;
+        return result;
+      }, {});
+
+      // sort function
+
+      const sortKeys = input => {
+        const output = {};
+        Object.keys(input)
+          .sort()
+          .forEach(key => {
+            output[key] = input[key];
+          });
+        return output;
+      };
+
+      // combine all the cases with all the dates that there where visitors and add the zero values to that case, also sort by dates
+
+      const countDatesMember = sortKeys({
+        ...def,
+        ...getCount(allDatesSeperate.member)
+      });
+      const countDatesAbo = sortKeys({
+        ...def,
+        ...getCount(allDatesSeperate.abo)
+      });
+      const countDatesDaily = sortKeys({
+        ...def,
+        ...getCount(allDatesSeperate.daily)
+      });
+
+      // combine to one Object
+      let allDatesCombined = {
+        member: countDatesMember,
+        abo: countDatesAbo,
+        daily: countDatesDaily
+      };
+
+      const countDatesOrdered = sortKeys(countDates);
+
       return {
-        chartOptions: {
-          chart: {
-            id: 'Besuche nach Datum',
-            type: 'bar',
-            height: 350,
-            stacked: true,
-            toolbar: {
-              show: true
-            }
-          },
-          xaxis: {
-            type: 'datetime',
-            categories: [
-              '01/01/2011 GMT',
-              '01/02/2011 GMT',
-              '01/03/2011 GMT',
-              '01/04/2011 GMT',
-              '01/05/2011 GMT',
-              '01/06/2011 GMT'
-            ]
-          }
-        },
-        series: [
-          {
-            name: 'Mitglieder',
-            data: [44, 55, 41, 67, 0, 43]
-          },
-          {
-            name: 'Tagesnutzung',
-            data: [13, 23, 0, 8, 13, 27]
-          },
-          {
-            name: 'Jahresabo',
-            data: [11, 17, 15, 15, 21, 14]
-          }
-        ]
+        dates: countDatesOrdered,
+        counts: allDatesCombined
       };
     }
   },
