@@ -69,7 +69,8 @@ export default {
           title: 'Statistik',
           link: '/statistics',
           show: false
-        }
+        },
+        { icon: 'build', title: 'Experten', link: '/experts', show: false }
       ]
     };
   },

@@ -145,6 +145,30 @@
               ></v-switch>
             </v-flex>
 
+            <v-flex v-if="user.member" xs12 class="px-2">
+              <v-switch
+                v-model="user.expert"
+                color="primary"
+                :label="'Expert*in'"
+              ></v-switch>
+            </v-flex>
+
+            <v-flex v-if="user.expert" xs12 class="px-2">
+              <v-select
+                v-model="user.expertise"
+                :items="computedAteliersSelect"
+                item-value="id"
+                item-text="name"
+                hide-selected
+                deletable-chips
+                attach
+                chips
+                label="Expertise auswählen"
+                multiple
+                menu-props="closeOnContentClick"
+              ></v-select>
+            </v-flex>
+
             <v-flex xs12 class="px-2">
               <v-select
                 v-model="user.partners"
@@ -235,7 +259,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchPartners', 'fetchSingleUser', 'editUser', 'setSnack']),
+    ...mapActions([
+      'fetchPartners',
+      'fetchSingleUser',
+      'fetchAteliers',
+      'editUser',
+      'setSnack'
+    ]),
 
     // on clicking the send button in the form
     onSubmit(e) {
@@ -243,6 +273,10 @@ export default {
 
       // check if the input is valid
       if (this.$refs.form.validate()) {
+        // delete expertise if user is not expert
+        if (this.user.expert == false) {
+          this.user.expertise = [];
+        }
         // set the button to spin
         this.loading = true;
         // call action to add new user
@@ -308,7 +342,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['partners']),
+    ...mapGetters(['partners', 'ateliers']),
 
     // Format the Birthdate
     computedDateBirthdate() {
@@ -322,6 +356,24 @@ export default {
       return this.user.buydate
         ? format(this.user.buydate, 'DD. MMMM YYYY', { locale: locales })
         : '';
+    },
+    // compute selects for Expertisebox
+    computedAteliersSelect() {
+      const atelierNames = [];
+
+      // add ateliers to array
+      this.ateliers.forEach(atelierID => {
+        // add Values to object
+        const atelierObject = {
+          name: atelierID.name,
+          id: atelierID._id
+        };
+
+        // push object to array
+        atelierNames.push(atelierObject);
+      });
+
+      return atelierNames;
     }
   },
   created() {

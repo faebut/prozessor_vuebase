@@ -66,9 +66,9 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{ partner }}
-                </v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">{{
+                  partner
+                }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
             </v-flex>
@@ -95,6 +95,15 @@
               <div>
                 <span v-if="user.infos">{{ user.infos }}</span>
                 <span v-else>keine speziellen Informationen</span>
+              </div>
+            </v-flex>
+
+            <v-flex v-if="user.expert" xs12 class="px-2">
+              <div class="caption grey--text">Expertise</div>
+              <div v-if="user.expertise">
+                <v-chip v-for="atelier in computedExpertise" :key="atelier">{{
+                  atelier
+                }}</v-chip>
               </div>
             </v-flex>
 
@@ -136,7 +145,7 @@ export default {
     user: {}
   }),
   methods: {
-    ...mapActions(['fetchPartners', 'fetchSingleUser']),
+    ...mapActions(['fetchPartners', 'fetchSingleUser', 'fetchAteliers']),
 
     // fetch user after pressing Info button
     openInfo(e) {
@@ -175,7 +184,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['partners']),
+    ...mapGetters(['partners', 'ateliers']),
 
     // Format the Birthdate
     computedDateBirthdate() {
@@ -227,6 +236,17 @@ export default {
       });
 
       return partnerNames;
+    },
+    computedExpertise() {
+      const atelierNames = [];
+
+      this.user.expertise.forEach(atelierID => {
+        const atelierName = this.ateliers.find(p => p._id === atelierID).name;
+
+        atelierNames.push(atelierName);
+      });
+
+      return atelierNames;
     }
   },
   created() {

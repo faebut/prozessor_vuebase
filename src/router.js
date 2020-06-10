@@ -74,6 +74,18 @@ export default new Router({
           next('/');
         }
       }
+    },
+    {
+      path: '/experts',
+      name: 'experts',
+      component: () => import('./views/Experts.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
     }
   ]
 });

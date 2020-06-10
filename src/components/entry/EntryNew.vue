@@ -68,9 +68,9 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="userToEdit.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">
-                  {{ partner }}
-                </v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">{{
+                  partner
+                }}</v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
               <div class="text-xs-right pr-2 pt-3">
