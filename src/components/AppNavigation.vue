@@ -1,10 +1,7 @@
 <template>
   <span>
     <v-toolbar app flat max-width="1200" class="background">
-      <v-toolbar-side-icon
-        @click="drawer = !drawer"
-        class="grey--text"
-      ></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click="drawer = !drawer" class="grey--text"></v-toolbar-side-icon>
       <v-toolbar-title class="text-uppercase grey--text">
         <span class="font-weight-light">Database</span>
         <span>Prozessor</span>
@@ -70,7 +67,7 @@ export default {
           link: '/statistics',
           show: false
         },
-        { icon: 'build', title: 'Experten', link: '/experts', show: false }
+        { icon: 'build', title: 'Expert*innen', link: '/experts', show: false }
       ]
     };
   },
