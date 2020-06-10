@@ -379,6 +379,8 @@ export default {
   created() {
     // reload state of partners
     this.fetchPartners();
+    // reload state of ateliers
+    this.fetchAteliers();
   }
 };
 </script>

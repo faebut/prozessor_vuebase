@@ -66,9 +66,9 @@
             <v-flex xs6 sm6 md3 class="px-2">
               <div class="caption grey--text">Partnerschaften</div>
               <div v-if="user.partners">
-                <v-chip v-for="partner in computedPartners" :key="partner">{{
-                  partner
-                }}</v-chip>
+                <v-chip v-for="partner in computedPartners" :key="partner">
+                  {{ partner }}
+                </v-chip>
               </div>
               <div v-else>Keine Partnerschaften</div>
             </v-flex>
@@ -101,9 +101,9 @@
             <v-flex v-if="user.expert" xs12 class="px-2">
               <div class="caption grey--text">Expertise</div>
               <div v-if="user.expertise">
-                <v-chip v-for="atelier in computedExpertise" :key="atelier">{{
-                  atelier
-                }}</v-chip>
+                <v-chip v-for="atelier in computedExpertise" :key="atelier">
+                  {{ atelier }}
+                </v-chip>
               </div>
             </v-flex>
 
@@ -252,6 +252,8 @@ export default {
   created() {
     // reload state of partners
     this.fetchPartners();
+    // reload state of ateliers
+    this.fetchAteliers();
   }
 };
 </script>
