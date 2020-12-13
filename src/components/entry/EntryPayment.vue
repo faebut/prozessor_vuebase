@@ -181,6 +181,7 @@
                 v-model="paid.paidby"
                 :items="['bar', 'twint']"
                 label="Zahlart"
+                :rules="[rules.payment]"
               ></v-select>
             </v-flex>
 
@@ -218,6 +219,10 @@ export default {
         baseprice: null,
         addons: [],
         paidby: ''
+      },
+      // rules for the form
+      rules: {
+        payment: value => value.length > 0 || 'Bitte Zahlart wählen.'
       }
     };
   },
@@ -240,42 +245,45 @@ export default {
         }
       };
 
-      // send payment
-      this.addPayment(payment)
-        .then(() => {
-          // show snackbar for success
-          this.setSnack({
-            message: `Bezahlung für ${this.user.firstname} ${
-              this.user.name
-            } erfolgreich erfasst`,
-            type: 'success'
-          });
-          // close dialog
-          this.dialog = false;
+      // check if the input is valid
+      if (this.$refs.form.validate()) {
+        // send payment
+        this.addPayment(payment)
+          .then(() => {
+            // show snackbar for success
+            this.setSnack({
+              message: `Bezahlung für ${this.user.firstname} ${
+                this.user.name
+              } erfolgreich erfasst`,
+              type: 'success'
+            });
+            // close dialog
+            this.dialog = false;
 
-          // emit to parent, that it's paid now
-          this.$emit('is-paid');
-        })
-        .catch(err => {
-          // show snackbar for error
-          this.setSnack({
-            message: `Error: ${err}`,
-            type: 'error'
+            // emit to parent, that it's paid now
+            this.$emit('is-paid');
+          })
+          .catch(err => {
+            // show snackbar for error
+            this.setSnack({
+              message: `Error: ${err}`,
+              type: 'error'
+            });
           });
-        });
 
-      // close dialog
-      this.dialog = false;
-      this.freeprice = false;
-      this.paid.baseprice = null;
-      this.paid.addons = [];
-      this.paid.paidby = '';
-      // reset item
-      this.item = {
-        description: '',
-        price: null,
-        paidby: ''
-      };
+        // close dialog
+        this.dialog = false;
+        this.freeprice = false;
+        this.paid.baseprice = null;
+        this.paid.addons = [];
+        this.paid.paidby = '';
+        // reset item
+        this.item = {
+          description: '',
+          price: null,
+          paidby: ''
+        };
+      }
     },
     // on clicking the cancel button in the form
     onCancel(e) {
