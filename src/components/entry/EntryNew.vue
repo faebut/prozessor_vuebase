@@ -63,6 +63,12 @@
                 </div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
+              <div v-if="userToEdit.helper">
+                <div class="caption grey--text" v-if="userToEdit.helper">
+                  Helfer*in
+                </div>
+                <div>Helfer*in Verein Prozessor</div>
+              </div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">
@@ -83,7 +89,7 @@
             </v-flex>
 
             <v-flex
-              v-if="userToEdit.member && aspartner === 'no_id'"
+              v-if="userToEdit.member && aspartner === 'no_id' && !ashelper"
               xs6
               class="px-2"
             >
@@ -106,6 +112,20 @@
                   item-text="name"
                   v-model="aspartner"
                 ></v-select>
+              </div>
+            </v-flex>
+
+            <v-flex
+              v-if="userToEdit.helper && !asmember"
+              xs6
+              class="px-2"
+            >
+              <div class="caption grey--text">Helfer*in</div>
+              <div>
+                <v-switch
+                  v-model="ashelper"
+                  label="als Helfer*in einchecken"
+                ></v-switch>
               </div>
             </v-flex>
 
@@ -133,8 +153,8 @@
               <div class="caption grey--text">Altersklasse</div>
               <div>
                 <span v-if="userage < 12">Kinder unter 12 Jahren</span>
-                <span v-if="userage < 18">Jugendliche unter 18 Jahren</span>
-                <span v-else>Erwachsene</span>
+                <span v-if="userage < 18 && userage > 12">Jugendliche unter 18 Jahren</span>
+                <span v-if="userage > 17">Erwachsene</span>
               </div>
             </v-flex>
 
@@ -218,6 +238,9 @@ export default {
       // checked in as partner
       aspartner: 'no_id',
 
+      // checked in as partner
+      ashelper: false,
+
       // checked in ateliers
       asatelier: []
     };
@@ -248,6 +271,8 @@ export default {
         visit.member = this.asmember;
         // add partnership to object
         visit.partner = this.aspartner;
+        // add helper to object
+        visit.helper = this.ashelper;
         // add visited ateliers to object
         visit.ateliers = this.asatelier;
         // add valid abonnement to object
@@ -298,10 +323,11 @@ export default {
       // make sure the loading spinner ist showing and dialog fires up
       this.fetching = true;
 
-      // make sure that asmember, asatelier and aspartner are reset
+      // make sure that asmember, asatelier, ashelper and aspartner are reset
       this.asmember = false;
       this.aspartner = 'no_id';
       this.asatelier = [];
+      this.ashelper = false;
 
       // fetch single User
       this.fetchSingleUser(this.id)
@@ -452,13 +478,17 @@ export default {
         price = 0;
       }
 
-      // check if as member or partner
+      // check if as member, helper or partner
       if (this.asmember === true) {
         price = 0;
       }
       if (this.aspartner !== 'no_id') {
         price = 0;
       }
+      if (this.ashelper === true) {
+        price = 0;
+      }
+
 
       // check if abonnement is valid
       if (this.validAbo === 'ja') {

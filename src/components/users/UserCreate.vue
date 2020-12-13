@@ -156,6 +156,14 @@
             </v-flex>
 
             <v-flex xs12 class="px-2">
+              <v-switch
+                v-model="user.helper"
+                color="primary"
+                :label="'Helfer*in'"
+              ></v-switch>
+            </v-flex>
+
+            <v-flex xs12 class="px-2">
               <v-select
                 v-model="user.partners"
                 :items="partners"
@@ -247,6 +255,7 @@ export default {
       agreement: false,
       infos: '',
       expert: false,
+      helper: false,
       expertise: []
     }
   }),

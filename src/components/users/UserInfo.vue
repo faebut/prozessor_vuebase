@@ -61,6 +61,13 @@
                 </div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
+                <br />
+                <div v-if="user.helper">
+                <div class="caption grey--text">
+                  Helfer*in
+                </div>
+                <div>Helfer*in Verein Prozessor</div>
+              </div>
             </v-flex>
 
             <v-flex xs6 sm6 md3 class="px-2">

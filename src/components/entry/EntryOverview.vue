@@ -24,6 +24,8 @@
           <br />
           <v-icon class="success--text">person</v-icon>&nbsp;Mitglied
           <br />
+          <v-icon class="error--text">stars</v-icon>&nbsp;Helfer*in
+          <br />
           <v-icon class="success--text">group</v-icon>&nbsp;Partner*in
           <br />
           <v-icon class="success--text">verified_user</v-icon>&nbsp;Abonnement

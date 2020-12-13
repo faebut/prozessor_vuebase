@@ -19,6 +19,8 @@
           </template>
           <span>{{ computedPartner }}</span>
         </v-tooltip>
+        <v-icon v-if="visit.helper" class="error--text">stars</v-icon
+        >
         <v-icon v-if="validAbo === 'ja'" class="success--text"
           >verified_user</v-icon
         >
@@ -30,8 +32,12 @@
         }}</v-icon>
       </v-flex>
 
-      <v-flex xs7>
+      <v-flex xs5>
         <div>{{ user.firstname }} {{ user.name }}, {{ user.city }}</div>
+      </v-flex>
+
+      <v-flex xs2>
+        <v-icon >access_time</v-icon> {{ computedTime }}
       </v-flex>
 
       <v-flex xs1>
@@ -92,6 +98,21 @@ export default {
       });
 
       return ateliersarray;
+    },
+    computedTime() {
+      // calculate how long each user has been logged in
+      const timegetin = new Date(this.visit.date);
+      const now = new Date();
+      const timepassed = new Date(now.getTime() - timegetin.getTime());
+      const diff_hours = timepassed.getHours() - 1;
+      let diff_mins = timepassed.getMinutes();
+
+      if (diff_mins < 10 ) {
+        diff_mins = "0" + diff_mins;
+      }
+
+
+      return diff_hours + ":" + diff_mins;
     }
   }
 };

@@ -29,12 +29,15 @@ export default {
       // seperate visits for type and count every Date
       const allDatesSeperate = {
         member: [],
+        helper: [],
         abo: [],
         daily: []
       };
 
       this.allVisits.forEach(visit => {
-        if (visit.member == true) {
+        if (visit.helper == true) {
+          allDatesSeperate.helper.push(visit.date);
+        } else if (visit.member == true) {
           allDatesSeperate.member.push(visit.date);
         } else if (visit.abonnement == true) {
           allDatesSeperate.abo.push(visit.date);
@@ -98,6 +101,10 @@ export default {
         ...def,
         ...getCount(allDatesSeperate.member)
       });
+      const countDatesHelper = sortKeys({
+        ...def,
+        ...getCount(allDatesSeperate.helper)
+      });
       const countDatesAbo = sortKeys({
         ...def,
         ...getCount(allDatesSeperate.abo)
@@ -110,6 +117,7 @@ export default {
       // combine to one Object
       let allDatesCombined = {
         member: countDatesMember,
+        helper: countDatesHelper,
         abo: countDatesAbo,
         daily: countDatesDaily
       };
@@ -161,6 +169,10 @@ export default {
           {
             name: 'Mitglieder',
             data: Object.values(this.visitsPerDate.counts.member)
+          },
+          {
+            name: 'Helfende',
+            data: Object.values(this.visitsPerDate.counts.helper)
           },
           {
             name: 'Jahresabo',
