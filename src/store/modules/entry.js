@@ -41,6 +41,17 @@ const actions = {
 
       commit('removeVisit', user._id);
     }
+  },
+  async addPayment({ commit }, payment) {
+    await axios.put(
+      `/users/${payment.user._id}/visits/${payment.user.visits.length -
+        1}/paid.json` +
+        '?auth=' +
+        auth.state.idToken,
+      payment.paid
+    );
+
+    commit('paidVisit', payment);
   }
 };
 
@@ -75,6 +86,14 @@ const mutations = {
     });
 
     state.loggedIn = loggedIn;
+  },
+  paidVisit: (state, payment) => {
+    for (let i = 0; i < state.loggedIn.length; i++) {
+      if (state.loggedIn[i]._id === payment.user._id) {
+        state.loggedIn[i].visits[state.loggedIn[i].visits.length - 1].paid =
+          payment.paid;
+      }
+    }
   },
   addLoggedIn: (state, newuser) => state.loggedIn.push(newuser),
   removeVisit: (state, _id) =>

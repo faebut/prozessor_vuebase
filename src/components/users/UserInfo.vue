@@ -61,8 +61,8 @@
                 </div>
                 <div>Mitglied Verein Prozessor</div>
               </div>
-                <br />
-                <div v-if="user.helper">
+              <br />
+              <div v-if="user.helper">
                 <div class="caption grey--text">
                   Helfer*in
                 </div>

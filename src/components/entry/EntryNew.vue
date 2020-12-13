@@ -115,11 +115,7 @@
               </div>
             </v-flex>
 
-            <v-flex
-              v-if="userToEdit.helper && !asmember"
-              xs6
-              class="px-2"
-            >
+            <v-flex v-if="userToEdit.helper && !asmember" xs6 class="px-2">
               <div class="caption grey--text">Helfer*in</div>
               <div>
                 <v-switch
@@ -153,7 +149,9 @@
               <div class="caption grey--text">Altersklasse</div>
               <div>
                 <span v-if="userage < 12">Kinder unter 12 Jahren</span>
-                <span v-if="userage < 18 && userage > 12">Jugendliche unter 18 Jahren</span>
+                <span v-if="userage < 18 && userage > 12"
+                  >Jugendliche unter 18 Jahren</span
+                >
                 <span v-if="userage > 17">Erwachsene</span>
               </div>
             </v-flex>
@@ -488,7 +486,6 @@ export default {
       if (this.ashelper === true) {
         price = 0;
       }
-
 
       // check if abonnement is valid
       if (this.validAbo === 'ja') {

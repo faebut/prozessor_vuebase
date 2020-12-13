@@ -19,8 +19,7 @@
           </template>
           <span>{{ computedPartner }}</span>
         </v-tooltip>
-        <v-icon v-if="visit.helper" class="error--text">stars</v-icon
-        >
+        <v-icon v-if="visit.helper" class="error--text">stars</v-icon>
         <v-icon v-if="validAbo === 'ja'" class="success--text"
           >verified_user</v-icon
         >
@@ -32,12 +31,26 @@
         }}</v-icon>
       </v-flex>
 
-      <v-flex xs5>
+      <v-flex xs4>
         <div>{{ user.firstname }} {{ user.name }}, {{ user.city }}</div>
       </v-flex>
 
       <v-flex xs2>
-        <v-icon >access_time</v-icon> {{ computedTime }}
+        <v-icon>access_time</v-icon> {{ computedTime.formatted }}
+      </v-flex>
+
+      <v-flex xs1>
+        <entry-payment
+          :visit="visit"
+          :user="user"
+          :ateliers="ateliers"
+          :timepassed="computedTime.unformatted"
+          v-if="!visit.paid"
+          @is-paid="togglePaid"
+        ></entry-payment>
+        <v-icon v-if="visit.paid || paid" class="success--text"
+          >check_circle</v-icon
+        >
       </v-flex>
 
       <v-flex xs1>
@@ -49,12 +62,24 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import EntryPayment from '@/components/entry/EntryPayment';
 
 export default {
   name: 'EntryLoggedInUser',
   props: ['user', 'visit', 'ateliers'],
+  data() {
+    return {
+      paid: false
+    };
+  },
+  components: {
+    EntryPayment
+  },
   methods: {
-    ...mapActions(['deleteVisit'])
+    ...mapActions(['deleteVisit']),
+    togglePaid() {
+      this.paid = true;
+    }
   },
   computed: {
     ...mapGetters(['partners']),
@@ -107,12 +132,14 @@ export default {
       const diff_hours = timepassed.getHours() - 1;
       let diff_mins = timepassed.getMinutes();
 
-      if (diff_mins < 10 ) {
-        diff_mins = "0" + diff_mins;
+      if (diff_mins < 10) {
+        diff_mins = '0' + diff_mins;
       }
 
-
-      return diff_hours + ":" + diff_mins;
+      return {
+        formatted: diff_hours + ':' + diff_mins,
+        unformatted: timepassed.getTime()
+      };
     }
   }
 };

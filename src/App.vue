@@ -27,7 +27,8 @@ export default {
 
 <style>
 h1,
-h2 {
+h2,
+h3 {
   font-weight: 300;
   color: gray;
 }
