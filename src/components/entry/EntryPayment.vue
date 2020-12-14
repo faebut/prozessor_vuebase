@@ -11,108 +11,108 @@
         <h1>Abrechnung für {{ user.firstname }} {{ user.name }}</h1>
       </v-card-title>
       <v-card-text>
-        <v-form ref="form">
+        <v-layout row wrap>
+          <v-flex xs6 sm6 md3 class="px-2">
+            <div class="caption grey--text">Ort</div>
+            <div>{{ user.postcode }} {{ user.city }}</div>
+          </v-flex>
+
+          <v-flex xs6 sm6 md3 class="px-2">
+            <div class="caption grey--text">Geburtstag</div>
+            <div>{{ computedDateBirthdate }}</div>
+          </v-flex>
+
+          <v-flex xs6 sm6 md3 class="px-2 mt-2">
+            <div class="caption grey--text">Jahresabonnement</div>
+            <div v-if="validAbo === 'ja'">
+              gültig bis: {{ computedDateEnddate }}
+            </div>
+            <div v-if="validAbo === 'nein'" class="error--text">
+              abgelaufen am: {{ computedDateEnddate }}
+            </div>
+            <div v-if="validAbo === 'kein'">Kein Abonnement</div>
+            <div>
+              <br />
+            </div>
+          </v-flex>
+          <v-flex xs6 sm6 md3 class="px-2 mt-2">
+            <div v-if="user.member">
+              <div class="caption grey--text" v-if="user.member">
+                Mitglied Prozessor
+              </div>
+              <div>Mitglied Verein Prozessor</div>
+            </div>
+            <div v-if="user.helper">
+              <div class="caption grey--text" v-if="user.helper">
+                Helfer*in
+              </div>
+              <div>Helfer*in Verein Prozessor</div>
+            </div>
+          </v-flex>
+
+          <v-flex xs12 class="px-2">
+            <h2>Grundpreis</h2>
+          </v-flex>
+
+          <v-flex xs6 class="px-2">
+            <div class="caption grey--text">Grundtarif</div>
+            <div>
+              <span v-if="userage < 12">Kinder unter 12 Jahren</span>
+              <span v-if="userage < 18 && userage > 12"
+                >Jugendliche unter 18 Jahren</span
+              >
+              <span v-if="userage > 17 && !visit.member && !visit.helper"
+                >Erwachsene</span
+              >
+              <span v-if="visit.member">Mitglied</span>
+              <span v-if="visit.helper">Helfer*in</span>
+            </div>
+          </v-flex>
+
+          <v-flex xs6 class="px-2">
+            <div class="caption grey--text">Eintrittspreis</div>
+            <div>
+              CHF {{ computedPrice }}.-
+              <span
+                v-if="!visit.member && !visit.helper && timepassed < 7200000"
+                class="success--text"
+              >
+                (Kurzzeitnutzung)</span
+              >
+            </div>
+          </v-flex>
+
+          <v-flex xs12 class="px-2 mt-2" v-if="!visit.member && !visit.helper">
+            <div class="caption grey--text">Spezialnutzung</div>
+            <div>
+              <v-switch
+                v-model="freeprice"
+                label="Freien Betrag eingeben"
+              ></v-switch>
+            </div>
+          </v-flex>
+
+          <v-flex xs12 class="px-2" v-if="freeprice">
+            <v-text-field
+              v-model="paid.baseprice"
+              label="Betrag in CHF*"
+              :rules="[rules.number]"
+              ref="freepricevalue"
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs6 class="px-2 mt-2">
+            <h3>Total Eintrittspreis</h3>
+          </v-flex>
+
+          <v-flex xs6 class="px-2 mt-2">
+            <h3 v-if="paid.baseprice">CHF {{ paid.baseprice }}.-</h3>
+            <h3 v-else>CHF {{ computedPrice }}.-</h3>
+          </v-flex>
+        </v-layout>
+
+        <v-form ref="miniform">
           <v-layout row wrap>
-            <v-flex xs6 sm6 md3 class="px-2">
-              <div class="caption grey--text">Ort</div>
-              <div>{{ user.postcode }} {{ user.city }}</div>
-            </v-flex>
-
-            <v-flex xs6 sm6 md3 class="px-2">
-              <div class="caption grey--text">Geburtstag</div>
-              <div>{{ computedDateBirthdate }}</div>
-            </v-flex>
-
-            <v-flex xs6 sm6 md3 class="px-2 mt-2">
-              <div class="caption grey--text">Jahresabonnement</div>
-              <div v-if="validAbo === 'ja'">
-                gültig bis: {{ computedDateEnddate }}
-              </div>
-              <div v-if="validAbo === 'nein'" class="error--text">
-                abgelaufen am: {{ computedDateEnddate }}
-              </div>
-              <div v-if="validAbo === 'kein'">Kein Abonnement</div>
-              <div>
-                <br />
-              </div>
-            </v-flex>
-            <v-flex xs6 sm6 md3 class="px-2 mt-2">
-              <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">
-                  Mitglied Prozessor
-                </div>
-                <div>Mitglied Verein Prozessor</div>
-              </div>
-              <div v-if="user.helper">
-                <div class="caption grey--text" v-if="user.helper">
-                  Helfer*in
-                </div>
-                <div>Helfer*in Verein Prozessor</div>
-              </div>
-            </v-flex>
-
-            <v-flex xs12 class="px-2">
-              <h2>Grundpreis</h2>
-            </v-flex>
-
-            <v-flex xs6 class="px-2">
-              <div class="caption grey--text">Grundtarif</div>
-              <div>
-                <span v-if="userage < 12">Kinder unter 12 Jahren</span>
-                <span v-if="userage < 18 && userage > 12"
-                  >Jugendliche unter 18 Jahren</span
-                >
-                <span v-if="userage > 17 && !visit.member && !visit.helper"
-                  >Erwachsene</span
-                >
-                <span v-if="visit.member">Mitglied</span>
-                <span v-if="visit.helper">Helfer*in</span>
-              </div>
-            </v-flex>
-
-            <v-flex xs6 class="px-2">
-              <div class="caption grey--text">Eintrittspreis</div>
-              <div>
-                CHF {{ computedPrice }}.-
-                <span
-                  v-if="!visit.member && !visit.helper && timepassed < 7200000"
-                  class="success--text"
-                >
-                  (Kurzzeitnutzung)</span
-                >
-              </div>
-            </v-flex>
-
-            <v-flex
-              xs12
-              class="px-2 mt-2"
-              v-if="!visit.member && !visit.helper"
-            >
-              <div class="caption grey--text">Spezialnutzung</div>
-              <div>
-                <v-switch
-                  v-model="freeprice"
-                  label="Freien Betrag eingeben"
-                ></v-switch>
-              </div>
-            </v-flex>
-
-            <v-flex xs12 class="px-2" v-if="freeprice">
-              <v-text-field
-                v-model="paid.baseprice"
-                label="Betrag in CHF*"
-              ></v-text-field>
-            </v-flex>
-
-            <v-flex xs6 class="px-2 mt-2">
-              <h3>Total Eintrittspreis</h3>
-            </v-flex>
-
-            <v-flex xs6 class="px-2 mt-2">
-              <h3 v-if="paid.baseprice">CHF {{ paid.baseprice }}.-</h3>
-              <h3 v-else>CHF {{ computedPrice }}.-</h3>
-            </v-flex>
-
             <v-flex xs12 class="px-2 mt-4">
               <h2>Material hinzufügen</h2>
             </v-flex>
@@ -122,6 +122,7 @@
                 v-model="item.description"
                 label="Beschreibung"
                 ref="description"
+                :rules="[rules.required]"
               ></v-text-field>
             </v-flex>
 
@@ -129,6 +130,8 @@
               <v-text-field
                 v-model="item.price"
                 label="Betrag in CHF"
+                ref="itemprice"
+                :rules="[rules.number, rules.required]"
                 @keyup.enter.native="newMaterialItem"
               ></v-text-field>
             </v-flex>
@@ -163,7 +166,11 @@
                 </v-card-text>
               </v-card>
             </v-flex>
+          </v-layout>
+        </v-form>
 
+        <v-form ref="form">
+          <v-layout row wrap>
             <v-flex xs12 class="px-2 mt-4">
               <h2>Bezahlen</h2>
             </v-flex>
@@ -212,7 +219,7 @@ export default {
       // Material item
       item: {
         description: '',
-        price: null
+        price: ''
       },
       // Special pricing
       paid: {
@@ -222,7 +229,12 @@ export default {
       },
       // rules for the form
       rules: {
-        payment: value => value.length > 0 || 'Bitte Zahlart wählen.'
+        payment: value => value.length > 0 || 'Bitte Zahlart wählen.',
+        required: value => value.length > 0 || 'Bitte ausfüllen.',
+        number: value => {
+          const pattern = /^-?\d*[.,]?\d*$/;
+          return pattern.test(value) || 'Zahl eingeben';
+        }
       }
     };
   },
@@ -246,7 +258,7 @@ export default {
       };
 
       // check if the input is valid
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && this.$refs.freepricevalue.validate()) {
         // send payment
         this.addPayment(payment)
           .then(() => {
@@ -271,18 +283,8 @@ export default {
             });
           });
 
-        // close dialog
-        this.dialog = false;
-        this.freeprice = false;
-        this.paid.baseprice = null;
-        this.paid.addons = [];
-        this.paid.paidby = '';
-        // reset item
-        this.item = {
-          description: '',
-          price: null,
-          paidby: ''
-        };
+        // reset and close dialog
+        this.onCancel(e);
       }
     },
     // on clicking the cancel button in the form
@@ -295,26 +297,35 @@ export default {
       this.paid.baseprice = null;
       this.paid.addons = [];
       this.paid.paidby = '';
-      // reset item
+      // reset items
       this.item = {
         description: '',
-        price: null,
-        paidby: ''
+        price: ''
       };
+      // reset validations
+      this.$refs.form.resetValidation();
+      this.$refs.miniform.resetValidation();
     },
     newMaterialItem(e) {
       e.preventDefault();
 
-      this.paid.addons.push(this.item);
+      // check if the input is valid
+      if (this.$refs.miniform.validate()) {
+        // push new item in array
+        this.paid.addons.push(this.item);
 
-      this.$refs.description.focus();
+        // focus on description for adding new items faster
+        this.$refs.description.focus();
 
-      // reset item
-      this.item = {
-        description: '',
-        price: null,
-        paidby: ''
-      };
+        // reset item
+        this.item = {
+          description: '',
+          price: ''
+        };
+
+        // reset validation
+        this.$refs.miniform.resetValidation();
+      }
     },
     deleteMaterialItem(idx) {
       this.paid.addons.splice(idx, 1);
