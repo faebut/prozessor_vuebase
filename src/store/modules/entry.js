@@ -2,12 +2,15 @@ import axios from 'axios';
 import auth from './auth';
 
 const state = {
-  loggedIn: []
+  loggedIn: [],
+  actualPayment: {}
 };
 
 const getters = {
   // get users from central storage
-  loggedIn: state => state.loggedIn
+  loggedIn: state => state.loggedIn,
+  // get actual payment from central storage
+  actualPayment: state => state.actualPayment
 };
 
 const actions = {
@@ -42,6 +45,19 @@ const actions = {
       commit('removeVisit', user._id);
     }
   },
+  async getPayment({ commit }, user) {
+    const response = await axios.get(
+      `/users/${user._id}/visits/${user.visits.length - 1}/paid.json` +
+        '?auth=' +
+        auth.state.idToken
+    );
+
+    commit('setPayment', response.data);
+
+    return {
+      response
+    };
+  },
   async addPayment({ commit }, payment) {
     await axios.put(
       `/users/${payment.user._id}/visits/${payment.user.visits.length -
@@ -52,6 +68,17 @@ const actions = {
     );
 
     commit('paidVisit', payment);
+  },
+  async deletePayment({ commit }, user) {
+    if (confirm(`Bezahlung wirklich löschen?`)) {
+      await axios.delete(
+        `/users/${user._id}/visits/${user.visits.length - 1}/paid.json` +
+          '?auth=' +
+          auth.state.idToken
+      );
+
+      commit('unPaidVisit', user);
+    }
   }
 };
 
@@ -87,11 +114,24 @@ const mutations = {
 
     state.loggedIn = loggedIn;
   },
+  setPayment: (state, payment) => {
+    state.actualPayment = payment;
+  },
   paidVisit: (state, payment) => {
     for (let i = 0; i < state.loggedIn.length; i++) {
       if (state.loggedIn[i]._id === payment.user._id) {
-        state.loggedIn[i].visits[state.loggedIn[i].visits.length - 1].paid =
-          payment.paid;
+        state.loggedIn[i].visits[
+          state.loggedIn[i].visits.length - 1
+        ].paid = true;
+      }
+    }
+  },
+  unPaidVisit: (state, user) => {
+    for (let i = 0; i < state.loggedIn.length; i++) {
+      if (state.loggedIn[i]._id === user._id) {
+        state.loggedIn[i].visits[
+          state.loggedIn[i].visits.length - 1
+        ].paid = false;
       }
     }
   },

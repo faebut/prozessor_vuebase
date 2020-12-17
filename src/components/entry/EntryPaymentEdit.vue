@@ -1,16 +1,29 @@
 <template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
-    <v-icon class="warning--text" @click="openNew" slot="activator"
-      >credit_card</v-icon
+    <v-icon class="info--text" @click="openEdit" slot="activator"
+      >check_circle</v-icon
     >
 
     <!-- form -->
     <v-card>
-      <v-card-title class="px-4">
+      <v-card-title v-if="!fetching" class="px-4">
         <h1>Abrechnung für {{ user.firstname }} {{ user.name }}</h1>
       </v-card-title>
-      <v-card-text>
+
+      <v-card-text v-if="fetching">
+        <v-flex xs12 class="text-xs-center mb-5 mt-5 pt-5 pb-5" v-if="fetching">
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate
+          ></v-progress-circular>
+
+          <h2 class="primary--text mt-4">Lade Bezahlung...</h2>
+        </v-flex>
+      </v-card-text>
+
+      <v-card-text v-else>
         <v-layout row wrap>
           <v-flex xs6 sm6 md3 class="px-2">
             <div class="caption grey--text">Ort</div>
@@ -71,15 +84,7 @@
 
           <v-flex xs6 class="px-2">
             <div class="caption grey--text">Eintrittspreis</div>
-            <div>
-              CHF {{ computedPrice }}.-
-              <span
-                v-if="!visit.member && !visit.helper && timepassed < 7200000"
-                class="success--text"
-              >
-                (Kurzzeitnutzung)</span
-              >
-            </div>
+            <div>CHF {{ lastprice }}.-</div>
           </v-flex>
 
           <v-flex xs12 class="px-2 mt-2" v-if="!visit.member && !visit.helper">
@@ -109,7 +114,7 @@
             <h3 v-if="paid.baseprice && freeprice">
               CHF {{ paid.baseprice }}.-
             </h3>
-            <h3 v-else>CHF {{ computedPrice }}.-</h3>
+            <h3 v-else>CHF {{ lastprice }}.-</h3>
           </v-flex>
         </v-layout>
 
@@ -196,8 +201,13 @@
             </v-flex>
 
             <v-flex xs12 class="mt-3">
-              <v-btn color="success" dark @click="onSubmit">Bezahlen</v-btn>
+              <v-btn color="success" dark @click="onSubmit"
+                >Zahlung anpassen</v-btn
+              >
               <v-btn color="warning" dark @click="onCancel">Abbrechen</v-btn>
+              <v-btn color="error" dark @click="onDelete"
+                >Zahlung löschen</v-btn
+              >
             </v-flex>
           </v-layout>
         </v-form>
@@ -217,6 +227,7 @@ export default {
   data() {
     return {
       dialog: false,
+      fetching: false,
       // Switches
       freeprice: false,
       // Material item
@@ -225,6 +236,7 @@ export default {
         price: ''
       },
       // Special pricing
+      lastprice: null,
       paid: {
         baseprice: null,
         addons: [],
@@ -242,9 +254,36 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['addPayment', 'setSnack']),
-    openNew(e) {
+    ...mapActions(['addPayment', 'deletePayment', 'getPayment', 'setSnack']),
+    openEdit(e) {
       e.preventDefault();
+
+      // make sure the loading spinner ist showing and dialog fires up
+      this.fetching = true;
+
+      // fetch single User
+      this.getPayment(this.user)
+        .then(res => {
+          console.log(res.response.data);
+
+          // get the data and set it to the payment
+          this.paid = res.response.data;
+          this.lastprice = res.response.data.baseprice;
+          this.paid.baseprice = null;
+          if (!res.response.data.addons) {
+            this.paid.addons = [];
+          }
+
+          // remove the loader and show form
+          this.fetching = false;
+        })
+        .catch(err => {
+          // show snackbar for error
+          this.setSnack({
+            message: `Error: ${err}`,
+            type: 'error'
+          });
+        });
     },
     onSubmit(e) {
       e.preventDefault();
@@ -255,7 +294,7 @@ export default {
           baseprice:
             this.freeprice && this.paid.baseprice
               ? this.paid.baseprice
-              : this.computedPrice,
+              : this.lastprice,
           addons: this.paid.addons,
           paidby: this.paid.paidby
         }
@@ -270,14 +309,11 @@ export default {
             this.setSnack({
               message: `Bezahlung für ${this.user.firstname} ${
                 this.user.name
-              } erfolgreich erfasst`,
+              } erfolgreich angepasst`,
               type: 'success'
             });
             // close dialog
             this.dialog = false;
-
-            // emit to parent, that it's paid now
-            this.$emit('is-paid');
           })
           .catch(err => {
             // show snackbar for error
@@ -301,14 +337,44 @@ export default {
       this.paid.baseprice = null;
       this.paid.addons = [];
       this.paid.paidby = '';
-      // reset items
-      this.item = {
-        description: '',
-        price: ''
-      };
+      (this.lastprice = null),
+        // reset items
+        (this.item = {
+          description: '',
+          price: ''
+        });
       // reset validations
       this.$refs.form.resetValidation();
       this.$refs.miniform.resetValidation();
+    },
+    onDelete(e) {
+      e.preventDefault();
+
+      // delete payment
+      this.deletePayment(this.user)
+        .then(() => {
+          // show snackbar for success
+          this.setSnack({
+            message: `Bezahlung für ${this.user.firstname} ${
+              this.user.name
+            } erfolgreich gelöscht`,
+            type: 'success'
+          });
+          // close dialog
+          this.dialog = false;
+        })
+        .catch(err => {
+          // show snackbar for error
+          this.setSnack({
+            message: `Error: ${err}`,
+            type: 'error'
+          });
+        });
+
+      // emit to parent, that it's paid now
+      this.$emit('is-paid');
+      // reset and close dialog
+      this.onCancel(e);
     },
     newMaterialItem(e) {
       e.preventDefault();
@@ -386,45 +452,11 @@ export default {
 
       return userage;
     },
-    computedPrice() {
-      let price = 30;
-
-      // short time usage
-      if (this.timepassed < 7200000) {
-        price = 10;
-      }
-
-      // price for age
-      if (this.userage < 18) {
-        price = 10;
-      }
-      if (this.userage < 12) {
-        price = 0;
-      }
-
-      // check if as member, helper or partner
-      if (this.visit.member === true) {
-        price = 0;
-      }
-      if (this.visit.partner !== 'no_id') {
-        price = 0;
-      }
-      if (this.visit.helper === true) {
-        price = 0;
-      }
-
-      // check if abonnement is valid
-      if (this.validAbo === 'ja') {
-        price = 0;
-      }
-
-      return price;
-    },
     totalPrice() {
       const entryprice = parseFloat(
         this.freeprice && this.paid.baseprice
           ? this.paid.baseprice
-          : this.computedPrice
+          : this.lastprice
       );
 
       let materialprice = 0;

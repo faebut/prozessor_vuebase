@@ -45,12 +45,17 @@
           :user="user"
           :ateliers="ateliers"
           :timepassed="computedTime.unformatted"
-          v-if="!visit.paid"
+          v-if="!paid"
           @is-paid="togglePaid"
         ></entry-payment>
-        <v-icon v-if="visit.paid || paid" class="success--text"
-          >check_circle</v-icon
-        >
+        <entry-payment-edit
+          v-else
+          :visit="visit"
+          :user="user"
+          :ateliers="ateliers"
+          :timepassed="computedTime.unformatted"
+          @is-paid="togglePaid"
+        ></entry-payment-edit>
       </v-flex>
 
       <v-flex xs1>
@@ -63,6 +68,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import EntryPayment from '@/components/entry/EntryPayment';
+import EntryPaymentEdit from '@/components/entry/EntryPaymentEdit';
 
 export default {
   name: 'EntryLoggedInUser',
@@ -73,12 +79,13 @@ export default {
     };
   },
   components: {
-    EntryPayment
+    EntryPayment,
+    EntryPaymentEdit
   },
   methods: {
     ...mapActions(['deleteVisit']),
     togglePaid() {
-      this.paid = true;
+      this.paid = !this.paid;
     }
   },
   computed: {
@@ -140,6 +147,11 @@ export default {
         formatted: diff_hours + ':' + diff_mins,
         unformatted: timepassed.getTime()
       };
+    }
+  },
+  mounted() {
+    if (this.visit.paid) {
+      this.paid = true;
     }
   }
 };
