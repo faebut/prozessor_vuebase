@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-text-field
-      label="Durchsuchen..."
+      label="Suche nach Name, Vorname oder Ort..."
       prepend-icon="search"
       clearabel
       v-model="search"
@@ -13,6 +13,39 @@
         </v-btn>
       </template>
     </v-text-field>
+
+    <v-card flat class="pa-3 mb-4">
+      <v-card-title class="headline">Suchfilter</v-card-title>
+      <v-layout row wrap>
+        <v-flex xs6 md3>
+          <v-checkbox
+            v-model="filterAbo"
+            label="Abonnement"
+            color="primary"
+            value="abo"
+            hide-details
+          ></v-checkbox>
+        </v-flex>
+        <v-flex xs6 md3>
+          <v-checkbox
+            v-model="filterMember"
+            label="Mitglied"
+            color="primary"
+            value="member"
+            hide-details
+          ></v-checkbox>
+        </v-flex>
+        <v-flex xs6 md3>
+          <v-checkbox
+            v-model="filterPartners"
+            label="Partner"
+            color="primary"
+            value="partner"
+            hide-details
+          ></v-checkbox>
+        </v-flex>
+      </v-layout>
+    </v-card>
 
     <v-card
       flat
@@ -71,6 +104,9 @@ export default {
   data() {
     return {
       search: '',
+      filterAbo: false,
+      filterMember: false,
+      filterPartners: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
@@ -99,8 +135,30 @@ export default {
             : -1
         );
 
+      // Filters from filtercard
+
+      var prefilterUsers = sortedUsers;
+
+      if (this.filterAbo) {
+        prefilterUsers = prefilterUsers.filter(user => {
+          return user.buydate;
+        });
+      }
+
+      if (this.filterMember) {
+        prefilterUsers = prefilterUsers.filter(user => {
+          return user.member;
+        });
+      }
+
+      if (this.filterPartners) {
+        prefilterUsers = prefilterUsers.filter(user => {
+          return user.partners;
+        });
+      }
+
       // Filter from searchbox
-      const filterUsers = sortedUsers.filter(user => {
+      const filterUsers = prefilterUsers.filter(user => {
         return (
           user.name.toLowerCase().match(this.search.toLowerCase()) ||
           user.firstname.toLowerCase().match(this.search.toLowerCase()) ||
