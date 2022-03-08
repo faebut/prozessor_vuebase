@@ -19,10 +19,10 @@ import VueApexCharts from 'vue-apexcharts';
 
 export default {
   name: 'AteliersChart',
-  props: ['allVisits', 'ateliers'],
   components: {
     apexcharts: VueApexCharts
   },
+  props: ['allVisits', 'ateliers'],
   computed: {
     visitsPerAtelier() {
       const allAteliers = [];
@@ -34,9 +34,9 @@ export default {
 
       // count for every atelier
       function getCount(arr) {
-        var obj = {};
-        for (var i = 0, l = arr.length; i < l; i++) {
-          var key = arr[i];
+        const obj = {};
+        for (let i = 0, l = arr.length; i < l; i++) {
+          const key = arr[i];
           obj[key] = obj[key] || 0;
           obj[key]++;
         }
@@ -48,7 +48,7 @@ export default {
       Object.keys(getCount(allAteliers)).forEach(key => {
         for (let i = 0, l = this.ateliers.length; i < l; i++) {
           if (key == this.ateliers[i]._id) {
-            var mem = countAteliers[key];
+            const mem = countAteliers[key];
             delete countAteliers[key];
             countAteliers[this.ateliers[i].name] = mem;
           }
@@ -62,7 +62,10 @@ export default {
         series: Object.values(this.visitsPerAtelier),
         chartOptions: {
           chart: {
-            type: 'donut'
+            type: 'donut',
+            animations: {
+              enabled: false
+            }
           },
           colors: [
             '#008FFB',
