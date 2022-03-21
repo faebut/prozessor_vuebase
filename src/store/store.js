@@ -8,6 +8,7 @@ import snackbar from './modules/snackbar';
 import entry from './modules/entry';
 import ateliers from './modules/ateliers';
 import auth from './modules/auth';
+import badges from './modules/badges';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     snackbar,
     entry,
     ateliers,
-    auth
+    auth,
+    badges
   }
 });

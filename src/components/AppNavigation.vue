@@ -56,7 +56,8 @@ export default {
       items: [
         { icon: 'dashboard', title: 'Home', link: '/', show: true },
         { icon: 'folder', title: 'Eingang', link: '/entry', show: false },
-        { icon: 'person', title: 'Besuchende', link: 'users', show: false },
+        { icon: 'person', title: 'Besuchende', link: '/users', show: false },
+        { icon: 'badge', title: 'Badges', link: '/badges', show: false },
         { icon: 'group', title: 'Partner', link: '/partners', show: false },
         {
           icon: 'assignment',

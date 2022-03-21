@@ -48,7 +48,12 @@ export default {
       email: value => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || 'E-Mail ungültig.';
-      }
+      },
+      // nfc stuff
+      pcsc: null,
+      nfc: null,
+      readers: null,
+      msg: 'Hello electron-vue-nfc!'
     }
   }),
   methods: {

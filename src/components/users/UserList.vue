@@ -24,6 +24,22 @@
             color="primary"
             value="abo"
             hide-details
+          ></v-checkbox
+          ><br />
+          <v-checkbox
+            v-if="filterAbo && !filterAboInvalid"
+            v-model="filterAboValid"
+            label="Abo gültig"
+            color="primary"
+            hide-details
+          ></v-checkbox>
+          <br />
+          <v-checkbox
+            v-if="filterAbo && !filterAboValid"
+            v-model="filterAboInvalid"
+            label="Abo abgelaufen"
+            color="primary"
+            hide-details
           ></v-checkbox>
         </v-flex>
         <v-flex xs6 md3>
@@ -43,6 +59,16 @@
             value="partner"
             hide-details
           ></v-checkbox>
+        </v-flex>
+        <v-flex xs6 md3>
+          <export-excel
+            :data="filteredUsers.filterUsers"
+            :fields="filterExport"
+            worksheet="Besuchende"
+            name="Datenbank.xls"
+          >
+            <v-btn class="primary">Download Excel</v-btn>
+          </export-excel>
         </v-flex>
       </v-layout>
     </v-card>
@@ -105,12 +131,28 @@ export default {
     return {
       search: '',
       filterAbo: false,
+      filterAboValid: false,
+      filterAboInvalid: false,
       filterMember: false,
       filterPartners: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
         pages: 1
+      },
+      // filter for Export
+      filterExport: {
+        Email: 'email',
+        Vorname: 'firstname',
+        Name: 'name',
+        Adresse: 'address',
+        PLZ: 'postcode',
+        Ort: 'city',
+        Geburtstag: 'birthdate',
+        Telefon: 'phone',
+        Mitglied: 'member',
+        Abo: 'buydate',
+        Nutzungsvereinbarung: 'agreement'
       }
     };
   },
@@ -139,9 +181,27 @@ export default {
 
       var prefilterUsers = sortedUsers;
 
+      // check validity of Abo
+      const dateNow = new Date().setHours(0, 0, 0, 0);
+
       if (this.filterAbo) {
         prefilterUsers = prefilterUsers.filter(user => {
-          return user.buydate;
+          if (user.buydate) {
+            // check if there is an abonnement and if it's still valid
+            const dateAbo = new Date(user.buydate);
+            const diffTime = Math.abs(dateNow - dateAbo);
+            const diffDays = Math.ceil(366 - diffTime / (1000 * 60 * 60 * 24));
+            // how many days is it still valid or already overdue
+            user.aboValidity = diffDays;
+          }
+
+          if (this.filterAboValid) {
+            return user.aboValidity >= 0;
+          } else if (this.filterAboInvalid) {
+            return user.aboValidity <= 0;
+          } else {
+            return user.buydate;
+          }
         });
       }
 
@@ -177,7 +237,8 @@ export default {
 
       return {
         pagedUsers,
-        pages
+        pages,
+        filterUsers
       };
     }
   },

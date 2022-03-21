@@ -40,6 +40,18 @@ export default new Router({
       }
     },
     {
+      path: '/badges',
+      name: 'badges',
+      component: () => import('./views/Badges.vue'),
+      beforeEnter(to, from, next) {
+        if (auth.state.idToken) {
+          next();
+        } else {
+          next('/');
+        }
+      }
+    },
+    {
       path: '/partners',
       name: 'partners',
       component: () => import('./views/Partners.vue'),
