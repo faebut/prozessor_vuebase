@@ -84,13 +84,31 @@
           <div class="caption grey--text">Name</div>
           <div>{{ user.firstname }} {{ user.name }}</div>
         </v-flex>
-        <v-flex xs6 sm6 md3>
+        <v-flex xs6 sm6 md2>
           <div class="caption grey--text">Ort</div>
           <div>{{ user.city }}</div>
         </v-flex>
         <v-flex xs6 sm6 md3>
           <div class="caption grey--text">E-Mail</div>
           <div>{{ user.email }}</div>
+        </v-flex>
+        <v-flex xs6 sm6 md1>
+          <div class="caption grey--text">"Abo"</div>
+          <div
+            v-if="user.aboValidity >= 30"
+            class="font-weight-bold green--text"
+          >
+            {{ user.aboValidity }} Tage
+          </div>
+          <div v-if="user.aboValidity <= 0" class="font-weight-bold red--text">
+            {{ user.aboValidity }} Tage
+          </div>
+          <div
+            v-else-if="user.aboValidity <= 30"
+            class="font-weight-bold orange--text"
+          >
+            {{ user.aboValidity }} Tage
+          </div>
         </v-flex>
         <v-flex xs12 sm6 md3>
           <center>
@@ -177,24 +195,27 @@ export default {
             : -1
         );
 
+      const dateNow = new Date().setHours(0, 0, 0, 0);
+
+      sortedUsers.forEach(user => {
+        if (user.buydate) {
+          // check if there is an abonnement and if it's still valid
+          const dateAbo = new Date(user.buydate);
+          const diffTime = Math.abs(dateNow - dateAbo);
+          const diffDays = Math.ceil(366 - diffTime / (1000 * 60 * 60 * 24));
+          // how many days is it still valid or already overdue
+          user.aboValidity = diffDays;
+        }
+      });
+
       // Filters from filtercard
 
       var prefilterUsers = sortedUsers;
 
       // check validity of Abo
-      const dateNow = new Date().setHours(0, 0, 0, 0);
 
       if (this.filterAbo) {
         prefilterUsers = prefilterUsers.filter(user => {
-          if (user.buydate) {
-            // check if there is an abonnement and if it's still valid
-            const dateAbo = new Date(user.buydate);
-            const diffTime = Math.abs(dateNow - dateAbo);
-            const diffDays = Math.ceil(366 - diffTime / (1000 * 60 * 60 * 24));
-            // how many days is it still valid or already overdue
-            user.aboValidity = diffDays;
-          }
-
           if (this.filterAboValid) {
             return user.aboValidity >= 0;
           } else if (this.filterAboInvalid) {
