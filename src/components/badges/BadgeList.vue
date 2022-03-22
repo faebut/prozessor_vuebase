@@ -1,6 +1,10 @@
 <template>
   <div>
-    <badge-listing v-for="badge in badges" :key="badge._id" :badge="badge" />
+    <badge-listing
+      v-for="badge in sortedBadges"
+      :key="badge._id"
+      :badge="badge"
+    />
   </div>
 </template>
 
@@ -20,7 +24,15 @@ export default {
     ...mapActions(['fetchBadges', 'fetchUsers'])
   },
   computed: {
-    ...mapGetters(['badges'])
+    ...mapGetters(['badges']),
+    // sort badges by number
+    sortedBadges() {
+      const unsortBadges = this.badges;
+
+      const sortBadges = unsortBadges.sort((a, b) => a.number - b.number);
+
+      return sortBadges;
+    }
   },
   created() {
     this.fetchBadges();
