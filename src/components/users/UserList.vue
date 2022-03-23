@@ -84,15 +84,11 @@
           <div class="caption grey--text">Name</div>
           <div>{{ user.firstname }} {{ user.name }}</div>
         </v-flex>
-        <v-flex xs6 sm6 md2>
+        <v-flex xs3 sm6 md2>
           <div class="caption grey--text">Ort</div>
           <div>{{ user.city }}</div>
         </v-flex>
-        <v-flex xs6 sm6 md3>
-          <div class="caption grey--text">E-Mail</div>
-          <div>{{ user.email }}</div>
-        </v-flex>
-        <v-flex xs6 sm6 md1>
+        <v-flex xs3 sm6 md1>
           <div class="caption grey--text">"Abo"</div>
           <div
             v-if="user.aboValidity >= 30"
@@ -109,7 +105,15 @@
           >
             {{ user.aboValidity }} Tage
           </div>
+          <div v-else>
+            kein Abo
+          </div>
         </v-flex>
+        <v-flex xs12 sm6 md3>
+          <div class="caption grey--text">E-Mail</div>
+          <div>{{ user.email }}</div>
+        </v-flex>
+
         <v-flex xs12 sm6 md3>
           <center>
             <user-info :id="user._id" />
