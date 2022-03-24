@@ -24,8 +24,7 @@
             color="primary"
             value="abo"
             hide-details
-          ></v-checkbox
-          ><br />
+          ></v-checkbox>
           <v-checkbox
             v-if="filterAbo && !filterAboInvalid"
             v-model="filterAboValid"
@@ -33,7 +32,6 @@
             color="primary"
             hide-details
           ></v-checkbox>
-          <br />
           <v-checkbox
             v-if="filterAbo && !filterAboValid"
             v-model="filterAboInvalid"
@@ -60,15 +58,32 @@
             hide-details
           ></v-checkbox>
         </v-flex>
-        <v-flex xs6 md3>
-          <export-excel
-            :data="filteredUsers.filterUsers"
-            :fields="filterExport"
-            worksheet="Besuchende"
-            name="Datenbank.xls"
-          >
-            <v-btn class="primary">Download Excel</v-btn>
-          </export-excel>
+        <v-flex xs12 sm6 md3>
+          <v-select
+            v-model="sortBy"
+            :items="sortOptions"
+            label="Sortieren nach"
+          ></v-select
+          ><br />
+          <v-select
+            v-model="sortDir"
+            :items="sortDirOptions"
+            label="Richtung"
+          ></v-select>
+        </v-flex>
+
+        <v-flex xs12>
+          <center>
+            <v-btn class="primary">
+              <export-excel
+                :data="filteredUsers.sortedSortedUsers"
+                :fields="filterExport"
+                worksheet="Besuchende"
+                name="Datenbank.xls"
+                >Download Excel
+              </export-excel></v-btn
+            >
+          </center>
         </v-flex>
       </v-layout>
     </v-card>
@@ -96,7 +111,10 @@
           >
             {{ user.aboValidity }} Tage
           </div>
-          <div v-if="user.aboValidity <= 0" class="font-weight-bold red--text">
+          <div
+            v-else-if="user.aboValidity <= 0"
+            class="font-weight-bold red--text"
+          >
             {{ user.aboValidity }} Tage
           </div>
           <div
@@ -175,7 +193,12 @@ export default {
         Mitglied: 'member',
         Abo: 'buydate',
         Nutzungsvereinbarung: 'agreement'
-      }
+      },
+      // sorting
+      sortOptions: ['Name', 'Ort', 'Abo'],
+      sortBy: 'Name',
+      sortDirOptions: ['Aufsteigend', 'Absteigend'],
+      sortDir: 'Aufsteigend'
     };
   },
   methods: {
@@ -187,17 +210,32 @@ export default {
   computed: {
     ...mapGetters(['users']),
     filteredUsers() {
-      const sortedUsers = this.users
-        .slice()
-        .sort((a, b) =>
-          a.firstname.toLowerCase() > b.firstname.toLowerCase()
-            ? 1
-            : a.firstname.toLowerCase() === b.firstname.toLowerCase()
-            ? a.name.toLowerCase() > b.name.toLowerCase()
+      let sortedUsers = null;
+      if (this.sortDir === 'Aufsteigend') {
+        sortedUsers = this.users
+          .slice()
+          .sort((a, b) =>
+            a.firstname.toLowerCase() > b.firstname.toLowerCase()
               ? 1
+              : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+              ? a.name.toLowerCase() > b.name.toLowerCase()
+                ? 1
+                : -1
               : -1
-            : -1
-        );
+          );
+      } else {
+        sortedUsers = this.users
+          .slice()
+          .sort((b, a) =>
+            a.firstname.toLowerCase() > b.firstname.toLowerCase()
+              ? 1
+              : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+              ? a.name.toLowerCase() > b.name.toLowerCase()
+                ? 1
+                : -1
+              : -1
+          );
+      }
 
       const dateNow = new Date().setHours(0, 0, 0, 0);
 
@@ -251,19 +289,96 @@ export default {
         );
       });
 
+      // conditional sorting done here.
+
+      let sortedSortedUsers = filterUsers;
+
+      if (this.sortBy === 'Ort') {
+        if (this.sortDir === 'Aufsteigend') {
+          sortedSortedUsers = filterUsers
+            .slice()
+            .sort((a, b) =>
+              a.city.toLowerCase() > b.city.toLowerCase()
+                ? 1
+                : a.city.toLowerCase() === b.city.toLowerCase()
+                ? a.firstname.toLowerCase() > b.firstname.toLowerCase()
+                  ? 1
+                  : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+                  ? a.name.toLowerCase() > b.name.toLowerCase()
+                    ? 1
+                    : -1
+                  : -1
+                : -1
+            );
+        } else {
+          sortedSortedUsers = filterUsers
+            .slice()
+            .sort((b, a) =>
+              a.city.toLowerCase() > b.city.toLowerCase()
+                ? 1
+                : a.city.toLowerCase() === b.city.toLowerCase()
+                ? a.firstname.toLowerCase() > b.firstname.toLowerCase()
+                  ? 1
+                  : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+                  ? a.name.toLowerCase() > b.name.toLowerCase()
+                    ? 1
+                    : -1
+                  : -1
+                : -1
+            );
+        }
+      } else if (this.sortBy === 'Abo') {
+        if (this.sortDir === 'Aufsteigend') {
+          sortedSortedUsers = filterUsers
+            .slice()
+            .sort((a, b) =>
+              a.aboValidity > b.aboValidity
+                ? 1
+                : a.aboValidity === b.aboValidity
+                ? a.firstname.toLowerCase() > b.firstname.toLowerCase()
+                  ? 1
+                  : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+                  ? a.name.toLowerCase() > b.name.toLowerCase()
+                    ? 1
+                    : -1
+                  : -1
+                : -1
+            );
+        } else {
+          sortedSortedUsers = filterUsers
+            .slice()
+            .sort((b, a) =>
+              a.aboValidity > b.aboValidity
+                ? 1
+                : a.aboValidity === b.aboValidity
+                ? a.firstname.toLowerCase() > b.firstname.toLowerCase()
+                  ? 1
+                  : a.firstname.toLowerCase() === b.firstname.toLowerCase()
+                  ? a.name.toLowerCase() > b.name.toLowerCase()
+                    ? 1
+                    : -1
+                  : -1
+                : -1
+            );
+        }
+      }
+
       // Pagination
       const pageSize = this.pagination.pageSize;
-      const pages = Math.ceil(filterUsers.length / pageSize);
+      const pages = Math.ceil(sortedSortedUsers.length / pageSize);
 
       const startIndex = (this.pagination.currentPage - 1) * pageSize;
-      const endIndex = Math.min(startIndex + pageSize, filterUsers.length);
+      const endIndex = Math.min(
+        startIndex + pageSize,
+        sortedSortedUsers.length
+      );
 
-      const pagedUsers = filterUsers.slice(startIndex, endIndex);
+      const pagedUsers = sortedSortedUsers.slice(startIndex, endIndex);
 
       return {
         pagedUsers,
         pages,
-        filterUsers
+        sortedSortedUsers
       };
     }
   },
