@@ -17,17 +17,17 @@ export default {
   name: 'BadgesMain',
   components: {
     BadgeList,
-    BadgeCreate
+    BadgeCreate,
   },
   methods: {
-    ...mapActions(['fetchUsers'])
+    ...mapActions(['fetchUsers']),
   },
   computed: {
-    ...mapGetters(['users'])
+    ...mapGetters(['users']),
   },
   created() {
     this.fetchUsers();
-  }
+  },
 };
 </script>
 

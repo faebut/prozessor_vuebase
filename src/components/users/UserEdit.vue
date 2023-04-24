@@ -104,7 +104,7 @@
             </v-flex>
 
             <v-flex xs12 class="px-2">
-              <h1>Abonnemente / Mitgliedschaft / Partnervereine</h1>
+              <h1>Abonnemente / Betriebsgruppe / Partnervereine</h1>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
@@ -141,7 +141,7 @@
               <v-switch
                 v-model="user.member"
                 color="primary"
-                :label="'Mitglied Verein Prozessor'"
+                :label="'Betriebsgruppe Prozessor'"
               ></v-switch>
             </v-flex>
 
@@ -252,18 +252,19 @@ export default {
       fetching: true,
       // rules
       rules: {
-        required: value => !!value || 'Bitte eingeben.',
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        required: (value) => !!value || 'Bitte eingeben.',
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'E-Mail ungültig.';
-        }
+        },
       },
       // date Stuff
       datePickerBirthday: false,
       datePickerBuydate: false,
 
       // form fields initally empty --> check if needed
-      user: {}
+      user: {},
     };
   },
   methods: {
@@ -272,7 +273,7 @@ export default {
       'fetchSingleUser',
       'fetchAteliers',
       'editUser',
-      'setSnack'
+      'setSnack',
     ]),
 
     // on clicking the send button in the form
@@ -294,19 +295,17 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Besucher*in ${this.user.firstname} ${
-                this.user.name
-              } erfolgreich geändert`,
-              type: 'success'
+              message: `Besucher*in ${this.user.firstname} ${this.user.name} erfolgreich geändert`,
+              type: 'success',
             });
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
@@ -322,7 +321,7 @@ export default {
 
       // fetch single User
       this.fetchSingleUser(this.id)
-        .then(res => {
+        .then((res) => {
           // get the data and set it to the user
           this.user = res.response.data;
 
@@ -332,11 +331,11 @@ export default {
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -347,7 +346,7 @@ export default {
 
       // close dialog
       this.dialog = false;
-    }
+    },
   },
   computed: {
     ...mapGetters(['partners', 'ateliers']),
@@ -370,11 +369,11 @@ export default {
       const atelierNames = [];
 
       // add ateliers to array
-      this.ateliers.forEach(atelierID => {
+      this.ateliers.forEach((atelierID) => {
         // add Values to object
         const atelierObject = {
           name: atelierID.name,
-          id: atelierID._id
+          id: atelierID._id,
         };
 
         // push object to array
@@ -382,14 +381,14 @@ export default {
       });
 
       return atelierNames;
-    }
+    },
   },
   created() {
     // reload state of partners
     this.fetchPartners();
     // reload state of ateliers
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

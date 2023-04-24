@@ -63,30 +63,30 @@ export default {
           icon: 'assignment',
           title: 'Stammdaten',
           link: '/stamm',
-          show: false
+          show: false,
         },
         {
           icon: 'insert_chart',
           title: 'Statistik',
           link: '/statistics',
-          show: false
+          show: false,
         },
-        { icon: 'build', title: 'Expert*innen', link: '/experts', show: false }
-      ]
+        { icon: 'build', title: 'Expert*innen', link: '/experts', show: false },
+      ],
     };
   },
   methods: {
     ...mapActions(['logout']),
     onLogout() {
       this.logout();
-    }
+    },
   },
   computed: {
     loggedIn() {
       // return the value of the idToken
       return auth.state.idToken;
-    }
-  }
+    },
+  },
 };
 </script>
 

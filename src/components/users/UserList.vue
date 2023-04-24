@@ -43,9 +43,18 @@
         <v-flex xs6 md3>
           <v-checkbox
             v-model="filterMember"
-            label="Mitglied"
+            label="Betriebsgruppe"
             color="primary"
             value="member"
+            hide-details
+          ></v-checkbox>
+        </v-flex>
+        <v-flex xs6 md3>
+          <v-checkbox
+            v-model="filterBadge"
+            label="Badge"
+            color="primary"
+            value="badge"
             hide-details
           ></v-checkbox>
         </v-flex>
@@ -123,9 +132,7 @@
           >
             {{ user.aboValidity }} Tage
           </div>
-          <div v-else>
-            kein Abo
-          </div>
+          <div v-else>kein Abo</div>
         </v-flex>
         <v-flex xs12 sm6 md3>
           <div class="caption grey--text">E-Mail</div>
@@ -165,7 +172,7 @@ export default {
   name: 'UserList',
   components: {
     UserEdit,
-    UserInfo
+    UserInfo,
   },
   data() {
     return {
@@ -174,11 +181,12 @@ export default {
       filterAboValid: false,
       filterAboInvalid: false,
       filterMember: false,
+      filterBadge: false,
       filterPartners: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        pages: 1
+        pages: 1,
       },
       // filter for Export
       filterExport: {
@@ -190,25 +198,36 @@ export default {
         Ort: 'city',
         Geburtstag: 'birthdate',
         Telefon: 'phone',
-        Mitglied: 'member',
+        Betriebsgruppe: 'member',
         Abo: 'buydate',
-        Nutzungsvereinbarung: 'agreement'
+        Nutzungsvereinbarung: 'agreement',
       },
       // sorting
       sortOptions: ['Name', 'Ort', 'Abo'],
       sortBy: 'Name',
       sortDirOptions: ['Aufsteigend', 'Absteigend'],
-      sortDir: 'Aufsteigend'
+      sortDir: 'Aufsteigend',
     };
   },
   methods: {
-    ...mapActions(['fetchUsers', 'deleteUser']),
+    ...mapActions(['fetchUsers', 'fetchBadges', 'deleteUser']),
     clearSearch() {
       this.search = '';
-    }
+    },
   },
   computed: {
-    ...mapGetters(['users']),
+    ...mapGetters(['users', 'badges']),
+    filteredBadges() {
+      let filterBadges = [];
+
+      for (let i = 0; i < this.badges.length; i++) {
+        if (this.badges[i].ownerInternID) {
+          filterBadges.push(this.badges[i].ownerInternID);
+        }
+      }
+
+      return filterBadges;
+    },
     filteredUsers() {
       let sortedUsers = null;
       if (this.sortDir === 'Aufsteigend') {
@@ -239,7 +258,7 @@ export default {
 
       const dateNow = new Date().setHours(0, 0, 0, 0);
 
-      sortedUsers.forEach(user => {
+      sortedUsers.forEach((user) => {
         if (user.buydate) {
           // check if there is an abonnement and if it's still valid
           const dateAbo = new Date(user.buydate);
@@ -257,7 +276,7 @@ export default {
       // check validity of Abo
 
       if (this.filterAbo) {
-        prefilterUsers = prefilterUsers.filter(user => {
+        prefilterUsers = prefilterUsers.filter((user) => {
           if (this.filterAboValid) {
             return user.aboValidity >= 0;
           } else if (this.filterAboInvalid) {
@@ -269,19 +288,25 @@ export default {
       }
 
       if (this.filterMember) {
-        prefilterUsers = prefilterUsers.filter(user => {
+        prefilterUsers = prefilterUsers.filter((user) => {
           return user.member;
         });
       }
 
+      if (this.filterBadge) {
+        prefilterUsers = prefilterUsers.filter((user) =>
+          this.filteredBadges.includes(user._id)
+        );
+      }
+
       if (this.filterPartners) {
-        prefilterUsers = prefilterUsers.filter(user => {
+        prefilterUsers = prefilterUsers.filter((user) => {
           return user.partners;
         });
       }
 
       // Filter from searchbox
-      const filterUsers = prefilterUsers.filter(user => {
+      const filterUsers = prefilterUsers.filter((user) => {
         return (
           user.name.toLowerCase().match(this.search.toLowerCase()) ||
           user.firstname.toLowerCase().match(this.search.toLowerCase()) ||
@@ -378,14 +403,15 @@ export default {
       return {
         pagedUsers,
         pages,
-        sortedSortedUsers
+        sortedSortedUsers,
       };
-    }
+    },
   },
   created() {
     // reload state of users
     this.fetchUsers();
-  }
+    this.fetchBadges();
+  },
 };
 </script>
 

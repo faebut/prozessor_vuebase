@@ -38,14 +38,12 @@
           <v-flex xs6 sm6 md3 class="px-2 mt-2">
             <div v-if="user.member">
               <div class="caption grey--text" v-if="user.member">
-                Mitglied Prozessor
+                Betriebsgruppe
               </div>
-              <div>Mitglied Verein Prozessor</div>
+              <div>Betriebsgruppe Prozessor</div>
             </div>
             <div v-if="user.helper">
-              <div class="caption grey--text" v-if="user.helper">
-                Helfer*in
-              </div>
+              <div class="caption grey--text" v-if="user.helper">Helfer*in</div>
               <div>Helfer*in Verein Prozessor</div>
             </div>
           </v-flex>
@@ -64,7 +62,7 @@
               <span v-if="userage > 17 && !visit.member && !visit.helper"
                 >Erwachsene</span
               >
-              <span v-if="visit.member">Mitglied</span>
+              <span v-if="visit.member">Betriebsgruppe</span>
               <span v-if="visit.helper">Helfer*in</span>
             </div>
           </v-flex>
@@ -222,23 +220,23 @@ export default {
       // Material item
       item: {
         description: '',
-        price: ''
+        price: '',
       },
       // Special pricing
       paid: {
         baseprice: null,
         addons: [],
-        paidby: ''
+        paidby: '',
       },
       // rules for the form
       rules: {
-        payment: value => value.length > 0 || 'Bitte Zahlart wählen.',
-        required: value => value.length > 0 || 'Bitte ausfüllen.',
-        number: value => {
+        payment: (value) => value.length > 0 || 'Bitte Zahlart wählen.',
+        required: (value) => value.length > 0 || 'Bitte ausfüllen.',
+        number: (value) => {
           const pattern = /^-?\d*[.,]?\d*$/;
           return pattern.test(value) || 'Zahl eingeben';
-        }
-      }
+        },
+      },
     };
   },
   methods: {
@@ -257,8 +255,8 @@ export default {
               ? this.paid.baseprice
               : this.computedPrice,
           addons: this.paid.addons,
-          paidby: this.paid.paidby
-        }
+          paidby: this.paid.paidby,
+        },
       };
 
       // check if the input is valid
@@ -268,10 +266,8 @@ export default {
           .then(() => {
             // show snackbar for success
             this.setSnack({
-              message: `Bezahlung für ${this.user.firstname} ${
-                this.user.name
-              } erfolgreich erfasst`,
-              type: 'success'
+              message: `Bezahlung für ${this.user.firstname} ${this.user.name} erfolgreich erfasst`,
+              type: 'success',
             });
             // close dialog
             this.dialog = false;
@@ -279,11 +275,11 @@ export default {
             // emit to parent, that it's paid now
             this.$emit('is-paid');
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
 
@@ -304,7 +300,7 @@ export default {
       // reset items
       this.item = {
         description: '',
-        price: ''
+        price: '',
       };
       // reset validations
       this.$refs.form.resetValidation();
@@ -324,7 +320,7 @@ export default {
         // reset item
         this.item = {
           description: '',
-          price: ''
+          price: '',
         };
 
         // reset validation
@@ -333,14 +329,14 @@ export default {
     },
     deleteMaterialItem(idx) {
       this.paid.addons.splice(idx, 1);
-    }
+    },
   },
   computed: {
     // Format the Birthdate
     computedDateBirthdate() {
       return this.user.birthdate
         ? format(this.user.birthdate, 'DD. MMMM YYYY', {
-            locale: locales
+            locale: locales,
           })
         : '';
     },
@@ -437,8 +433,8 @@ export default {
       }
 
       return materialprice + entryprice;
-    }
-  }
+    },
+  },
 };
 </script>
 

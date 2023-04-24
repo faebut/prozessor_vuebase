@@ -5,13 +5,13 @@ const state = {
     type: '',
     timeout: 3000,
     show: false,
-    icon: 'error'
-  }
+    icon: 'error',
+  },
 };
 
 const getters = {
   // get state of snack from central storage
-  snack: state => state.snack
+  snack: (state) => state.snack,
 };
 
 const actions = {
@@ -32,19 +32,19 @@ const actions = {
   },
   hideSnack({ commit }) {
     commit('notShowSnack');
-  }
+  },
 };
 
 const mutations = {
   // set state of snack to new value
   setSnack: (state, snack) => (state.snack = snack),
   // hide the snackbar again
-  notShowSnack: state => (state.snack.show = false)
+  notShowSnack: (state) => (state.snack.show = false),
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

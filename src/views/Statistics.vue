@@ -102,7 +102,7 @@ export default {
   components: {
     OptionsStatistic,
     VisitorChart,
-    AteliersChart
+    AteliersChart,
   },
   data() {
     return {
@@ -113,11 +113,11 @@ export default {
         .substr(0, 10),
       // date Stuff
       datePickerStartdate: false,
-      datePickerEnddate: false
+      datePickerEnddate: false,
     };
   },
   methods: {
-    ...mapActions(['fetchUsers', 'fetchAteliers'])
+    ...mapActions(['fetchUsers', 'fetchAteliers']),
   },
   computed: {
     ...mapGetters(['users', 'ateliers']),
@@ -135,9 +135,9 @@ export default {
     },
     allVisits() {
       const visitList = [];
-      this.users.forEach(user => {
+      this.users.forEach((user) => {
         if (user.visits) {
-          user.visits.forEach(visit => {
+          user.visits.forEach((visit) => {
             if (
               new Date(visit.date) >= new Date(this.startDate) &&
               new Date(visit.date) <= new Date(this.endDate)
@@ -158,10 +158,10 @@ export default {
         member: [],
         helper: [],
         abo: [],
-        daily: []
+        daily: [],
       };
 
-      this.allVisits.forEach(visit => {
+      this.allVisits.forEach((visit) => {
         if (visit.helper == true) {
           allDatesSeperate.helper.push(visit.date);
         } else if (visit.member == true) {
@@ -195,7 +195,7 @@ export default {
       // Push all dates in one array
       const allDates = [];
 
-      this.allVisits.forEach(visit => {
+      this.allVisits.forEach((visit) => {
         allDates.push(visit.date);
       });
 
@@ -212,11 +212,11 @@ export default {
 
       // sort function
 
-      const sortKeys = input => {
+      const sortKeys = (input) => {
         const output = {};
         Object.keys(input)
           .sort()
-          .forEach(key => {
+          .forEach((key) => {
             output[key] = input[key];
           });
         return output;
@@ -226,19 +226,19 @@ export default {
 
       const countDatesMember = sortKeys({
         ...def,
-        ...getCount(allDatesSeperate.member)
+        ...getCount(allDatesSeperate.member),
       });
       const countDatesHelper = sortKeys({
         ...def,
-        ...getCount(allDatesSeperate.helper)
+        ...getCount(allDatesSeperate.helper),
       });
       const countDatesAbo = sortKeys({
         ...def,
-        ...getCount(allDatesSeperate.abo)
+        ...getCount(allDatesSeperate.abo),
       });
       const countDatesDaily = sortKeys({
         ...def,
-        ...getCount(allDatesSeperate.daily)
+        ...getCount(allDatesSeperate.daily),
       });
 
       // combine to one Object
@@ -246,20 +246,20 @@ export default {
         member: countDatesMember,
         helper: countDatesHelper,
         abo: countDatesAbo,
-        daily: countDatesDaily
+        daily: countDatesDaily,
       };
 
       const countDatesOrdered = sortKeys(countDates);
 
       return {
         dates: countDatesOrdered,
-        counts: allDatesCombined
+        counts: allDatesCombined,
       };
     },
     sortUserList() {
       // remove all users without visits from list
       const userList = [];
-      this.users.forEach(user => {
+      this.users.forEach((user) => {
         if (user.visits) {
           userList.push(user);
         }
@@ -267,13 +267,13 @@ export default {
 
       // sort List by length and return
       return userList.sort((a, b) => b.visits.length - a.visits.length);
-    }
+    },
   },
   created() {
     // reload state of users
     this.fetchUsers();
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

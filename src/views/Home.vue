@@ -44,17 +44,18 @@ export default {
     password: '',
     // rules
     rules: {
-      required: value => !!value || 'Bitte eingeben.',
-      email: value => {
-        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      required: (value) => !!value || 'Bitte eingeben.',
+      email: (value) => {
+        const pattern =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || 'E-Mail ungültig.';
       },
       // nfc stuff
       pcsc: null,
       nfc: null,
       readers: null,
-      msg: 'Hello electron-vue-nfc!'
-    }
+      msg: 'Hello electron-vue-nfc!',
+    },
   }),
   methods: {
     ...mapActions(['login', 'setSnack']),
@@ -62,32 +63,32 @@ export default {
       if (this.$refs.form.validate()) {
         const formData = {
           email: this.email,
-          password: this.password
+          password: this.password,
         };
         this.login({ email: formData.email, password: formData.password })
           .then(() => {
             // show snackbar for success
             this.setSnack({
               message: 'Erfolgreich eingeloggt',
-              type: 'success'
+              type: 'success',
             });
           })
           .catch(() => {
             // show snackbar for error
             this.setSnack({
               message: `Benutzername oder Passwort falsch`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
-    }
+    },
   },
   computed: {
     loggedIn() {
       // return the value of the idToken
       return auth.state.idToken;
-    }
-  }
+    },
+  },
 };
 </script>
 

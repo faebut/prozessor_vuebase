@@ -26,15 +26,15 @@ export default {
   name: 'Entry',
   components: {
     EntryUserList,
-    EntryOverview
+    EntryOverview,
   },
   computed: {
     computedDate() {
       const date = new Date();
 
       return date ? format(date, 'DD. MMMM YYYY', { locale: locales }) : '';
-    }
-  }
+    },
+  },
 };
 </script>
 

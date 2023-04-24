@@ -15,13 +15,13 @@ import BadgeListing from './BadgeListing.vue';
 export default {
   name: 'BadgeList',
   components: {
-    BadgeListing
+    BadgeListing,
   },
   data() {
     return {};
   },
   methods: {
-    ...mapActions(['fetchBadges', 'fetchUsers'])
+    ...mapActions(['fetchBadges', 'fetchUsers']),
   },
   computed: {
     ...mapGetters(['badges']),
@@ -32,11 +32,11 @@ export default {
       const sortBadges = unsortBadges.sort((a, b) => a.number - b.number);
 
       return sortBadges;
-    }
+    },
   },
   created() {
     this.fetchBadges();
-  }
+  },
 };
 </script>
 

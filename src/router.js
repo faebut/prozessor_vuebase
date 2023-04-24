@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
     },
     {
       path: '/entry',
@@ -25,7 +25,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/users',
@@ -37,7 +37,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/badges',
@@ -49,7 +49,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/partners',
@@ -61,7 +61,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/statistics',
@@ -73,7 +73,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/stamm',
@@ -85,7 +85,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
+      },
     },
     {
       path: '/experts',
@@ -97,7 +97,7 @@ export default new Router({
         } else {
           next('/');
         }
-      }
-    }
-  ]
+      },
+    },
+  ],
 });

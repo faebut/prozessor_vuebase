@@ -100,11 +100,12 @@ export default {
 
       // rules for the form-fields
       rules: {
-        required: value => !!value || 'Bitte eingeben.',
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        required: (value) => !!value || 'Bitte eingeben.',
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'E-Mail ungültig.';
-        }
+        },
       },
       // dont show date pickers before the field is clicked
       datePickerBirthday: false,
@@ -120,8 +121,8 @@ export default {
         city: '',
         email: '',
         description: null,
-        visits: []
-      }
+        visits: [],
+      },
     };
   },
   methods: {
@@ -142,26 +143,24 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Partner*in ${
-                this.partner.partner
-              } erfolgreich hinzugefügt`,
-              type: 'success'
+              message: `Partner*in ${this.partner.partner} erfolgreich hinzugefügt`,
+              type: 'success',
             });
             // reset the input fields
             this.$refs.form.reset();
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

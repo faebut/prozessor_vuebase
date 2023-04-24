@@ -16,7 +16,7 @@
             Tagesnutzungen: {{ countDates.daily }}<br />
             Abonnements: {{ countDates.abo }}<br />
             Helfende: {{ countDates.helper }}<br />
-            Mitglieder: {{ countDates.member }}<br />
+            Betriebsgruppe: {{ countDates.member }}<br />
             Total: {{ countDates.total }}
           </v-flex>
 
@@ -45,7 +45,7 @@ export default {
   methods: {
     clickbait() {
       console.log(this.allVisits);
-    }
+    },
   },
   computed: {
     ...mapGetters(['users']),
@@ -57,7 +57,7 @@ export default {
       let helper = 0;
       let member = 0;
 
-      this.allVisits.forEach(visit => {
+      this.allVisits.forEach((visit) => {
         if (visit.helper == true) {
           helper += 1;
         } else if (visit.member == true) {
@@ -74,7 +74,7 @@ export default {
         abo,
         daily,
         helper,
-        member
+        member,
       };
     },
     countAges() {
@@ -125,10 +125,10 @@ export default {
         u31,
         u51,
         u66,
-        u100
+        u100,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -15,11 +15,13 @@
           <span v-if="!badge.inUse"
             ><v-icon color="secondary">cancel</v-icon></span
           >
-          <span v-if="badge.inUse"
-            ><v-icon :color="badge.extern ? 'error' : 'success'"
+          <span v-if="badge.inUse">
+            <v-icon v-if="badge.extern" color="warning">check_circle</v-icon>
+            <v-icon v-else-if="user.member || user.validAbo" color="success"
               >check_circle</v-icon
-            ></span
-          >
+            >
+            <v-icon v-else color="error">info</v-icon>
+          </span>
         </v-flex>
 
         <v-flex xs6 sm6 md3>
@@ -55,13 +57,13 @@ export default {
   name: 'BadgeListing',
   props: ['badge'],
   components: {
-    BadgeEdit
+    BadgeEdit,
   },
   data() {
     return {};
   },
   methods: {
-    ...mapActions(['deleteBadge'])
+    ...mapActions(['deleteBadge']),
   },
   computed: {
     ...mapGetters(['users']),
@@ -69,14 +71,37 @@ export default {
       let user = {
         firstname: '',
         name: '',
-        city: ''
+        city: '',
       };
 
       if (this.badge.inUse) {
         if (!this.badge.extern) {
           user = this.users.filter(
-            user => user._id === this.badge.ownerInternID
+            (user) => user._id === this.badge.ownerInternID
           )[0];
+
+          if (user.buydate) {
+            const today = new Date();
+            const buydate = new Date(user.buydate);
+
+            const difference = today - buydate;
+
+            const total_seconds = parseInt(Math.floor(difference / 1000));
+            const total_minutes = parseInt(Math.floor(total_seconds / 60));
+            const total_hours = parseInt(Math.floor(total_minutes / 60));
+            const days = parseInt(Math.floor(total_hours / 24));
+            const restdays = 365 - days;
+
+            if (restdays > 0) {
+              user.duration = restdays;
+              user.validAbo = true;
+            } else if (restdays < 0) {
+              user.validAbo = false;
+              user.duration = restdays;
+            } else {
+              user.validAbo = false;
+            }
+          }
         } else {
           user.firstname = this.badge.ownerFirstName;
           user.name = this.badge.ownerLastName;
@@ -85,8 +110,8 @@ export default {
       }
 
       return user;
-    }
-  }
+    },
+  },
 };
 </script>
 

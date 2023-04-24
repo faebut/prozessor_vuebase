@@ -73,7 +73,7 @@ import PartnerEdit from '@/components/partners/PartnerEdit';
 export default {
   name: 'PartnerList',
   components: {
-    PartnerEdit
+    PartnerEdit,
   },
   data() {
     return {
@@ -81,15 +81,15 @@ export default {
       pagination: {
         currentPage: 1,
         pageSize: 5,
-        pages: 1
-      }
+        pages: 1,
+      },
     };
   },
   methods: {
     ...mapActions(['fetchPartners', 'deletePartner']),
     clearSearch() {
       this.search = '';
-    }
+    },
   },
   computed: {
     ...mapGetters(['partners']),
@@ -101,7 +101,7 @@ export default {
         );
 
       // Filter from searchbox
-      const filterPartners = sortedPartners.filter(partner => {
+      const filterPartners = sortedPartners.filter((partner) => {
         return (
           partner.partner.toLowerCase().match(this.search.toLowerCase()) ||
           partner.city.toLowerCase().match(this.search.toLowerCase()) ||
@@ -123,13 +123,13 @@ export default {
 
       return {
         pagedPartners,
-        pages
+        pages,
       };
-    }
+    },
   },
   created() {
     this.fetchPartners();
-  }
+  },
 };
 </script>
 

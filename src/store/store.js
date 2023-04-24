@@ -21,6 +21,6 @@ export default new Vuex.Store({
     entry,
     ateliers,
     auth,
-    badges
-  }
+    badges,
+  },
 });

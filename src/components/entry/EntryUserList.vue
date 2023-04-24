@@ -53,7 +53,7 @@ import EntryNew from '@/components/entry/EntryNew';
 export default {
   name: 'UserList',
   components: {
-    EntryNew
+    EntryNew,
   },
   data() {
     return {
@@ -61,15 +61,15 @@ export default {
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        pages: 1
-      }
+        pages: 1,
+      },
     };
   },
   methods: {
     ...mapActions(['fetchPartners', 'fetchUsers', 'fetchAteliers']),
     clearSearch() {
       this.search = '';
-    }
+    },
   },
   computed: {
     ...mapGetters(['users', 'partners', 'ateliers', 'loggedIn']),
@@ -87,16 +87,16 @@ export default {
         );
 
       // filter logged in users from List
-      const notLoggedIn = sortedUsers.filter(user => {
+      const notLoggedIn = sortedUsers.filter((user) => {
         return (
-          this.loggedIn.filter(userLoggedIn => {
+          this.loggedIn.filter((userLoggedIn) => {
             return userLoggedIn._id == user._id;
           }).length == 0
         );
       });
 
       // Filter from searchbox
-      const filterUsers = notLoggedIn.filter(user => {
+      const filterUsers = notLoggedIn.filter((user) => {
         return (
           user.name.toLowerCase().match(this.search.toLowerCase()) ||
           user.firstname.toLowerCase().match(this.search.toLowerCase()) ||
@@ -115,9 +115,9 @@ export default {
 
       return {
         pagedUsers,
-        pages
+        pages,
       };
-    }
+    },
   },
   created() {
     this.fetchUsers();
@@ -127,7 +127,7 @@ export default {
 
     // get Ateliers
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

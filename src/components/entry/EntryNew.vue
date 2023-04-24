@@ -1,4 +1,5 @@
-.<template>
+.
+<template>
   <v-dialog max-width="800px" persistent v-model="dialog">
     <!-- button -->
     <v-icon class="success--text" @click="openNew" slot="activator"
@@ -59,9 +60,9 @@
               </div>
               <div v-if="userToEdit.member">
                 <div class="caption grey--text" v-if="userToEdit.member">
-                  Mitglied Prozessor
+                  Betriebsgruppe
                 </div>
-                <div>Mitglied Verein Prozessor</div>
+                <div>Betriebsgruppe Prozessor</div>
               </div>
               <div v-if="userToEdit.helper">
                 <div class="caption grey--text" v-if="userToEdit.helper">
@@ -93,11 +94,11 @@
               xs6
               class="px-2"
             >
-              <div class="caption grey--text">Mitglied</div>
+              <div class="caption grey--text">Betriebsgruppe</div>
               <div>
                 <v-switch
                   v-model="asmember"
-                  label="als Mitglied einchecken"
+                  label="als Betriebsgruppe einchecken"
                 ></v-switch>
               </div>
             </v-flex>
@@ -213,7 +214,7 @@ import locales from 'date-fns/locale/de';
 export default {
   name: 'EntryNew',
   components: {
-    UserEdit
+    UserEdit,
   },
   props: ['id', 'partners', 'ateliers'],
   data: () => {
@@ -224,7 +225,7 @@ export default {
       fetching: true,
       // rules
       rules: {
-        required: value => value.length > 0 || 'Bitte eingeben.'
+        required: (value) => value.length > 0 || 'Bitte eingeben.',
       },
       // date Stuff
       datePickerBirthday: false,
@@ -240,7 +241,7 @@ export default {
       ashelper: false,
 
       // checked in ateliers
-      asatelier: []
+      asatelier: [],
     };
   },
   methods: {
@@ -296,20 +297,18 @@ export default {
               this.loading = false;
               // show snackbar for success
               this.setSnack({
-                message: `Besucher*in ${this.userToEdit.firstname} ${
-                  this.userToEdit.name
-                } erfolgreich eingecheckt`,
-                type: 'success'
+                message: `Besucher*in ${this.userToEdit.firstname} ${this.userToEdit.name} erfolgreich eingecheckt`,
+                type: 'success',
               });
               // close dialog
               this.dialog = false;
             });
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
@@ -333,11 +332,11 @@ export default {
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -354,7 +353,7 @@ export default {
 
       // create an agreement property and set it to true
       this.userToEdit.agreement = true;
-    }
+    },
   },
   computed: {
     ...mapGetters(['userToEdit']),
@@ -362,7 +361,7 @@ export default {
     computedDateBirthdate() {
       return this.userToEdit.birthdate
         ? format(this.userToEdit.birthdate, 'DD. MMMM YYYY', {
-            locale: locales
+            locale: locales,
           })
         : '';
     },
@@ -382,9 +381,10 @@ export default {
     computedPartners() {
       const partnerNames = [];
 
-      this.userToEdit.partners.forEach(partnerID => {
-        const partnerName = this.partners.find(p => p._id === partnerID)
-          .partner;
+      this.userToEdit.partners.forEach((partnerID) => {
+        const partnerName = this.partners.find(
+          (p) => p._id === partnerID
+        ).partner;
 
         partnerNames.push(partnerName);
       });
@@ -398,17 +398,17 @@ export default {
       // add default option for no partner
       partnerNames.push({
         name: 'kein Partner',
-        id: 'no_id'
+        id: 'no_id',
       });
 
       // add partners of user to array
-      this.userToEdit.partners.forEach(partnerID => {
-        const name = this.partners.find(p => p._id === partnerID).partner;
+      this.userToEdit.partners.forEach((partnerID) => {
+        const name = this.partners.find((p) => p._id === partnerID).partner;
 
         // add Values to object
         const partnerObject = {
           name: name,
-          id: partnerID
+          id: partnerID,
         };
 
         // push object to array
@@ -422,11 +422,11 @@ export default {
       const atelierNames = [];
 
       // add ateliers to array
-      this.ateliers.forEach(atelierID => {
+      this.ateliers.forEach((atelierID) => {
         // add Values to object
         const atelierObject = {
           name: atelierID.name,
-          id: atelierID._id
+          id: atelierID._id,
         };
 
         // push object to array
@@ -493,8 +493,8 @@ export default {
       }
 
       return price;
-    }
-  }
+    },
+  },
 };
 </script>
 

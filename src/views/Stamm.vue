@@ -16,8 +16,8 @@ export default {
   name: 'Stammdaten',
   components: {
     AtelierList,
-    AtelierCreate
-  }
+    AtelierCreate,
+  },
 };
 </script>
 

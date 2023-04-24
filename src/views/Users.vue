@@ -15,8 +15,8 @@ export default {
   name: 'Users',
   components: {
     UserCreate,
-    UserList
-  }
+    UserList,
+  },
 };
 </script>
 

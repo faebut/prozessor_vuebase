@@ -87,11 +87,11 @@ export default {
       fetching: true,
       // rules
       rules: {
-        required: value => !!value || 'Bitte eingeben.'
+        required: (value) => !!value || 'Bitte eingeben.',
       },
 
       // form fields initally empty --> check if needed
-      atelier: {}
+      atelier: {},
     };
   },
   methods: {
@@ -112,19 +112,17 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Atelier/Werkstatt ${
-                this.atelier.name
-              }  erfolgreich geändert`,
-              type: 'success'
+              message: `Atelier/Werkstatt ${this.atelier.name}  erfolgreich geändert`,
+              type: 'success',
             });
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
@@ -138,7 +136,7 @@ export default {
 
       // fetch single User
       this.fetchSingleAtelier(this.id)
-        .then(res => {
+        .then((res) => {
           // get the data and set it to the user
           this.atelier = res.response.data;
 
@@ -148,11 +146,11 @@ export default {
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -163,8 +161,8 @@ export default {
 
       // close dialog
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

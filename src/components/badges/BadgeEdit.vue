@@ -79,7 +79,7 @@
             </v-flex>
 
             <v-flex v-if="!badge.extern && badge.inUse" xs6 class="px-2">
-              Mitglied:
+              Betriebsgruppe:
               <span v-if="memberCheck.member === null"
                 ><v-icon color="secondary">help</v-icon></span
               >
@@ -180,11 +180,11 @@ export default {
     fetching: true,
     // rules
     rules: {
-      required: value => !!value || 'Bitte eingeben.'
+      required: (value) => !!value || 'Bitte eingeben.',
     },
 
     // form fields initally empty --> check if needed
-    badge: {}
+    badge: {},
   }),
   methods: {
     ...mapActions(['fetchSingleBadge', 'editBadge', 'setSnack']),
@@ -205,16 +205,16 @@ export default {
             // show snackbar for success
             this.setSnack({
               message: `Badge UID: ${this.badge.uid} erfolgreich geändert`,
-              type: 'success'
+              type: 'success',
             });
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
@@ -228,7 +228,7 @@ export default {
 
       // fetch single User
       this.fetchSingleBadge(this.id)
-        .then(res => {
+        .then((res) => {
           // get the data and set it to the user
           this.badge = res.response.data;
 
@@ -238,11 +238,11 @@ export default {
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -253,7 +253,7 @@ export default {
 
       // close dialog
       this.dialog = false;
-    }
+    },
   },
   computed: {
     buttonColor() {
@@ -267,12 +267,10 @@ export default {
 
       for (let i = 0; i < this.users.length; i++) {
         const user = {
-          name: `${this.users[i].firstname} ${this.users[i].name}, ${
-            this.users[i].city
-          }`,
+          name: `${this.users[i].firstname} ${this.users[i].name}, ${this.users[i].city}`,
           _id: this.users[i]._id,
           member: this.users[i].member,
-          abo: this.users[i].abo
+          abo: this.users[i].abo,
         };
 
         namedUsers.push(user);
@@ -288,7 +286,9 @@ export default {
       let abo = null;
 
       if (this.badge.ownerInternID != null) {
-        user = this.users.filter(user => user._id === this.badge.ownerInternID);
+        user = this.users.filter(
+          (user) => user._id === this.badge.ownerInternID
+        );
 
         if (user[0].member === true) {
           member = true;
@@ -321,10 +321,10 @@ export default {
       return {
         member,
         abo,
-        duration
+        duration,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

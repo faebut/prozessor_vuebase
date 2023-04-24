@@ -89,7 +89,7 @@
             </v-flex>
 
             <v-flex xs12 class="px-2">
-              <h1>Abonnemente / Mitgliedschaft / Partnervereine</h1>
+              <h1>Abonnemente / Betriebsgruppe / Partnervereine</h1>
             </v-flex>
 
             <v-flex md6 sm12 class="px-2">
@@ -127,7 +127,7 @@
               <v-switch
                 v-model="user.member"
                 color="primary"
-                :label="'Mitglied Verein Prozessor'"
+                :label="'Betriebsgruppe Prozessor'"
               ></v-switch>
             </v-flex>
 
@@ -230,11 +230,12 @@ export default {
     valid: false,
     // rules
     rules: {
-      required: value => !!value || 'Bitte eingeben.',
-      email: value => {
-        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      required: (value) => !!value || 'Bitte eingeben.',
+      email: (value) => {
+        const pattern =
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || 'E-Mail ungültig.';
-      }
+      },
     },
     // date Stuff
     datePickerBirthday: false,
@@ -256,8 +257,8 @@ export default {
       infos: '',
       expert: false,
       helper: false,
-      expertise: []
-    }
+      expertise: [],
+    },
   }),
   methods: {
     ...mapActions(['fetchPartners', 'fetchAteliers', 'addUser', 'setSnack']),
@@ -281,10 +282,8 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Besucher*in ${this.user.firstname} ${
-                this.user.name
-              } erfolgreich hinzugefügt`,
-              type: 'success'
+              message: `Besucher*in ${this.user.firstname} ${this.user.name} erfolgreich hinzugefügt`,
+              type: 'success',
             });
             // reset the input fields
             this.$refs.form.reset();
@@ -292,15 +291,15 @@ export default {
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
-    }
+    },
   },
   computed: {
     ...mapGetters(['partners', 'ateliers']),
@@ -323,11 +322,11 @@ export default {
       const atelierNames = [];
 
       // add ateliers to array
-      this.ateliers.forEach(atelierID => {
+      this.ateliers.forEach((atelierID) => {
         // add Values to object
         const atelierObject = {
           name: atelierID.name,
-          id: atelierID._id
+          id: atelierID._id,
         };
 
         // push object to array
@@ -335,14 +334,14 @@ export default {
       });
 
       return atelierNames;
-    }
+    },
   },
   created() {
     // reload state of partners
     this.fetchPartners();
     // reload state of ateliers
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

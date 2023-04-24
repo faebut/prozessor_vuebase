@@ -75,18 +75,18 @@ export default {
   props: ['user', 'visit', 'ateliers'],
   data() {
     return {
-      paid: false
+      paid: false,
     };
   },
   components: {
     EntryPayment,
-    EntryPaymentEdit
+    EntryPaymentEdit,
   },
   methods: {
     ...mapActions(['deleteVisit']),
     togglePaid() {
       this.paid = !this.paid;
-    }
+    },
   },
   computed: {
     ...mapGetters(['partners']),
@@ -112,8 +112,9 @@ export default {
     },
     computedPartner() {
       if (this.visit.partner !== 'no_id') {
-        const partner = this.partners.find(x => x._id === this.visit.partner)
-          .partner;
+        const partner = this.partners.find(
+          (x) => x._id === this.visit.partner
+        ).partner;
 
         return partner;
       } else {
@@ -124,8 +125,8 @@ export default {
       const ateliersarray = [];
 
       // get for each logged in atelier the object from ateliers and add it to the array
-      this.visit.ateliers.forEach(atelier => {
-        const object = this.ateliers.find(x => x._id === atelier);
+      this.visit.ateliers.forEach((atelier) => {
+        const object = this.ateliers.find((x) => x._id === atelier);
         ateliersarray.push(object);
       });
 
@@ -145,15 +146,15 @@ export default {
 
       return {
         formatted: diff_hours + ':' + diff_mins,
-        unformatted: timepassed.getTime()
+        unformatted: timepassed.getTime(),
       };
-    }
+    },
   },
   mounted() {
     if (this.visit.paid) {
       this.paid = true;
     }
-  }
+  },
 };
 </script>
 

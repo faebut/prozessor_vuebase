@@ -19,11 +19,11 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'AlertSnackbar',
   methods: {
-    ...mapActions(['hideSnack'])
+    ...mapActions(['hideSnack']),
   },
   computed: {
-    ...mapGetters(['snack'])
-  }
+    ...mapGetters(['snack']),
+  },
 };
 </script>
 

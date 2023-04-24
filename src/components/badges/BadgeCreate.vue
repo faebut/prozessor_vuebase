@@ -64,7 +64,7 @@
             </v-flex>
 
             <v-flex v-if="!badge.extern && badge.inUse" xs6 class="px-2">
-              Mitglied:
+              Betriebsgruppe:
               <span v-if="memberCheck.member === null"
                 ><v-icon color="secondary">help</v-icon></span
               >
@@ -161,7 +161,7 @@ export default {
 
       // rules for the form-fields
       rules: {
-        required: value => !!value || 'Bitte eingeben.'
+        required: (value) => !!value || 'Bitte eingeben.',
       },
 
       // form fields
@@ -175,8 +175,8 @@ export default {
         ownerFirstName: '',
         ownerCity: '',
         ownerPhone: '',
-        purpose: ''
-      }
+        purpose: '',
+      },
     };
   },
   methods: {
@@ -197,25 +197,23 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Badge mit UID: ${
-                this.badge.uid
-              } erfolgreich hinzugefügt`,
-              type: 'success'
+              message: `Badge mit UID: ${this.badge.uid} erfolgreich hinzugefügt`,
+              type: 'success',
             });
             // reset the input fields
             this.$refs.form.reset();
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
-    }
+    },
   },
   computed: {
     buttonColor() {
@@ -229,12 +227,10 @@ export default {
 
       for (let i = 0; i < this.users.length; i++) {
         const user = {
-          name: `${this.users[i].firstname} ${this.users[i].name}, ${
-            this.users[i].city
-          }`,
+          name: `${this.users[i].firstname} ${this.users[i].name}, ${this.users[i].city}`,
           _id: this.users[i]._id,
           member: this.users[i].member,
-          abo: this.users[i].abo
+          abo: this.users[i].abo,
         };
 
         namedUsers.push(user);
@@ -250,7 +246,9 @@ export default {
       let abo = null;
 
       if (this.badge.ownerInternID != null) {
-        user = this.users.filter(user => user._id === this.badge.ownerInternID);
+        user = this.users.filter(
+          (user) => user._id === this.badge.ownerInternID
+        );
 
         if (user[0].member === true) {
           member = true;
@@ -283,10 +281,10 @@ export default {
       return {
         member,
         abo,
-        duration
+        duration,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

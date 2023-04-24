@@ -70,15 +70,15 @@ export default {
 
       // rules for the form-fields
       rules: {
-        required: value => !!value || 'Bitte eingeben.'
+        required: (value) => !!value || 'Bitte eingeben.',
       },
 
       // form fields
       atelier: {
         name: '',
         description: '',
-        icon: ''
-      }
+        icon: '',
+      },
     };
   },
   methods: {
@@ -99,26 +99,24 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Atelier/Werkstatt ${
-                this.atelier.name
-              } erfolgreich hinzugefügt`,
-              type: 'success'
+              message: `Atelier/Werkstatt ${this.atelier.name} erfolgreich hinzugefügt`,
+              type: 'success',
             });
             // reset the input fields
             this.$refs.form.reset();
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

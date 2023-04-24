@@ -4,15 +4,15 @@ import auth from './auth';
 const state = {
   // initial state for partners
   partners: [],
-  partnerToEdit: {}
+  partnerToEdit: {},
 };
 
 const getters = {
   // get partners from central storage
-  partners: state => state.partners,
+  partners: (state) => state.partners,
 
   // get single partner from central storage
-  partnerToEdit: state => state.partnerToEdit
+  partnerToEdit: (state) => state.partnerToEdit,
 };
 
 const actions = {
@@ -34,7 +34,7 @@ const actions = {
     commit('setPartnerToEdit', response.data);
 
     return {
-      response
+      response,
     };
   },
 
@@ -77,7 +77,7 @@ const actions = {
     );
 
     commit('updatePartner', response.data);
-  }
+  },
 };
 
 const mutations = {
@@ -88,7 +88,7 @@ const mutations = {
 
   // filter state of partners for ID and remove it from storage
   removePartner: (state, _id) =>
-    (state.partners = state.partners.filter(partner => partner._id !== _id)),
+    (state.partners = state.partners.filter((partner) => partner._id !== _id)),
 
   // set state of partners to new value
   setPartners: (state, partners) => {
@@ -105,23 +105,23 @@ const mutations = {
     (state.partnerToEdit = partnerToEdit),
 
   // reset userToEdit state
-  clearPartnerToEdit: state => (state.partnerToEdit = {}),
+  clearPartnerToEdit: (state) => (state.partnerToEdit = {}),
 
   // find user in array and replace it with new one
   updatePartner: (state, partner) => {
     const index = state.partners
-      .map(e => {
+      .map((e) => {
         return e._id;
       })
       .indexOf(partner._id);
 
     state.partners.splice(index, 1, partner);
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

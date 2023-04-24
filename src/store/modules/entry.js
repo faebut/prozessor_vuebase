@@ -3,14 +3,14 @@ import auth from './auth';
 
 const state = {
   loggedIn: [],
-  actualPayment: {}
+  actualPayment: {},
 };
 
 const getters = {
   // get users from central storage
-  loggedIn: state => state.loggedIn,
+  loggedIn: (state) => state.loggedIn,
   // get actual payment from central storage
-  actualPayment: state => state.actualPayment
+  actualPayment: (state) => state.actualPayment,
 };
 
 const actions = {
@@ -55,13 +55,14 @@ const actions = {
     commit('setPayment', response.data);
 
     return {
-      response
+      response,
     };
   },
   async addPayment({ commit }, payment) {
     await axios.put(
-      `/users/${payment.user._id}/visits/${payment.user.visits.length -
-        1}/paid.json` +
+      `/users/${payment.user._id}/visits/${
+        payment.user.visits.length - 1
+      }/paid.json` +
         '?auth=' +
         auth.state.idToken,
       payment.paid
@@ -79,7 +80,7 @@ const actions = {
 
       commit('unPaidVisit', user);
     }
-  }
+  },
 };
 
 const mutations = {
@@ -98,7 +99,7 @@ const mutations = {
     const loggedIn = [];
 
     // check whos logged in
-    userarray.forEach(user => {
+    userarray.forEach((user) => {
       // check for users that have already visited
       if (user.visits) {
         // get the last visit of the user
@@ -137,12 +138,12 @@ const mutations = {
   },
   addLoggedIn: (state, newuser) => state.loggedIn.push(newuser),
   removeVisit: (state, _id) =>
-    (state.loggedIn = state.loggedIn.filter(user => user._id !== _id))
+    (state.loggedIn = state.loggedIn.filter((user) => user._id !== _id)),
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

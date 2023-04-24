@@ -35,20 +35,20 @@ import AtelierEdit from '@/components/stammdaten/AtelierEdit';
 export default {
   name: 'AtelierList',
   components: {
-    AtelierEdit
+    AtelierEdit,
   },
   data() {
     return {};
   },
   methods: {
-    ...mapActions(['fetchAteliers', 'deleteAtelier'])
+    ...mapActions(['fetchAteliers', 'deleteAtelier']),
   },
   computed: {
-    ...mapGetters(['ateliers'])
+    ...mapGetters(['ateliers']),
   },
   created() {
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

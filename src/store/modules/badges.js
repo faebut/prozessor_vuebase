@@ -4,15 +4,15 @@ import auth from './auth';
 const state = {
   // initial state for ateliers
   badges: [],
-  badgeToEdit: {}
+  badgeToEdit: {},
 };
 
 const getters = {
   // get ateliers from central storage
-  badges: state => state.badges,
+  badges: (state) => state.badges,
 
   // get single atelier from central storage
-  badgeToEdit: state => state.badgeToEdit
+  badgeToEdit: (state) => state.badgeToEdit,
 };
 
 const actions = {
@@ -34,7 +34,7 @@ const actions = {
     commit('setBadgeToEdit', response.data);
 
     return {
-      response
+      response,
     };
   },
 
@@ -75,7 +75,7 @@ const actions = {
     );
 
     commit('updateBadge', response.data);
-  }
+  },
 };
 
 const mutations = {
@@ -86,7 +86,7 @@ const mutations = {
 
   // filter state of badges for ID and remove it from storage
   removeBadge: (state, _id) =>
-    (state.badges = state.badges.filter(badge => badge._id !== _id)),
+    (state.badges = state.badges.filter((badge) => badge._id !== _id)),
 
   // set state of badges to new value
   setBadges: (state, badges) => {
@@ -102,19 +102,19 @@ const mutations = {
   setBadgeToEdit: (state, badgeToEdit) => (state.badgeToEdit = badgeToEdit),
 
   // reset badgeToEdit state
-  clearBadgeToEdit: state => (state.badgeToEdit = {}),
+  clearBadgeToEdit: (state) => (state.badgeToEdit = {}),
 
   // find badge in array and replace it with new one
   updateBadge: (state, badge) => {
-    const index = state.badges.map(e => e._id).indexOf(badge._id);
+    const index = state.badges.map((e) => e._id).indexOf(badge._id);
 
     state.badges.splice(index, 1, badge);
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

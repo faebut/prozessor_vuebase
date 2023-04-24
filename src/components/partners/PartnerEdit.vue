@@ -119,15 +119,16 @@ export default {
       fetching: true,
       // rules
       rules: {
-        required: value => !!value || 'Bitte eingeben.',
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        required: (value) => !!value || 'Bitte eingeben.',
+        email: (value) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'E-Mail ungültig.';
-        }
+        },
       },
 
       // form fields initally empty --> check if needed
-      partner: {}
+      partner: {},
     };
   },
   methods: {
@@ -149,19 +150,17 @@ export default {
             this.loading = false;
             // show snackbar for success
             this.setSnack({
-              message: `Partner*in ${
-                this.partner.partner
-              }  erfolgreich geändert`,
-              type: 'success'
+              message: `Partner*in ${this.partner.partner}  erfolgreich geändert`,
+              type: 'success',
             });
             // close dialog
             this.dialog = false;
           })
-          .catch(err => {
+          .catch((err) => {
             // show snackbar for error
             this.setSnack({
               message: `Error: ${err}`,
-              type: 'error'
+              type: 'error',
             });
           });
       }
@@ -175,7 +174,7 @@ export default {
 
       // fetch single User
       this.fetchSinglePartner(this.id)
-        .then(res => {
+        .then((res) => {
           // get the data and set it to the user
           this.partner = res.response.data;
 
@@ -185,11 +184,11 @@ export default {
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -203,8 +202,8 @@ export default {
 
       // close dialog
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -20,14 +20,14 @@ import VueApexCharts from 'vue-apexcharts';
 export default {
   name: 'AteliersChart',
   components: {
-    apexcharts: VueApexCharts
+    apexcharts: VueApexCharts,
   },
   props: ['allVisits', 'ateliers'],
   computed: {
     visitsPerAtelier() {
       const allAteliers = [];
-      this.allVisits.forEach(visit => {
-        visit.ateliers.forEach(atelier => {
+      this.allVisits.forEach((visit) => {
+        visit.ateliers.forEach((atelier) => {
           allAteliers.push(atelier);
         });
       });
@@ -45,7 +45,7 @@ export default {
 
       const countAteliers = getCount(allAteliers);
 
-      Object.keys(getCount(allAteliers)).forEach(key => {
+      Object.keys(getCount(allAteliers)).forEach((key) => {
         for (let i = 0, l = this.ateliers.length; i < l; i++) {
           if (key == this.ateliers[i]._id) {
             const mem = countAteliers[key];
@@ -64,20 +64,22 @@ export default {
           chart: {
             type: 'donut',
             animations: {
-              enabled: false
-            }
+              enabled: false,
+            },
           },
           colors: [
-            '#008FFB',
-            '#00E396',
-            '#FEB019',
-            '#FF4560',
-            '#775DD0',
-            '#3F51B5',
-            '#03A9F4',
-            '#4CAF50',
-            '#F9CE1D',
-            '#FF9800'
+            '#ED5565',
+            '#FC6E51',
+            '#FFCE54',
+            '#A0D468',
+            '#48CFAD',
+            '#4FC1E9',
+            '#5D9CEC',
+            '#AC92EC',
+            '#EC87C0',
+            '#E6E9ED',
+            '#AAB2BD',
+            '#434A54',
           ],
           labels: Object.keys(this.visitsPerAtelier),
           responsive: [
@@ -85,15 +87,15 @@ export default {
               breakpoint: 650,
               options: {
                 legend: {
-                  position: 'bottom'
-                }
-              }
-            }
-          ]
-        }
+                  position: 'bottom',
+                },
+              },
+            },
+          ],
+        },
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

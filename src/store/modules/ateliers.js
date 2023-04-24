@@ -4,15 +4,15 @@ import auth from './auth';
 const state = {
   // initial state for ateliers
   ateliers: [],
-  atelierToEdit: {}
+  atelierToEdit: {},
 };
 
 const getters = {
   // get ateliers from central storage
-  ateliers: state => state.ateliers,
+  ateliers: (state) => state.ateliers,
 
   // get single atelier from central storage
-  atelierToEdit: state => state.atelierToEdit
+  atelierToEdit: (state) => state.atelierToEdit,
 };
 
 const actions = {
@@ -34,7 +34,7 @@ const actions = {
     commit('setAtelierToEdit', response.data);
 
     return {
-      response
+      response,
     };
   },
 
@@ -77,7 +77,7 @@ const actions = {
     );
 
     commit('updateAtelier', response.data);
-  }
+  },
 };
 
 const mutations = {
@@ -88,7 +88,7 @@ const mutations = {
 
   // filter state of ateliers for ID and remove it from storage
   removeAteliers: (state, _id) =>
-    (state.ateliers = state.ateliers.filter(atelier => atelier._id !== _id)),
+    (state.ateliers = state.ateliers.filter((atelier) => atelier._id !== _id)),
 
   // set state of ateliers to new value
   setAteliers: (state, ateliers) => {
@@ -105,23 +105,23 @@ const mutations = {
     (state.atelierToEdit = atelierToEdit),
 
   // reset userToEdit state
-  clearAtelierToEdit: state => (state.atelierToEdit = {}),
+  clearAtelierToEdit: (state) => (state.atelierToEdit = {}),
 
   // find user in array and replace it with new one
   updateAtelier: (state, atelier) => {
     const index = state.ateliers
-      .map(e => {
+      .map((e) => {
         return e._id;
       })
       .indexOf(atelier._id);
 
     state.ateliers.splice(index, 1, atelier);
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

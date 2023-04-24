@@ -16,8 +16,8 @@ export default {
   name: 'Partners',
   components: {
     PartnerCreate,
-    PartnerList
-  }
+    PartnerList,
+  },
 };
 </script>
 

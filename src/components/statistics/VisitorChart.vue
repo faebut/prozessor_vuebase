@@ -22,7 +22,7 @@ import VueApexCharts from 'vue-apexcharts';
 export default {
   name: 'VisitorChart',
   components: {
-    apexcharts: VueApexCharts
+    apexcharts: VueApexCharts,
   },
   props: ['allVisits', 'visitsPerDate'],
   computed: {
@@ -34,25 +34,25 @@ export default {
             type: 'bar',
             stacked: true,
             animations: {
-              enabled: false
+              enabled: false,
             },
             toolbar: {
-              show: true
-            }
+              show: true,
+            },
           },
           xaxis: {
             type: 'datetime',
-            categories: Object.keys(this.visitsPerDate.dates)
+            categories: Object.keys(this.visitsPerDate.dates),
           },
           legend: {
             position: 'top',
-            horizontalAlign: 'left'
+            horizontalAlign: 'left',
           },
           dataLabels: {
-            enabled: false
+            enabled: false,
           },
           makers: {
-            size: 0
+            size: 0,
           },
           responsive: [
             {
@@ -63,34 +63,34 @@ export default {
                   horizontalAlign: 'center',
                   containerMargin: {
                     top: 65,
-                    bottom: 35
-                  }
-                }
-              }
-            }
-          ]
+                    bottom: 35,
+                  },
+                },
+              },
+            },
+          ],
         },
         series: [
           {
-            name: 'Mitglieder',
-            data: Object.values(this.visitsPerDate.counts.member)
+            name: 'Betriebsgruppe',
+            data: Object.values(this.visitsPerDate.counts.member),
           },
           {
             name: 'Helfende',
-            data: Object.values(this.visitsPerDate.counts.helper)
+            data: Object.values(this.visitsPerDate.counts.helper),
           },
           {
             name: 'Jahresabo',
-            data: Object.values(this.visitsPerDate.counts.abo)
+            data: Object.values(this.visitsPerDate.counts.abo),
           },
           {
             name: 'Tagesnutzung',
-            data: Object.values(this.visitsPerDate.counts.daily)
-          }
-        ]
+            data: Object.values(this.visitsPerDate.counts.daily),
+          },
+        ],
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -20,9 +20,9 @@
 
         <v-flex xs4>
           <div class="mb-1 caption grey--text">Tarif</div>
-          <v-icon>person</v-icon>&nbsp;kein Mitglied
+          <v-icon>person</v-icon>&nbsp;Normaltarif
           <br />
-          <v-icon class="success--text">person</v-icon>&nbsp;Mitglied
+          <v-icon class="success--text">person</v-icon>&nbsp;Betriebsgruppe
           <br />
           <v-icon class="error--text">stars</v-icon>&nbsp;Helfer*in
           <br />
@@ -52,13 +52,13 @@ export default {
   name: 'EntryOverview',
   props: ['date'],
   components: {
-    EntryLoggedInUser
+    EntryLoggedInUser,
   },
   data() {
     return {};
   },
   methods: {
-    ...mapActions(['usersLoggedIn', 'fetchAteliers'])
+    ...mapActions(['usersLoggedIn', 'fetchAteliers']),
   },
   computed: {
     ...mapGetters(['loggedIn', 'ateliers']),
@@ -75,7 +75,7 @@ export default {
             : -1
         );
       return sortedUsers;
-    }
+    },
   },
   created() {
     // reloat state of users logged in
@@ -83,7 +83,7 @@ export default {
 
     // get the ateliers to pass them down
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

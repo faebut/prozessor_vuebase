@@ -21,7 +21,7 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Experts',
   methods: {
-    ...mapActions(['usersLoggedIn', 'fetchAteliers'])
+    ...mapActions(['usersLoggedIn', 'fetchAteliers']),
   },
   computed: {
     ...mapGetters(['loggedIn', 'ateliers']),
@@ -51,9 +51,9 @@ export default {
       const expertises = [];
 
       // push all atelier IDs into the array
-      this.loggedIn.forEach(user => {
+      this.loggedIn.forEach((user) => {
         if (user.expert) {
-          user.expertise.forEach(atelier => {
+          user.expertise.forEach((atelier) => {
             expertises.push(atelier);
           });
         }
@@ -65,19 +65,19 @@ export default {
       // get the names for the ateliers
       const atelierNames = [];
 
-      expertisesFiltered.forEach(atelierID => {
-        this.ateliers.forEach(atelier => {
+      expertisesFiltered.forEach((atelierID) => {
+        this.ateliers.forEach((atelier) => {
           if (atelier._id == atelierID) {
             atelierNames.push({
               name: atelier.name,
-              icon: atelier.icon
+              icon: atelier.icon,
             });
           }
         });
       });
 
       return atelierNames;
-    }
+    },
   },
   created() {
     // reloat state of users logged in
@@ -85,7 +85,7 @@ export default {
 
     // get the ateliers to pass them down
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

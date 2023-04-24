@@ -14,6 +14,6 @@ Vue.use(Vuetify, {
     success: '#00cc66',
     warning: '#ff9933',
     darkgrey: '#2e2e2e',
-    background: colors.grey.lighten4
-  }
+    background: colors.grey.lighten4,
+  },
 });

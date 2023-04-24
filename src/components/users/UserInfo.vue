@@ -56,16 +56,12 @@
                 <br />
               </div>
               <div v-if="user.member">
-                <div class="caption grey--text" v-if="user.member">
-                  Mitglied Prozessor
-                </div>
-                <div>Mitglied Verein Prozessor</div>
+                <div class="caption grey--text">Betriebsgruppe Prozessor</div>
+                <div>Betriebsgruppe Verein Prozessor</div>
               </div>
               <br />
               <div v-if="user.helper">
-                <div class="caption grey--text">
-                  Helfer*in
-                </div>
+                <div class="caption grey--text">Helfer*in</div>
                 <div>Helfer*in Verein Prozessor</div>
               </div>
             </v-flex>
@@ -149,7 +145,7 @@ export default {
   data: () => ({
     dialog: false,
     fetching: true,
-    user: {}
+    user: {},
   }),
   methods: {
     ...mapActions(['fetchPartners', 'fetchSingleUser', 'fetchAteliers']),
@@ -163,18 +159,18 @@ export default {
 
       // fetch single User
       this.fetchSingleUser(this.id)
-        .then(res => {
+        .then((res) => {
           // get the data and set it to the user
           this.user = res.response.data;
 
           // remove the loader and show form
           this.fetching = false;
         })
-        .catch(err => {
+        .catch((err) => {
           // show snackbar for error
           this.setSnack({
             message: `Error: ${err}`,
-            type: 'error'
+            type: 'error',
           });
         });
     },
@@ -188,7 +184,7 @@ export default {
 
       // close dialog
       this.dialog = false;
-    }
+    },
   },
   computed: {
     ...mapGetters(['partners', 'ateliers']),
@@ -235,9 +231,10 @@ export default {
     computedPartners() {
       const partnerNames = [];
 
-      this.user.partners.forEach(partnerID => {
-        const partnerName = this.partners.find(p => p._id === partnerID)
-          .partner;
+      this.user.partners.forEach((partnerID) => {
+        const partnerName = this.partners.find(
+          (p) => p._id === partnerID
+        ).partner;
 
         partnerNames.push(partnerName);
       });
@@ -247,21 +244,21 @@ export default {
     computedExpertise() {
       const atelierNames = [];
 
-      this.user.expertise.forEach(atelierID => {
-        const atelierName = this.ateliers.find(p => p._id === atelierID).name;
+      this.user.expertise.forEach((atelierID) => {
+        const atelierName = this.ateliers.find((p) => p._id === atelierID).name;
 
         atelierNames.push(atelierName);
       });
 
       return atelierNames;
-    }
+    },
   },
   created() {
     // reload state of partners
     this.fetchPartners();
     // reload state of ateliers
     this.fetchAteliers();
-  }
+  },
 };
 </script>
 

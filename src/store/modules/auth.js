@@ -4,7 +4,7 @@ import router from '../../router';
 const state = {
   // initial state for logins
   idToken: null,
-  userId: null
+  userId: null,
 };
 
 const getters = {};
@@ -24,14 +24,14 @@ const actions = {
         {
           email: authData.email,
           password: authData.password,
-          returnSecureToken: true
+          returnSecureToken: true,
         }
       )
-      .then(res => {
+      .then((res) => {
         // send the response to the function that stores it
         commit('authUser', {
           token: res.data.idToken,
-          userId: res.data.localId
+          userId: res.data.localId,
         });
         // get the time to know when the auto logout takes place
         const now = new Date();
@@ -65,7 +65,7 @@ const actions = {
     const userId = localStorage.getItem('userId');
     commit('authUser', {
       token: token,
-      userId: userId
+      userId: userId,
     });
     // set a new timer for auto logout
     dispatch('setLogoutTimer', setTimer);
@@ -77,7 +77,7 @@ const actions = {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     router.replace('/');
-  }
+  },
 };
 
 const mutations = {
@@ -89,12 +89,12 @@ const mutations = {
   clearAuthData(state) {
     state.idToken = null;
     state.userId = null;
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

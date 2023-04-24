@@ -17,11 +17,11 @@ export default {
   name: 'App',
   components: {
     AppNavigation,
-    AlertSnackbar
+    AlertSnackbar,
   },
   created() {
     this.$store.dispatch('tryAutoLogin');
-  }
+  },
 };
 </script>
 
