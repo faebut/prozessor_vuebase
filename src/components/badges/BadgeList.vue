@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div v-if="users.length > 0 && badges.length > 0">
     <badge-listing
       v-for="badge in sortedBadges"
       :key="badge._id"
       :badge="badge"
+      :users="users"
     />
   </div>
 </template>
@@ -14,14 +15,12 @@ import BadgeListing from './BadgeListing.vue';
 
 export default {
   name: 'BadgeList',
+  props: ['users'],
   components: {
     BadgeListing,
   },
-  data() {
-    return {};
-  },
   methods: {
-    ...mapActions(['fetchBadges', 'fetchUsers']),
+    ...mapActions(['fetchBadges']),
   },
   computed: {
     ...mapGetters(['badges']),

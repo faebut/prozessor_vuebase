@@ -3,7 +3,7 @@
     <h1 class="grey--text">Badges</h1>
     <v-container class="my-5">
       <badge-create :users="users" />
-      <badge-list />
+      <badge-list :users="users" />
     </v-container>
   </div>
 </template>

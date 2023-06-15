@@ -17,7 +17,9 @@
           >
           <span v-if="badge.inUse">
             <v-icon v-if="badge.extern" color="warning">check_circle</v-icon>
-            <v-icon v-else-if="user.member || user.validAbo" color="success"
+            <v-icon
+              v-else-if="badgeUser.member || badgeUser.validAbo"
+              color="success"
               >check_circle</v-icon
             >
             <v-icon v-else color="error">info</v-icon>
@@ -27,7 +29,7 @@
         <v-flex xs6 sm6 md3>
           <div class="caption grey--text">Benutzer</div>
           <div v-if="badge.inUse">
-            {{ user.firstname }} {{ user.name }}, {{ user.city }}
+            {{ badgeUser.firstname }} {{ badgeUser.name }}, {{ badgeUser.city }}
           </div>
         </v-flex>
 
@@ -50,12 +52,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import BadgeEdit from '@/components/badges/BadgeEdit';
 
 export default {
   name: 'BadgeListing',
-  props: ['badge'],
+  props: ['badge', 'users'],
   components: {
     BadgeEdit,
   },
@@ -66,8 +68,7 @@ export default {
     ...mapActions(['deleteBadge']),
   },
   computed: {
-    ...mapGetters(['users']),
-    user() {
+    badgeUser() {
       let user = {
         firstname: '',
         name: '',
@@ -76,9 +77,7 @@ export default {
 
       if (this.badge.inUse) {
         if (!this.badge.extern) {
-          user = this.users.filter(
-            (user) => user._id === this.badge.ownerInternID
-          )[0];
+          user = this.users.find((u) => u._id === this.badge.ownerInternID);
 
           if (user.buydate) {
             const today = new Date();
