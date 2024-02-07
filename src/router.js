@@ -7,7 +7,8 @@ import auth from './store/modules/auth';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -98,6 +99,11 @@ export default new Router({
           next('/');
         }
       },
+    },
+    {
+      path: '/registration',
+      name: 'registration',
+      component: () => import('./views/Registration.vue'),
     },
   ],
 });

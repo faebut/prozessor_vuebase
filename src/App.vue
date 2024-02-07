@@ -1,7 +1,7 @@
 <template>
   <v-app class="background">
     <alert-snackbar />
-    <app-navigation />
+    <app-navigation v-if="currentRoute !== '/registration'" />
 
     <v-content class="mx-4" transition="slide-x-transition">
       <router-view />
@@ -19,8 +19,18 @@ export default {
     AppNavigation,
     AlertSnackbar,
   },
+  data() {
+    return {
+      currentRoute: '/',
+    };
+  },
   created() {
     this.$store.dispatch('tryAutoLogin');
+  },
+  watch: {
+    $route(to) {
+      this.currentRoute = to.path;
+    },
   },
 };
 </script>
