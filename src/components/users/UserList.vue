@@ -104,15 +104,15 @@
       :key="user._id"
     >
       <v-layout row wrap>
-        <v-flex xs6 sm6 md3>
+        <v-flex xs5 sm6 md3>
           <div class="caption grey--text">Name</div>
           <div>{{ user.firstname }} {{ user.name }}</div>
         </v-flex>
-        <v-flex xs3 sm6 md2>
+        <v-flex xs3 sm6 md1>
           <div class="caption grey--text">Ort</div>
           <div>{{ user.city }}</div>
         </v-flex>
-        <v-flex xs3 sm6 md1>
+        <v-flex xs3 sm3 md1>
           <div class="caption grey--text">"Abo"</div>
           <div
             v-if="user.aboValidity >= 30"
@@ -133,6 +133,12 @@
             {{ user.aboValidity }} Tage
           </div>
           <div v-else>kein Abo</div>
+        </v-flex>
+        <v-flex xs1 sm3 md1>
+          <div class="caption grey--text">Badge</div>
+          <div>
+            <span v-if="user.badge"><v-icon color="success">key</v-icon></span>
+          </div>
         </v-flex>
         <v-flex xs12 sm6 md3>
           <div class="caption grey--text">E-Mail</div>
@@ -267,6 +273,7 @@ export default {
           // how many days is it still valid or already overdue
           user.aboValidity = diffDays;
         }
+        user.badge = this.filteredBadges.includes(user._id);
       });
 
       // Filters from filtercard
