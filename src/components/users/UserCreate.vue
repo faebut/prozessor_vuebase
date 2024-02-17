@@ -258,6 +258,7 @@ export default {
       expert: false,
       helper: false,
       expertise: [],
+      visits: [],
     },
   }),
   methods: {
