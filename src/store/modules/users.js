@@ -55,6 +55,12 @@ const actions = {
     // add the generated ID to the Object so the state can be mutated
     newuser._id = response.data.name;
 
+    // put the new ID back to the Object in the Database ///// DOES NOT WORK??
+    axios.put(
+      `/users/${response.data.name}/_id.json` + '?auth=' + auth.state.idToken,
+      JSON.stringify(newuser._id)
+    );
+
     commit('newUser', newuser);
   },
 
